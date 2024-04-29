@@ -28,7 +28,7 @@ workspace.xml
 .gradle/
 build/
 !**/src/**/build
-!**/test/**/build
+!src/commonTest/**/build
 *.iml
 !**/testData/**/*.iml
 .idea/artifacts
