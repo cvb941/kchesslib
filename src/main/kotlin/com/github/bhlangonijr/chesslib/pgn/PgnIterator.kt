@@ -26,6 +26,7 @@ import com.github.bhlangonijr.chesslib.util.LargeFile
  */
 class PgnIterator : Iterable<Game?>, AutoCloseable {
     private val pgnLines: Iterable<String?>
+    private val pgnLinesIterator: Iterator<String?>
 
     private var game: Game? = null
 
@@ -44,6 +45,7 @@ class PgnIterator : Iterable<Game?>, AutoCloseable {
      */
     constructor(file: LargeFile) {
         this.pgnLines = file
+        this.pgnLinesIterator = pgnLines.iterator()
         loadNextGame()
     }
 
@@ -54,6 +56,7 @@ class PgnIterator : Iterable<Game?>, AutoCloseable {
      */
     constructor(pgnLines: Iterable<String?>) {
         this.pgnLines = pgnLines
+        this.pgnLinesIterator = pgnLines.iterator()
         loadNextGame()
     }
 
@@ -77,7 +80,7 @@ class PgnIterator : Iterable<Game?>, AutoCloseable {
     }
 
     private fun loadNextGame() {
-        game = GameLoader.loadNextGame(pgnLines.iterator())
+        game = GameLoader.loadNextGame(pgnLinesIterator)
     }
 
     private inner class GameIterator : MutableIterator<Game?> {
