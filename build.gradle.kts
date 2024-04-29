@@ -17,6 +17,9 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
+                implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.0-RC.2")
+                implementation("com.benasher44:uuid:0.8.4")
+                implementation("org.jetbrains.kotlinx:kotlinx-io-core:0.3.3")
             }
         }
         commonTest {

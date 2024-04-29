@@ -24,6 +24,7 @@ import com.github.bhlangonijr.chesslib.util.LargeFile
  *
  * The iterator permits iterating over large PGN files without piling up every game into the memory.
  */
+@OptIn(ExperimentalStdlibApi::class)
 class PgnIterator : Iterable<Game?>, AutoCloseable {
     private val pgnLines: Iterable<String?>
     private val pgnLinesIterator: Iterator<String?>
@@ -72,7 +73,6 @@ class PgnIterator : Iterable<Game?>, AutoCloseable {
     /**
      * Attempts to close the PGN file and releases any system resources associated with it.
      */
-    @Throws(Exception::class)
     override fun close() {
         if (pgnLines is LargeFile) {
             pgnLines.close()

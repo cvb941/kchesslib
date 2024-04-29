@@ -15,8 +15,6 @@
  */
 package com.github.bhlangonijr.chesslib
 
-import java.util.EnumMap
-
 /**
  * All possible squares on a board.
  *
@@ -417,9 +415,7 @@ enum class Square {
         private val fileValues = File.entries.toTypedArray()
         private val bitboard = LongArray(allSquares.size)
 
-        private val sideSquare = EnumMap<Square, Array<Square?>>(
-            Square::class.java
-        )
+        private val sideSquare = mutableMapOf<Square, Array<Square?>>()
 
         init {
             for (sq in allSquares) {

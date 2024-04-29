@@ -21,8 +21,8 @@ import com.github.bhlangonijr.chesslib.move.MoveException
 import com.github.bhlangonijr.chesslib.move.MoveList
 import com.github.bhlangonijr.chesslib.pgn.PgnException
 import com.github.bhlangonijr.chesslib.util.StringUtil
-import java.util.LinkedList
-import java.util.Locale
+import kotlin.jvm.JvmField
+import kotlin.jvm.JvmOverloads
 
 /**
  * A chess game, as defined by the specifications of the Portable Game Notation (PGN) format.
@@ -341,7 +341,7 @@ class Game(
             sb.append(
                 makeProp(
                     "Termination",
-                    termination.toString().lowercase(Locale.getDefault())
+                    termination.toString().lowercase()
                 )
             )
         }
@@ -574,8 +574,7 @@ class Game(
 
         val moves = StringBuilder()
         var comment: StringBuilder? = null
-        val variation =
-            LinkedList<RTextEntry>()
+        val variation = mutableListOf<RTextEntry>()
 
         var halfMove = 0
         var variantIndex = 0
@@ -651,7 +650,7 @@ class Game(
             ) {
                 onVariationBlock = false
                 if (variation != null) {
-                    val last = variation.pollLast()
+                    val last = variation.removeLastOrNull()
                     val currentLine =
                         StringBuilder(getMovesAt(moves.toString(), halfMove))
                     try {
@@ -665,7 +664,7 @@ class Game(
                         tmp.loadFromSan(getMovesAt(currentLine.toString(), last!!.index))
                         val `var`: MoveList = MoveList.Companion.createMoveListFrom(tmp, tmp.size)
                         `var`.loadFromSan(last.text.toString())
-                        val parent = variation.peekLast()
+                        val parent = variation.lastOrNull()
                         if (onVariationBlock && parent != null) {
                             `var`.parent = parent.index
                         } else {
@@ -700,9 +699,9 @@ class Game(
 
             if (onVariationBlock) {
                 if (variation != null) {
-                    variation.last.text.append(token)
-                    variation.last.text.append(" ")
-                    variation.last.size++
+                    variation.last().text.append(token)
+                    variation.last().text.append(" ")
+                    variation.last().size++
                     variantIndex++
                 }
                 continue

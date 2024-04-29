@@ -2,7 +2,9 @@ package com.github.bhlangonijr.chesslib.unicode
 
 import com.github.bhlangonijr.chesslib.Board
 import com.github.bhlangonijr.chesslib.Piece
-import java.io.PrintStream
+import kotlinx.io.Sink
+import kotlinx.io.writeString
+import kotlin.jvm.JvmOverloads
 
 /**
  * A printer class for conveniently printing boards using Unicode chess symbols in a reliable and consistent way.
@@ -15,7 +17,7 @@ class UnicodePrinter
  * Same as invoking `new UnicodePrinter(System.out)`.
  *
  * @see UnicodePrinter.UnicodePrinter
- */ @JvmOverloads constructor(private val printStream: PrintStream = System.out) {
+ */ @JvmOverloads constructor(private val printStream: Sink) {
     /**
      * Construct a printer using the specified print stream.
      *
@@ -31,12 +33,12 @@ class UnicodePrinter
         var row = 0
         for (p in board.boardToArray()) {
             if (p == Piece.NONE) {
-                printStream.print(' ')
+                printStream.writeString(" ")
             } else {
-                printStream.print(p.fanSymbol)
+                printStream.writeString(p.fanSymbol)
             }
             if (++row % 8 == 0) {
-                printStream.println()
+                printStream.writeString("\n")
             }
         }
     }

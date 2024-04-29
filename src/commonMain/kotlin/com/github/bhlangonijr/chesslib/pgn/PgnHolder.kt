@@ -19,13 +19,13 @@ import com.github.bhlangonijr.chesslib.game.Event
 import com.github.bhlangonijr.chesslib.game.Game
 import com.github.bhlangonijr.chesslib.game.Player
 import com.github.bhlangonijr.chesslib.util.LargeFile
-import java.io.FileWriter
-import java.io.IOException
-import java.io.PrintWriter
-import java.nio.file.Files
-import java.nio.file.Paths
-import java.util.Arrays
-import java.util.function.Consumer
+import com.github.bhlangonijr.chesslib.util.readLines
+import kotlinx.io.IOException
+import kotlinx.io.buffered
+import kotlinx.io.files.Path
+import kotlinx.io.files.SystemFileSystem
+import kotlinx.io.writeString
+import kotlin.jvm.JvmOverloads
 
 /**
  * A proxy for accessing a Portable Game Notation (PGN) file. The PGN holder can be used to optimize the way the
@@ -135,8 +135,8 @@ class PgnHolder(filename: String?) {
      * @throws IOException in case of error reading the PGN file
      */
     @Throws(IOException::class)
-    fun countGamesInPgnFile(): Long {
-        return Files.lines(Paths.get(this.fileName))
+    fun countGamesInPgnFile(): Int {
+        return SystemFileSystem.source(Path(this.fileName!!)).buffered().readLines()
             .filter { s: String -> s.startsWith("[Event ") }
             .count()
     }
@@ -192,15 +192,14 @@ class PgnHolder(filename: String?) {
      */
     fun savePgn() {
         try {
-            val outFile = FileWriter(fileName)
-            val out = PrintWriter(outFile)
+            val out = SystemFileSystem.sink(Path(fileName!!)).buffered()
             for (event in event.values) {
                 for (round in event.round.values) {
                     for (game in round.game) {
                         if (game != null) {
-                            out.println()
-                            out.print(game)
-                            out.println()
+                            out.writeString("\n")
+                            out.writeString(game.toString())
+                            out.writeString("\n")
                         }
                     }
                 }
@@ -258,10 +257,10 @@ class PgnHolder(filename: String?) {
         games.add(game)
 
         // Notify all registered listeners about added game
-        getListener().forEach(Consumer { pgnLoadListener: PgnLoadListener ->
+        getListener().forEach { pgnLoadListener: PgnLoadListener ->
             pgnLoadListener.notifyProgress(
                 games.size
             )
-        })
+        }
     }
 }

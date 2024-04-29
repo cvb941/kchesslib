@@ -25,10 +25,10 @@ import com.github.bhlangonijr.chesslib.Rank
 import com.github.bhlangonijr.chesslib.Side
 import com.github.bhlangonijr.chesslib.Square
 import com.github.bhlangonijr.chesslib.util.StringUtil
-import java.util.LinkedList
-import java.util.Locale
-import java.util.function.Function
+import kotlin.jvm.JvmOverloads
+import kotlin.jvm.Synchronized
 import kotlin.math.abs
+import kotlin.native.concurrent.ThreadLocal
 
 /**
  * A convenient data structure to store an ordered sequence of moves and access to their human-readable representation
@@ -52,8 +52,9 @@ class MoveList
      *
      * @return the FEN representation of the initial position
      */
-    val startFen: String = Constants.startStandardFENPosition
-) : LinkedList<Move>(), MutableList<Move> {
+    val startFen: String = Constants.startStandardFENPosition,
+    private val backingList: MutableList<Move> = mutableListOf()
+) : MutableList<Move> by backingList {
     private var dirty = true
 
     private var sanArray: Array<String?>? = null
@@ -95,44 +96,59 @@ class MoveList
      * @param halfMoves the existing move list
      */
     constructor(halfMoves: MoveList) : this(halfMoves.startFen) {
-        super.addAll(halfMoves)
+        backingList.addAll(halfMoves)
     }
 
     override fun add(index: Int, move: Move) {
         dirty = true
-        super.add(index, move)
+        backingList.add(index, move)
     }
 
     override fun add(move: Move): Boolean {
         dirty = true
-        return super.add(move)
+        return backingList.add(move)
     }
 
     override fun addAll(moves: Collection<Move>): Boolean {
         dirty = true
-        return super.addAll(moves)
+        return backingList.addAll(moves)
     }
 
     override fun addAll(index: Int, moves: Collection<Move>): Boolean {
         dirty = true
-        return super.addAll(index, moves)
+        return backingList.addAll(index, moves)
     }
 
-    override fun removeFirst(): Move? {
+    override fun removeAll(elements: Collection<Move>): Boolean {
         dirty = true
-        return super.removeFirst()
+        return backingList.removeAll(elements)
     }
 
-    override fun removeLast(): Move? {
+    override fun removeAt(index: Int): Move {
         dirty = true
-        return super.removeLast()
+        return backingList.removeAt(index)
+    }
+
+    override fun remove(element: Move): Boolean {
+        dirty = true
+        return backingList.remove(element)
+    }
+
+    override fun retainAll(elements: Collection<Move>): Boolean {
+        dirty = true
+        return backingList.retainAll(elements)
+    }
+
+    override fun set(index: Int, element: Move): Move {
+        dirty = true
+        return backingList.set(index, element)
     }
 
     override fun clear() {
         dirty = true
         sanArray = null
         fanArray = null
-        super.clear()
+        backingList.clear()
     }
 
     /**
@@ -415,7 +431,7 @@ class MoveList
 
         val lastChar = san[san.length - 1]
         //FIX missing equal sign for pawn promotions
-        if (Character.isLetter(lastChar) && lastChar.uppercaseChar() != 'O') {
+        if (lastChar.isLetter() && lastChar.uppercaseChar() != 'O') {
             san = san.substring(0, san.length - 1)
             strPromotion = lastChar.toString()
         }
@@ -429,7 +445,7 @@ class MoveList
         }
 
         if (san.length == 3 &&
-            Character.isUpperCase(san[2])
+            san[2].isUpperCase()
         ) {
             strPromotion = san.substring(2, 3)
             san = san.substring(0, 2)
@@ -438,17 +454,17 @@ class MoveList
         var from = Square.NONE
         val to: Square
         try {
-            to = Square.valueOf(StringUtil.lastSequence(san.uppercase(Locale.getDefault()), 2))
+            to = Square.valueOf(StringUtil.lastSequence(san.uppercase(), 2))
         } catch (e: Exception) {
             throw MoveConversionException(
                 "Couldn't parse destination square[" + san + "]: " +
-                        san.uppercase(Locale.getDefault())
+                        san.uppercase()
             )
         }
         val promotion =
             if (strPromotion.isEmpty()) Piece.NONE else Piece.Companion.fromFenSymbol(
-                if (side == Side.WHITE) strPromotion.uppercase(Locale.getDefault()) else strPromotion.lowercase(
-                    Locale.getDefault()
+                if (side == Side.WHITE) strPromotion.uppercase() else strPromotion.lowercase(
+                    
                 )
             )
 
@@ -477,23 +493,23 @@ class MoveList
 
             var fromPiece = PieceType.PAWN
 
-            if (Character.isUpperCase(strFrom[0])) {
+            if (strFrom[0].isUpperCase()) {
                 fromPiece = PieceType.Companion.fromSanSymbol(strFrom[0].toString())
             }
 
             if (strFrom.length == 3) {
-                from = Square.valueOf(strFrom.substring(1, 3).uppercase(Locale.getDefault()))
+                from = Square.valueOf(strFrom.substring(1, 3).uppercase())
             } else {
                 var location = ""
                 if (strFrom.length == 2) {
-                    if (Character.isUpperCase(strFrom[0])) {
+                    if (strFrom[0].isUpperCase()) {
                         location = strFrom.substring(1, 2)
                     } else {
                         location = strFrom.substring(0, 2)
-                        from = Square.valueOf(location.uppercase(Locale.getDefault()))
+                        from = Square.valueOf(location.uppercase())
                     }
                 } else {
-                    if (Character.isLowerCase(strFrom[0])) {
+                    if (strFrom[0].isLowerCase()) {
                         location = strFrom
                     }
                 }
@@ -504,7 +520,7 @@ class MoveList
                         board.sideToMove, fromPiece
                     )
                     if (location.length > 0) {
-                        if (Character.isDigit(location[0])) {
+                        if (location[0].isDigit()) {
                             val irank = location.toInt()
                             if (!(irank >= 1 && irank <= 8)) {
                                 throw MoveConversionException("Couldn't parse rank: $location")
@@ -514,7 +530,7 @@ class MoveList
                         } else {
                             try {
                                 val file =
-                                    File.valueOf("FILE_" + location.uppercase(Locale.getDefault()))
+                                    File.valueOf("FILE_" + location.uppercase())
                                 xfrom = xfrom and Bitboard.getFilebb(file)
                             } catch (e: Exception) {
                                 throw MoveConversionException("Couldn't parse file: $location")
@@ -656,7 +672,7 @@ class MoveList
 
     companion object {
         private const val serialVersionUID = -6204280556340150806L
-        private val boardHolder: ThreadLocal<Board> = ThreadLocal.withInitial { Board() }
+        private val boardHolder: Board = Board()
         private val nullMove = Move(Square.NONE, Square.NONE)
 
         private val board: Board
@@ -665,7 +681,7 @@ class MoveList
              *
              * @return the board representing the position after the moves are played
              */
-            get() = boardHolder.get()
+            get() = boardHolder
 
         /**
          * Encodes the move to its Short Algebraic Notation (SAN), using the context of the given board.
@@ -706,7 +722,7 @@ class MoveList
          */
         // encode the move to SAN/FAN move and update thread local board
         @Throws(MoveConversionException::class)
-        private fun encode(board: Board, move: Move, notation: Function<Piece, String?>): String {
+        private fun encode(board: Board, move: Move, notation: (Piece) -> String?): String {
             val san = StringBuilder()
             val piece = board.getPiece(move.from)
             if (piece.pieceType == PieceType.KING) {
@@ -726,7 +742,7 @@ class MoveList
             }
             val pawnMove = piece.pieceType == PieceType.PAWN && move.from.file == move.to.file
             var ambResolved = false
-            san.append(notation.apply(piece))
+            san.append(notation(piece))
             if (!pawnMove) {
                 //resolving ambiguous move
                 var amb = board.squareAttackedByPieceType(
@@ -744,11 +760,11 @@ class MoveList
                 }
                 if (amb != 0L) {
                     if ((Bitboard.getFilebb(move.from) and amb) == 0L) {
-                        san.append(move.from.file.notation.lowercase(Locale.getDefault()))
+                        san.append(move.from.file.notation.lowercase())
                     } else if ((Bitboard.getRankbb(move.from) and amb) == 0L) {
-                        san.append(move.from.rank.notation.lowercase(Locale.getDefault()))
+                        san.append(move.from.rank.notation.lowercase())
                     } else {
-                        san.append(move.from.toString().lowercase(Locale.getDefault()))
+                        san.append(move.from.toString().lowercase())
                     }
                     ambResolved = true
                 }
@@ -762,18 +778,18 @@ class MoveList
             }
 
 
-            val captured = board.backup.last!!.capturedPiece
+            val captured = board.backup.last()!!.capturedPiece
             val isCapture = captured != Piece.NONE
             if (isCapture) {
                 if (!ambResolved && piece.pieceType == PieceType.PAWN) {
-                    san.append(move.from.file.notation.lowercase(Locale.getDefault()))
+                    san.append(move.from.file.notation.lowercase())
                 }
                 san.append("x")
             }
-            san.append(move.to.toString().lowercase(Locale.getDefault()))
+            san.append(move.to.toString().lowercase())
             if (move.promotion != Piece.NONE) {
                 san.append("=")
-                san.append(notation.apply(move.promotion))
+                san.append(notation(move.promotion))
             }
             addCheckFlag(board, san)
             return san.toString()

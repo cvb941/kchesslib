@@ -15,6 +15,8 @@
  */
 package com.github.bhlangonijr.chesslib
 
+import kotlin.jvm.JvmStatic
+
 /**
  * A chess piece on the board, that is, a specific combination of a [Side] and a [PieceType].
  *
@@ -190,7 +192,7 @@ enum class Piece(
         @JvmStatic
         fun fromFenSymbol(fenSymbol: String): Piece {
             val piece = fenToPiece[fenSymbol]
-                ?: throw IllegalArgumentException(String.format("Unknown piece '%s'", fenSymbol))
+                ?: throw IllegalArgumentException("Unknown piece '$fenSymbol'")
             return piece
         }
     }

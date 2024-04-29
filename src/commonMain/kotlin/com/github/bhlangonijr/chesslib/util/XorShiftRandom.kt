@@ -1,5 +1,8 @@
 package com.github.bhlangonijr.chesslib.util
 
+import kotlinx.datetime.Clock
+import kotlin.jvm.JvmOverloads
+
 /**
  * A utility class that is used to generate pseudorandom numbers bases on XOR and bit shifts operations.
  * [Xorshift random generators](https://en.wikipedia.org/wiki/Xorshift) are simple and efficient software
@@ -8,7 +11,7 @@ package com.github.bhlangonijr.chesslib.util
 class XorShiftRandom
 /**
  * Constructs a new random number generator.
- */ @JvmOverloads constructor(private var seed: Long = System.nanoTime()) {
+ */ @JvmOverloads constructor(private var seed: Long = Clock.System.now().nanosecondsOfSecond.toLong()) {
     /**
      * Constructs a new random number generator using a custom long seed.
      *

@@ -1,7 +1,6 @@
 package com.github.bhlangonijr.chesslib.pgn
 
 import com.github.bhlangonijr.chesslib.util.StringUtil
-import java.util.regex.Pattern
 
 /**
  * The definition of a Portable Game Notation (PGN) property, also known as *tag*.
@@ -39,7 +38,7 @@ class PgnProperty {
          */
         const val UTF8_BOM: String = "\uFEFF"
 
-        private val propertyPattern: Pattern = Pattern.compile("\\[.* \".*\"\\]")
+        private val propertyPattern: Regex = Regex("\\[.* \".*\"\\]")
 
         /**
          * Checks if the line of text contains a PGN property.
@@ -48,7 +47,7 @@ class PgnProperty {
          * @return `true` if the line is a PGN property
          */
         fun isProperty(line: String): Boolean {
-            return propertyPattern.matcher(line).matches()
+            return propertyPattern.matches(line)
         }
 
         /**

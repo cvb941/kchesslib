@@ -15,6 +15,8 @@
  */
 package com.github.bhlangonijr.chesslib
 
+import kotlin.jvm.JvmStatic
+
 
 /**
  * All possible piece types in a chess game.
@@ -110,7 +112,7 @@ enum class PieceType(
         @JvmStatic
         fun fromSanSymbol(sanSymbol: String): PieceType {
             val pieceType = sanToType[sanSymbol]
-                ?: throw IllegalArgumentException(String.format("Unknown piece '%s'", sanSymbol))
+                ?: throw IllegalArgumentException("Unknown piece '$sanSymbol'")
             return pieceType
         }
     }

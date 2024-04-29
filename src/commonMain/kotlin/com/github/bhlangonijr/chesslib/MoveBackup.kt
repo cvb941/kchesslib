@@ -16,7 +16,7 @@
 package com.github.bhlangonijr.chesslib
 
 import com.github.bhlangonijr.chesslib.move.Move
-import java.util.EnumMap
+import kotlin.jvm.JvmField
 
 /**
  * A structure that can be used to cancel the effects of a move and to restore the board to a previous status. The
@@ -33,7 +33,7 @@ class MoveBackup() : BoardEvent {
      *
      * @return the castle rights
      */
-    val castleRight: EnumMap<Side, CastleRight?> = EnumMap(Side::class.java)
+    val castleRight: MutableMap<Side, CastleRight?> = mutableMapOf()
     /**
      * Returns the next side to move used for restoring the board.
      *

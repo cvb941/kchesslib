@@ -1,6 +1,7 @@
 package com.github.bhlangonijr.chesslib
 
 import com.github.bhlangonijr.chesslib.move.MoveGeneratorException
+import kotlinx.datetime.Clock
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -212,7 +213,7 @@ class PerftTest {
         }
         var time: Long = 0
         if (ply == 1) {
-            time = System.currentTimeMillis()
+            time = Clock.System.now().toEpochMilliseconds()
         }
         var nodes: Long = 0
         var partialNodes: Long
@@ -239,7 +240,7 @@ class PerftTest {
         }
         if (ply == 1) {
             println("Node count: $nodes")
-            println("Time: " + (System.currentTimeMillis() - time))
+            println("Time: " + (Clock.System.now().toEpochMilliseconds() - time))
         }
         return nodes
     }

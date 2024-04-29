@@ -15,6 +15,8 @@
  */
 package com.github.bhlangonijr.chesslib.game
 
+import kotlin.jvm.JvmField
+
 /**
  * A round of a chess event.
  */

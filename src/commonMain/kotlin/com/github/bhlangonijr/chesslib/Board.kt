@@ -21,13 +21,8 @@ import com.github.bhlangonijr.chesslib.move.Move
 import com.github.bhlangonijr.chesslib.move.MoveGenerator
 import com.github.bhlangonijr.chesslib.move.MoveList
 import com.github.bhlangonijr.chesslib.util.XorShiftRandom
-import java.util.Arrays
-import java.util.EnumMap
-import java.util.LinkedList
-import java.util.Locale
-import java.util.concurrent.CopyOnWriteArrayList
-import java.util.function.Supplier
-import java.util.stream.IntStream
+import kotlin.jvm.JvmField
+import kotlin.jvm.JvmOverloads
 import kotlin.math.abs
 import kotlin.math.min
 
@@ -51,17 +46,15 @@ import kotlin.math.min
 class Board @JvmOverloads constructor(
     gameContext: GameContext = GameContext(),
     private val updateHistory: Boolean = true
-) : Cloneable, BoardEvent {
+) : BoardEvent {
     /**
      * Returns the current ordered list of move backups generated from the moves performed on the board.
      *
      * @return the list of move backups
      */
     @JvmField
-    val backup: LinkedList<MoveBackup?> = LinkedList()
-    private val eventListener = EnumMap<BoardEventType, MutableList<BoardEventListener>?>(
-        BoardEventType::class.java
-    )
+    val backup: MutableList<MoveBackup?> = mutableListOf()
+    private val eventListener = mutableMapOf<BoardEventType, MutableList<BoardEventListener>?>()
     private val bitboard = LongArray(Piece.Companion.allPieces.size)
 
     /**
@@ -78,7 +71,7 @@ class Board @JvmOverloads constructor(
      *
      * @return the map containing the castle rights for both sides
      */
-    val castleRight: EnumMap<Side, CastleRight?> = EnumMap(Side::class.java)
+    val castleRight: MutableMap<Side, CastleRight?> = mutableMapOf()
 
     /**
      * Returns the history of the board, represented by the hashes of all the positions occurred on the board.
@@ -87,7 +80,7 @@ class Board @JvmOverloads constructor(
      * @see Board.getIncrementalHashKey
      */
     @JvmField
-    val history: LinkedList<Long> = LinkedList()
+    val history: MutableList<Long> = mutableListOf()
     /**
      * Returns the next side to move.
      *
@@ -214,7 +207,7 @@ class Board @JvmOverloads constructor(
         moveCounter = 1
         halfMoveCounter = 0
         for (evt in BoardEventType.entries) {
-            eventListener[evt] = CopyOnWriteArrayList()
+            eventListener[evt] = mutableListOf()
         }
         loadFromFen(gameContext.startFEN)
         isEnableEvents = true
@@ -386,7 +379,7 @@ class Board @JvmOverloads constructor(
         incrementalHashKey = incrementalHashKey xor getSideKey(sideToMove!!)
 
         if (updateHistory) {
-            history.addLast(incrementalHashKey)
+            history.add(incrementalHashKey)
         }
 
         backup.add(backupMove)
@@ -422,7 +415,7 @@ class Board @JvmOverloads constructor(
         sideToMove = side!!.flip()
         incrementalHashKey = incrementalHashKey xor getSideKey(sideToMove!!)
         if (updateHistory) {
-            history.addLast(incrementalHashKey)
+            history.add(incrementalHashKey)
         }
         backup.add(backupMove)
         return true
@@ -641,9 +634,9 @@ class Board @JvmOverloads constructor(
         halfMoveCounter = 0
         history.clear()
 
-        Arrays.fill(bitboard, 0L)
-        Arrays.fill(bbSide, 0L)
-        Arrays.fill(occupation, Piece.NONE)
+        bitboard.fill(0L)
+        bbSide.fill(0L)
+        occupation.fill(Piece.NONE)
         backup.clear()
         incrementalHashKey = 0
     }
@@ -699,7 +692,7 @@ class Board @JvmOverloads constructor(
             file = 0
             for (i in 0 until r.length) {
                 val c = r[i]
-                if (Character.isDigit(c)) {
+                if (c.isDigit()) {
                     file += c.digitToIntOrNull() ?: -1
                 } else {
                     val sq: Square = Square.Companion.encode(
@@ -713,7 +706,7 @@ class Board @JvmOverloads constructor(
             rank--
         }
 
-        sideToMove = if (state.lowercase(Locale.getDefault())[0] == 'w') Side.WHITE else Side.BLACK
+        sideToMove = if (state.lowercase()[0] == 'w') Side.WHITE else Side.BLACK
 
         if (state.contains("KQ")) {
             castleRight[Side.WHITE] = CastleRight.KING_AND_QUEEN_SIDE
@@ -737,7 +730,7 @@ class Board @JvmOverloads constructor(
 
         val flags = state.split(" ")
         if (flags.size >= 3) {
-            val s = flags[2].uppercase(Locale.getDefault()).trim { it <= ' ' }
+            val s = flags[2].uppercase().trim { it <= ' ' }
             if (s != "-") {
                 val ep = Square.valueOf(s)
                 enPassant = ep
@@ -759,7 +752,7 @@ class Board @JvmOverloads constructor(
 
         incrementalHashKey = zobristKey
         if (updateHistory) {
-            history.addLast(this.zobristKey)
+            history.add(this.zobristKey)
         }
         // call listeners
         if (isEnableEvents &&
@@ -813,7 +806,7 @@ class Board @JvmOverloads constructor(
      * @return the string that represents the current position in FEN notation
      */
     fun getFen(includeCounters: Boolean, onlyOutputEnPassantIfCapturable: Boolean): String {
-        val fen = StringBuffer()
+        val fen = StringBuilder()
         var emptySquares = 0
         for (i in 7 downTo 0) {
             val r: Rank = Rank.Companion.allRanks.get(i)
@@ -883,7 +876,7 @@ class Board @JvmOverloads constructor(
             fen.append(" -")
         } else {
             fen.append(" ")
-            fen.append(enPassant.toString().lowercase(Locale.getDefault()))
+            fen.append(enPassant.toString().lowercase())
         }
 
         if (includeCounters) {
@@ -928,7 +921,7 @@ class Board @JvmOverloads constructor(
      *
      * @return the event listeners registered to this board
      */
-    fun getEventListener(): EnumMap<BoardEventType, MutableList<BoardEventListener>?>? {
+    fun getEventListener(): MutableMap<BoardEventType, MutableList<BoardEventListener>?> {
         return eventListener
     }
 
@@ -1209,7 +1202,7 @@ class Board @JvmOverloads constructor(
      */
     fun isAttackedBy(move: Move): Boolean {
         val pieceType = getPiece(move.from).pieceType
-        assert(PieceType.NONE != pieceType)
+        require(PieceType.NONE != pieceType)
         val side = sideToMove
         var attacks = 0L
         when (pieceType) {
@@ -1336,12 +1329,12 @@ class Board @JvmOverloads constructor(
 
             val pawns = getBitboard(Piece.WHITE_PAWN) or getBitboard(Piece.BLACK_PAWN)
             if (pawns == 0L) {
-                val count = java.lang.Long.bitCount(getBitboard()).toLong()
-                val whiteCount = java.lang.Long.bitCount(getBitboard(Side.WHITE))
-                val blackCount = java.lang.Long.bitCount(getBitboard(Side.BLACK))
-                if (count == 4L) {
-                    val whiteBishopCount = java.lang.Long.bitCount(getBitboard(Piece.WHITE_BISHOP))
-                    val blackBishopCount = java.lang.Long.bitCount(getBitboard(Piece.BLACK_BISHOP))
+                val count = getBitboard().countOneBits()
+                val whiteCount = getBitboard(Side.WHITE).countOneBits()
+                val blackCount = getBitboard(Side.BLACK).countOneBits()
+                if (count == 4) {
+                    val whiteBishopCount = getBitboard(Piece.WHITE_BISHOP).countOneBits()
+                    val blackBishopCount = getBitboard(Piece.BLACK_BISHOP).countOneBits()
                     if (whiteCount > 1 && blackCount > 1) {
                         return !((whiteBishopCount == 1 && blackBishopCount == 1) &&
                                 getFistPieceLocation(Piece.WHITE_BISHOP).isLightSquare !=
@@ -1357,8 +1350,8 @@ class Board @JvmOverloads constructor(
                                 ((Bitboard.lightSquares and getBitboard(Piece.BLACK_BISHOP)) == 0L ||
                                         (Bitboard.darkSquares and getBitboard(Piece.BLACK_BISHOP)) == 0L)
                     } else {
-                        java.lang.Long.bitCount(getBitboard(Piece.WHITE_KNIGHT)) == 2 ||
-                                java.lang.Long.bitCount(getBitboard(Piece.BLACK_KNIGHT)) == 2
+                        getBitboard(Piece.WHITE_KNIGHT).countOneBits() == 2 ||
+                                getBitboard(Piece.BLACK_KNIGHT).countOneBits() == 2
                     }
                 } else {
                     if ((getBitboard(Piece.WHITE_KING) or getBitboard(Piece.WHITE_BISHOP)) == getBitboard(
@@ -1607,14 +1600,12 @@ class Board @JvmOverloads constructor(
     fun toStringFromViewPoint(side: Side): String {
         val sb = StringBuilder()
 
-        val rankIterator = if (side == Side.WHITE
-        ) Supplier { sevenToZero() } else Supplier { zeroToSeven() }
-        val fileIterator = if (side == Side.WHITE
-        ) Supplier { zeroToSeven() } else Supplier { sevenToZero() }
+        val rankIterator = if (side == Side.WHITE) sevenToZero() else zeroToSeven()
+        val fileIterator = if (side == Side.WHITE) zeroToSeven() else sevenToZero()
 
-        rankIterator.get().forEach { i: Int ->
+        rankIterator.forEach { i: Int ->
             val r: Rank = Rank.Companion.allRanks.get(i)
-            fileIterator.get().forEach { n: Int ->
+            fileIterator.forEach { n: Int ->
                 val f: File = File.Companion.allFiles.get(n)
                 if (File.NONE != f && Rank.NONE != r) {
                     val sq: Square = Square.Companion.encode(r, f)
@@ -1646,7 +1637,7 @@ class Board @JvmOverloads constructor(
      *
      * @return a copy of the board
      */
-    public override fun clone(): Board {
+    public fun clone(): Board {
         val copy = Board(context, this.updateHistory)
         copy.loadFromFen(this.fen)
         copy.enPassantTarget = enPassantTarget
@@ -1740,12 +1731,12 @@ class Board @JvmOverloads constructor(
             return ep
         }
 
-        private fun zeroToSeven(): IntStream {
-            return IntStream.iterate(0) { i: Int -> i + 1 }.limit(8)
+        private fun zeroToSeven(): IntProgression {
+            return 0..7
         }
 
-        private fun sevenToZero(): IntStream {
-            return IntStream.iterate(7) { i: Int -> i - 1 }.limit(8)
+        private fun sevenToZero(): IntProgression {
+            return 7 downTo 0
         }
     }
 }

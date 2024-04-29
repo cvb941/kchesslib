@@ -4,6 +4,8 @@ import com.github.bhlangonijr.chesslib.pgn.PgnException
 import com.github.bhlangonijr.chesslib.pgn.PgnHolder
 import com.github.bhlangonijr.chesslib.pgn.PgnLoadListener
 import com.github.bhlangonijr.chesslib.util.LargeFile
+import com.github.bhlangonijr.chesslib.util.compute
+import kotlinx.datetime.Clock
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
@@ -289,7 +291,7 @@ class PgnHolderTest {
     @Test
     @Throws(Exception::class)
     fun testLongMoves() {
-        val init = System.currentTimeMillis()
+        val init = Clock.System.now().toEpochMilliseconds()
         val pgn = PgnHolder("src/commonTest/resources/longest.pgn")
         pgn.loadPgn()
         for (game in pgn.getGames()) {
@@ -300,7 +302,7 @@ class PgnHolderTest {
                 board.doMove(move)
             }
         }
-        val timeSpent = System.currentTimeMillis() - init
+        val timeSpent = Clock.System.now().toEpochMilliseconds() - init
         assertTrue(timeSpent < 5000)
     }
 

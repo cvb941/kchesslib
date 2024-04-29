@@ -20,6 +20,7 @@ import com.github.bhlangonijr.chesslib.Constants
 import com.github.bhlangonijr.chesslib.Side
 import com.github.bhlangonijr.chesslib.Square
 import com.github.bhlangonijr.chesslib.move.Move
+import kotlin.jvm.JvmOverloads
 
 /**
  * The definition of a game context, a support structure used to provide contextual information to a chess position, and

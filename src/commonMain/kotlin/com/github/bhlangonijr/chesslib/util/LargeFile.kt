@@ -13,18 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.github.bhlangonijr.chesslib.util
 
-import java.io.BufferedReader
-import java.io.FileReader
-import java.io.InputStream
-import java.io.InputStreamReader
+import kotlinx.io.RawSource
+import kotlinx.io.Source
+import kotlinx.io.buffered
+import kotlinx.io.files.Path
+import kotlinx.io.files.SystemFileSystem
+import kotlinx.io.readLine
 
 /**
  * An abstract representation of a potentially large text-based file that can be read line by line.
  */
+@OptIn(ExperimentalStdlibApi::class)
 class LargeFile : Iterable<String?>, AutoCloseable {
-    private val reader: BufferedReader
+    private val reader: Source
 
     private var nextLine: String? = null
 
@@ -35,7 +39,7 @@ class LargeFile : Iterable<String?>, AutoCloseable {
      * @throws Exception in case the file can not be accessed
      */
     constructor(filePath: String) {
-        reader = BufferedReader(FileReader(filePath))
+        reader = SystemFileSystem.source(Path(filePath)).buffered()
         readNextLine()
     }
 
@@ -44,8 +48,8 @@ class LargeFile : Iterable<String?>, AutoCloseable {
      *
      * @param inputStream the input stream
      */
-    constructor(inputStream: InputStream) {
-        reader = BufferedReader(InputStreamReader(inputStream))
+    constructor(inputStream: RawSource) {
+        reader = inputStream.buffered()
         readNextLine()
     }
 

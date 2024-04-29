@@ -20,7 +20,7 @@ import com.github.bhlangonijr.chesslib.BoardEventType
 import com.github.bhlangonijr.chesslib.Piece
 import com.github.bhlangonijr.chesslib.Side
 import com.github.bhlangonijr.chesslib.Square
-import java.util.Locale
+import kotlin.jvm.JvmOverloads
 
 /**
  * The definition of a chess move, that is, a piece movement from its starting square (the origin square) to a
@@ -96,12 +96,12 @@ class Move
      * @param side the side used to disambiguate the promotion piece
      */
     constructor(move: String, side: Side?) : this(
-        Square.valueOf(move.substring(0, 2).uppercase(Locale.getDefault())),
-        Square.valueOf(move.substring(2, 4).uppercase(Locale.getDefault())),
+        Square.valueOf(move.substring(0, 2).uppercase()),
+        Square.valueOf(move.substring(2, 4).uppercase()),
         if (move.length < 5) Piece.NONE else if (Side.WHITE == side) Piece.Companion.fromFenSymbol(
-            move.substring(4, 5).uppercase(Locale.getDefault())
+            move.substring(4, 5).uppercase()
         ) else Piece.Companion.fromFenSymbol(
-            move.substring(4, 5).lowercase(Locale.getDefault())
+            move.substring(4, 5).lowercase()
         )
     )
 
@@ -138,9 +138,9 @@ class Move
         if (Piece.NONE != promotion) {
             promo = promotion.fenSymbol
         }
-        return from.toString().lowercase(Locale.getDefault()) +
-                to.toString().lowercase(Locale.getDefault()) +
-                promo!!.lowercase(Locale.getDefault())
+        return from.toString().lowercase() +
+                to.toString().lowercase() +
+                promo!!.lowercase()
     }
 
     override val type: BoardEventType

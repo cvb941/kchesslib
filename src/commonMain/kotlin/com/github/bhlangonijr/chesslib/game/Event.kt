@@ -16,6 +16,7 @@
 package com.github.bhlangonijr.chesslib.game
 
 import com.github.bhlangonijr.chesslib.pgn.PgnHolder
+import kotlin.jvm.JvmField
 
 /**
  * A chess event.

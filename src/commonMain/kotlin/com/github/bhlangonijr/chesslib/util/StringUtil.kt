@@ -107,7 +107,7 @@ object StringUtil {
     fun replaceAll(builder: StringBuilder, from: String, to: String): StringBuilder {
         var index = builder.indexOf(from)
         while (index != -1) {
-            builder.replace(index, index + from.length, to)
+            builder.setRange(index, index + from.length, to)
             index += to.length
             index = builder.indexOf(from, index)
         }
@@ -126,7 +126,7 @@ object StringUtil {
             var ch = str[idx]
             if (ch.code < table.size) {
                 ch = table[ch.code]
-                str.setCharAt(idx, ch)
+                str.set(idx, ch)
             }
         }
     }
@@ -141,7 +141,7 @@ object StringUtil {
         for (idx in 0 until str.length) {
             val ch = str[idx]
             val conversion = map[ch]
-            if (conversion != null) str.setCharAt(idx, conversion)
+            if (conversion != null) str.set(idx, conversion)
         }
     }
 

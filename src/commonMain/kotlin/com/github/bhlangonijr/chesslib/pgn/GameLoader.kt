@@ -15,6 +15,7 @@
  */
 package com.github.bhlangonijr.chesslib.pgn
 
+import com.benasher44.uuid.uuid4
 import com.github.bhlangonijr.chesslib.game.Event
 import com.github.bhlangonijr.chesslib.game.Game
 import com.github.bhlangonijr.chesslib.game.GameResult
@@ -25,8 +26,6 @@ import com.github.bhlangonijr.chesslib.game.Round
 import com.github.bhlangonijr.chesslib.game.Termination
 import com.github.bhlangonijr.chesslib.game.TimeControl
 import com.github.bhlangonijr.chesslib.util.StringUtil
-import java.util.Locale
-import java.util.UUID
 import kotlin.math.max
 
 /**
@@ -68,7 +67,7 @@ object GameLoader {
             } catch (e: Exception) { //TODO stricter exceptions
                 val name = container.event.name
                 val r = container.round.number
-                throw PgnException(String.format("Error parsing PGN[%d, %s]: ", r, name), e)
+                throw PgnException("Error parsing PGN[$r, $name]: ", e)
             }
         }
         return if (container.initGame) container.game else null
@@ -78,7 +77,7 @@ object GameLoader {
     private fun addProperty(line: String, container: PgnTempContainer) {
         val property: PgnProperty = PgnProperty.Companion.parsePgnProperty(line) ?: return
         container.initGame = true
-        val tag = property.name!!.lowercase(Locale.getDefault()).trim { it <= ' ' }
+        val tag = property.name!!.lowercase().trim { it <= ' ' }
         when (tag) {
             "event" -> {
                 if (container.moveTextParsing && container.game.halfMoves.size == 0) {
@@ -133,7 +132,7 @@ object GameLoader {
             "plycount" -> container.game.plyCount = property.value
             "termination" -> try {
                 container.game.termination =
-                    Termination.Companion.fromValue(property.value!!.uppercase(Locale.getDefault()))
+                    Termination.Companion.fromValue(property.value!!.uppercase())
             } catch (e1: Exception) {
                 container.game.termination = Termination.UNTERMINATED
             }
@@ -141,7 +140,7 @@ object GameLoader {
             "timecontrol" -> if (container.event.timeControl == null) {
                 try {
                     container.event.timeControl =
-                        TimeControl.Companion.parseFromString(property.value!!.uppercase(Locale.getDefault()))
+                        TimeControl.Companion.parseFromString(property.value!!.uppercase())
                 } catch (e1: Exception) {
                     //ignore errors in time control tag as it's not required by standards
                 }
@@ -203,7 +202,7 @@ object GameLoader {
         //TODO many of this stuff can be accessed through game
         val event: Event = Event()
         val round: Round = Round(event)
-        val game: Game = Game(UUID.randomUUID().toString(), round)
+        val game: Game = Game(uuid4().toString(), round)
         var whitePlayer: Player
         var blackPlayer: Player
         val moveText: StringBuilder

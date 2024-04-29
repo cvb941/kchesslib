@@ -16,7 +16,6 @@
 package com.github.bhlangonijr.chesslib
 
 import com.github.bhlangonijr.chesslib.move.Move
-import java.util.EnumMap
 
 /**
  * A handy collection of constant values to be used in common scenarios.
@@ -113,7 +112,7 @@ object Constants {
      *
      */
     @Deprecated("use {@link Piece#getFenSymbol()} instead")
-    val pieceNotation: EnumMap<Piece, String> = EnumMap(Piece::class.java)
+    val pieceNotation: MutableMap<Piece, String> = mutableMapOf()
 
     /**
      * The map that returns a piece by its Forsyth-Edwards Notation (FEN) symbol.

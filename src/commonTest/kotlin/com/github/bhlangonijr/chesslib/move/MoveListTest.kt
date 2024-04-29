@@ -3,6 +3,7 @@ package com.github.bhlangonijr.chesslib.move
 import com.github.bhlangonijr.chesslib.Square
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 
 /**
  * The type Move list test.
@@ -225,10 +226,12 @@ class MoveListTest {
         assertEquals("Ne2", moveList.toSanArray()!![moveList.size - 1])
     }
 
-    @Test(expected = MoveConversionException::class)
+    @Test
     fun testInvalidSan() {
-        val moveList = MoveList("4k3/8/8/8/1b6/2N5/8/4K1N1 w - - 0 1")
-        moveList.addSanMove("Nce2", false, true)
+        assertFailsWith(MoveConversionException::class) {
+            val moveList = MoveList("4k3/8/8/8/1b6/2N5/8/4K1N1 w - - 0 1")
+            moveList.addSanMove("Nce2", false, true)
+        }
     }
 
     @Test

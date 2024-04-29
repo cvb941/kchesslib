@@ -15,7 +15,7 @@
  */
 package com.github.bhlangonijr.chesslib
 
-import java.util.LinkedList
+import kotlin.jvm.JvmStatic
 
 /**
  * A collection of bitboards and related constant values useful to perform efficient board manipulations, fast squares
@@ -1101,7 +1101,7 @@ object Bitboard {
      */
     @JvmStatic
     fun bitScanForward(bb: Long): Int {
-        return java.lang.Long.numberOfTrailingZeros(bb)
+        return bb.countTrailingZeroBits()
     }
 
     /**
@@ -1113,7 +1113,7 @@ object Bitboard {
      */
     @JvmStatic
     fun bitScanReverse(bb: Long): Int {
-        return 63 - java.lang.Long.numberOfLeadingZeros(bb)
+        return 63 - bb.countLeadingZeroBits()
     }
 
     /**
@@ -1318,7 +1318,7 @@ object Bitboard {
     @JvmStatic
     fun bbToSquareList(bb: Long): List<Square> {
         var bb = bb
-        val squares: MutableList<Square> = LinkedList()
+        val squares: MutableList<Square> = mutableListOf()
         while (bb != 0L) {
             val sq = bitScanForward(bb)
             bb = extractLsb(bb)
@@ -1336,7 +1336,7 @@ object Bitboard {
      */
     fun bbToSquareArray(bb: Long): Array<Square?> {
         var bb = bb
-        val squares = arrayOfNulls<Square>(java.lang.Long.bitCount(bb))
+        val squares = arrayOfNulls<Square>(bb.countOneBits())
         var index = 0
         while (bb != 0L) {
             val sq = bitScanForward(bb)

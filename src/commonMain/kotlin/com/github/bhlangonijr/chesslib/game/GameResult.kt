@@ -15,6 +15,8 @@
  */
 package com.github.bhlangonijr.chesslib.game
 
+import kotlin.jvm.JvmField
+
 /**
  * All possible results in a chess game. A game in progress is considered a result too.
  */

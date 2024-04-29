@@ -23,8 +23,8 @@ import com.github.bhlangonijr.chesslib.PieceType
 import com.github.bhlangonijr.chesslib.Rank
 import com.github.bhlangonijr.chesslib.Side
 import com.github.bhlangonijr.chesslib.Square
-import java.util.LinkedList
-import java.util.function.Predicate
+import kotlin.jvm.JvmOverloads
+import kotlin.jvm.JvmStatic
 
 /**
  * A handy collection of static utility methods for generating moves from a chess position.
@@ -388,7 +388,7 @@ object MoveGenerator {
      * @return the list of pseudo-legal moves available in the position
      */
     fun generatePseudoLegalMoves(board: Board): MutableList<Move> {
-        val moves: MutableList<Move> = LinkedList()
+        val moves: MutableList<Move> = mutableListOf()
         generatePawnCaptures(board, moves)
         generatePawnMoves(board, moves)
         generateKnightMoves(board, moves)
@@ -413,7 +413,7 @@ object MoveGenerator {
      */
     @JvmStatic
     fun generatePseudoLegalCaptures(board: Board): List<Move> {
-        val moves: MutableList<Move> = LinkedList()
+        val moves: MutableList<Move> = mutableListOf()
         val other = board.sideToMove.flip()
         generatePawnCaptures(board, moves)
         generateKnightMoves(board, moves, board.getBitboard(other))
@@ -436,7 +436,7 @@ object MoveGenerator {
     fun generateLegalMoves(board: Board): List<Move?> {
         try {
             val moves = generatePseudoLegalMoves(board)
-            moves.removeIf { move -> !board.isMoveLegal(move, false) }
+            moves.removeAll { move -> !board.isMoveLegal(move, false) }
             return moves
         } catch (e: Exception) {
             throw MoveGeneratorException("Couldn't generate Legal moves: ", e)

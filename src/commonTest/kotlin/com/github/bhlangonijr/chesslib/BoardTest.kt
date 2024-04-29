@@ -514,7 +514,7 @@ class BoardTest {
         board.loadFromFen("r1bqk1nr/pppp1ppp/2n5/2b1p3/4P3/5N2/PPPPBPPP/RNBQK2R w KQkq - 0 1")
         assertEquals(CastleRight.KING_AND_QUEEN_SIDE, board.getCastleRight(Side.WHITE))
         board.doMove(Move(Square.E1, Square.G1)) // castle
-        val moveBackup = board.backup.last!!
+        val moveBackup = board.backup.last()!!
         assertTrue(moveBackup.isCastleMove)
         assertEquals(Move(Square.H1, Square.F1), moveBackup.rookCastleMove)
     }
@@ -526,7 +526,7 @@ class BoardTest {
 
         val whiteRookMoveE1G1 = Move("e1g1", Side.WHITE)
         board.doMove(whiteRookMoveE1G1)
-        val moveBackup = board.backup.last!!
+        val moveBackup = board.backup.last()!!
         assertFalse(moveBackup.isCastleMove)
         assertNull(moveBackup.rookCastleMove)
     }
@@ -813,7 +813,7 @@ class BoardTest {
         board.undoMove()
         board.doMove(e7e5)
         assertEquals(initialKey, board.incrementalHashKey)
-        assertEquals(board.history.last as Long, board.incrementalHashKey)
+        assertEquals(board.history.last() as Long, board.incrementalHashKey)
         assertEquals(board.zobristKey, initialKey)
     }
 
