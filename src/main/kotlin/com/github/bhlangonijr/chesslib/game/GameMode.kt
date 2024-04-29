@@ -13,29 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package com.github.bhlangonijr.chesslib.game;
+package com.github.bhlangonijr.chesslib.game
 
 /**
  * All the possible modes of a chess game.
  */
-public enum GameMode {
-
+enum class GameMode {
     /**
      * Human vs machine game mode.
      */
     HUMAN_VS_MACHINE,
+
     /**
      * Machine vs human game mode.
      */
     MACHINE_VS_HUMAN,
+
     /**
      * Human vs human game mode.
      */
     HUMAN_VS_HUMAN,
+
     /**
      * Machine vs machine game mode.
      */
     MACHINE_VS_MACHINE
-
 }

@@ -13,22 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package com.github.bhlangonijr.chesslib.move;
+package com.github.bhlangonijr.chesslib.move
 
 /**
  * Thrown to indicate a failure generating a move.
  */
-public class MoveGeneratorException extends RuntimeException {
-
-    private static final long serialVersionUID = 6523240383760826752L;
-
+class MoveGeneratorException : RuntimeException {
     /**
      * Constructs a new move generator exception.
      */
-    public MoveGeneratorException() {
-        super();
-    }
+    constructor() : super()
 
     /**
      * Constructs a new move generator exception with the specified detail message and cause.
@@ -36,26 +30,23 @@ public class MoveGeneratorException extends RuntimeException {
      * @param message the error message
      * @param cause   the cause
      */
-    public MoveGeneratorException(String message, Throwable cause) {
-        super(message, cause);
-    }
+    constructor(message: String?, cause: Throwable?) : super(message, cause)
 
     /**
      * Constructs a new move generator exception with the specified detail message.
      *
      * @param message the error message
      */
-    public MoveGeneratorException(String message) {
-        super(message);
-    }
+    constructor(message: String?) : super(message)
 
     /**
      * Constructs a new move generator exception with the specified cause.
      *
      * @param cause the cause
      */
-    public MoveGeneratorException(Throwable cause) {
-        super(cause);
-    }
+    constructor(cause: Throwable?) : super(cause)
 
+    companion object {
+        private const val serialVersionUID = 6523240383760826752L
+    }
 }

@@ -13,27 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package com.github.bhlangonijr.chesslib.game;
+package com.github.bhlangonijr.chesslib.game
 
 /**
  * A factory for game-related components, such as games, events, rounds, and players.
  */
-public class GameFactory {
-
+object GameFactory {
     /**
      * Returns a new instance of a chess event.
      *
      * @param name the name of the event
      * @return the newly created instance of a chess event
      */
-    public static Event newEvent(String name) {
+    fun newEvent(name: String?): Event {
+        val event = Event()
+        event.name = name
+        event.id = name
 
-        Event event = new Event();
-        event.setName(name);
-        event.setId(name);
-
-        return event;
+        return event
     }
 
     /**
@@ -43,12 +40,11 @@ public class GameFactory {
      * @param number the number of the round
      * @return the newly created instance of a round
      */
-    public static Round newRound(Event event, int number) {
+    fun newRound(event: Event, number: Int): Round {
+        val round = Round(event)
+        round.number = number
 
-        Round round = new Round(event);
-        round.setNumber(number);
-
-        return round;
+        return round
     }
 
     /**
@@ -58,9 +54,8 @@ public class GameFactory {
      * @param round  the round the game belongs to
      * @return the newly created instance of a game
      */
-    public static Game newGame(String gameId, Round round) {
-
-        return new Game(gameId, round);
+    fun newGame(gameId: String, round: Round): Game {
+        return Game(gameId, round)
     }
 
     /**
@@ -70,11 +65,9 @@ public class GameFactory {
      * @param name the name of the player
      * @return he newly created instance of a player
      */
-    public static Player newPlayer(PlayerType type, String name) {
-        Player player = new GenericPlayer(name, name);
-        player.setType(type);
-        return player;
+    fun newPlayer(type: PlayerType?, name: String?): Player {
+        val player: Player = GenericPlayer(name, name)
+        player.type = type
+        return player
     }
-
-
 }

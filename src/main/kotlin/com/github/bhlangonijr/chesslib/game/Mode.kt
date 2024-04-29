@@ -13,51 +13,49 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package com.github.bhlangonijr.chesslib.game;
+package com.github.bhlangonijr.chesslib.game
 
 /**
  * The game modes.
  */
-public enum Mode {
+enum class Mode(
+    /**
+     * The description of the game mode.
+     */
+    val description: String
+) {
     /**
      * The Over the Board (OTB) game mode.
      */
     OTB("Over the Board"),
+
     /**
      * The Internet Chess Server (ICS) game mode.
      */
     ICS("Internet Chess Server");
 
     /**
-     * The description of the game mode.
-     */
-    final String description;
-
-    Mode(String description) {
-        this.description = description;
-    }
-
-    /**
-     * Returns a game mode given its name.
-     * <p>
-     * Same as invoking {@link Mode#valueOf(String)}.
-     *
-     * @param v name of the game mode
-     * @return the game mode with the specified name
-     * @throws IllegalArgumentException if the name does not correspond to any game mode
-     */
-    public static Mode fromValue(String v) {
-        return valueOf(v);
-    }
-
-    /**
      * Returns the name of the game mode.
      *
      * @return the name of the game mode
      */
-    public String value() {
-        return name();
+    fun value(): String {
+        return name
     }
 
+    companion object {
+        /**
+         * Returns a game mode given its name.
+         *
+         *
+         * Same as invoking [Mode.valueOf].
+         *
+         * @param v name of the game mode
+         * @return the game mode with the specified name
+         * @throws IllegalArgumentException if the name does not correspond to any game mode
+         */
+        fun fromValue(v: String?): Mode {
+            return valueOf(v!!)
+        }
+    }
 }

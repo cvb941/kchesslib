@@ -1,30 +1,27 @@
-package com.github.bhlangonijr.chesslib;
+package com.github.bhlangonijr.chesslib
 
-import org.apache.commons.lang3.StringUtils;
-import org.junit.Test;
+import com.github.bhlangonijr.chesslib.PieceType.Companion.fromSanSymbol
+import org.apache.commons.lang3.StringUtils
+import org.junit.Assert
+import org.junit.Test
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-public class PieceTypeTest {
-
+class PieceTypeTest {
     @Test
-    public void fromSanSymbol() {
-        assertEquals(PieceType.PAWN, PieceType.fromSanSymbol(StringUtils.EMPTY));
-        assertEquals(PieceType.KNIGHT, PieceType.fromSanSymbol("N"));
-        assertEquals(PieceType.BISHOP, PieceType.fromSanSymbol("B"));
-        assertEquals(PieceType.ROOK, PieceType.fromSanSymbol("R"));
-        assertEquals(PieceType.QUEEN, PieceType.fromSanSymbol("Q"));
-        assertEquals(PieceType.KING, PieceType.fromSanSymbol("K"));
-        assertEquals(PieceType.NONE, PieceType.fromSanSymbol("NONE"));
+    fun fromSanSymbol() {
+        Assert.assertEquals(PieceType.PAWN, fromSanSymbol(StringUtils.EMPTY))
+        Assert.assertEquals(PieceType.KNIGHT, fromSanSymbol("N"))
+        Assert.assertEquals(PieceType.BISHOP, fromSanSymbol("B"))
+        Assert.assertEquals(PieceType.ROOK, fromSanSymbol("R"))
+        Assert.assertEquals(PieceType.QUEEN, fromSanSymbol("Q"))
+        Assert.assertEquals(PieceType.KING, fromSanSymbol("K"))
+        Assert.assertEquals(PieceType.NONE, fromSanSymbol("NONE"))
 
         try {
-            PieceType.fromSanSymbol("X");
-            fail("There should have been an exception");
-        } catch (Exception expected) {
-            assertTrue(expected instanceof IllegalArgumentException);
-            assertEquals("Unknown piece 'X'", expected.getMessage());
+            fromSanSymbol("X")
+            Assert.fail("There should have been an exception")
+        } catch (expected: Exception) {
+            Assert.assertTrue(expected is IllegalArgumentException)
+            Assert.assertEquals("Unknown piece 'X'", expected.message)
         }
     }
 }

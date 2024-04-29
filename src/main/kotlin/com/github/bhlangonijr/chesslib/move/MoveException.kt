@@ -13,23 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package com.github.bhlangonijr.chesslib.move;
+package com.github.bhlangonijr.chesslib.move
 
 /**
  * Thrown to indicate a failure executing a move, for instance because the move is considered illegal in the context of
  * the game it is played.
  */
-public class MoveException extends RuntimeException {
-
-    private static final long serialVersionUID = 6523240383760826752L;
-
+class MoveException : RuntimeException {
     /**
      * Constructs a new move exception.
      */
-    public MoveException() {
-        super();
-    }
+    constructor() : super()
 
     /**
      * Constructs a new move exception with the specified detail message and cause.
@@ -37,26 +31,23 @@ public class MoveException extends RuntimeException {
      * @param message the error message
      * @param cause   the cause
      */
-    public MoveException(String message, Throwable cause) {
-        super(message, cause);
-    }
+    constructor(message: String?, cause: Throwable?) : super(message, cause)
 
     /**
      * Constructs a new move exception with the specified detail message.
      *
      * @param message the error message
      */
-    public MoveException(String message) {
-        super(message);
-    }
+    constructor(message: String?) : super(message)
 
     /**
      * Constructs a new move exception with the specified cause.
      *
      * @param cause the cause
      */
-    public MoveException(Throwable cause) {
-        super(cause);
-    }
+    constructor(cause: Throwable?) : super(cause)
 
+    companion object {
+        private const val serialVersionUID = 6523240383760826752L
+    }
 }

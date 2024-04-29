@@ -13,24 +13,40 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package com.github.bhlangonijr.chesslib.game;
+package com.github.bhlangonijr.chesslib.game
 
 /**
  * The representation of the time control moves-per-time, that specifies how many moves must be played within a certain
- * amount of time, for example {@code "40/9000"}, 40 moves in 9000 seconds, i.e. 2 hours and 30 minutes.
+ * amount of time, for example `"40/9000"`, 40 moves in 9000 seconds, i.e. 2 hours and 30 minutes.
  */
-public class MovePerTime {
-
-    private int moves;
-    private long milliseconds;
+class MovePerTime {
+    /**
+     * Returns the moves component of the time control.
+     *
+     * @return the number of moves
+     */
+    /**
+     * Sets the number of moves component of the time control.
+     *
+     * @param moves the number of moves to set
+     */
+    var moves: Int = 0
+    /**
+     * Returns the time component of the time control, expressed in milliseconds.
+     *
+     * @return the amount of time, in milliseconds
+     */
+    /**
+     * Sets the time component of the time control, in milliseconds.
+     *
+     * @param milliseconds the amount of time to set
+     */
+    var milliseconds: Long = 0
 
     /**
      * Constructs a new moves-per-time time control.
      */
-    public MovePerTime() {
-
-    }
+    constructor()
 
     /**
      * Constructs a new moves-per-time time control from its components, the number of moves and the amount of time.
@@ -38,45 +54,9 @@ public class MovePerTime {
      * @param moves        the number of moves
      * @param milliseconds the amount of time, expressed in milliseconds
      */
-    public MovePerTime(int moves, long milliseconds) {
-        this.moves = moves;
-        this.milliseconds = milliseconds;
-    }
-
-    /**
-     * Returns the moves component of the time control.
-     *
-     * @return the number of moves
-     */
-    public int getMoves() {
-        return moves;
-    }
-
-    /**
-     * Sets the number of moves component of the time control.
-     *
-     * @param moves the number of moves to set
-     */
-    public void setMoves(int moves) {
-        this.moves = moves;
-    }
-
-    /**
-     * Returns the time component of the time control, expressed in milliseconds.
-     *
-     * @return the amount of time, in milliseconds
-     */
-    public long getMilliseconds() {
-        return milliseconds;
-    }
-
-    /**
-     * Sets the time component of the time control, in milliseconds.
-     *
-     * @param milliseconds the amount of time to set
-     */
-    public void setMilliseconds(long milliseconds) {
-        this.milliseconds = milliseconds;
+    constructor(moves: Int, milliseconds: Long) {
+        this.moves = moves
+        this.milliseconds = milliseconds
     }
 
     /**
@@ -84,8 +64,8 @@ public class MovePerTime {
      *
      * @return the PGN representation of this time control
      */
-    public String toPGNString() {
-        return getMoves() + "/" + (getMilliseconds() / 1000);
+    fun toPGNString(): String {
+        return moves.toString() + "/" + (milliseconds / 1000)
     }
 
     /**
@@ -93,9 +73,7 @@ public class MovePerTime {
      *
      * @return a string representation of this time control
      */
-    @Override
-    public String toString() {
-        return getMoves() + " Moves / " + (getMilliseconds() / 1000) + " Sec";
+    override fun toString(): String {
+        return moves.toString() + " Moves / " + (milliseconds / 1000) + " Sec"
     }
-
 }

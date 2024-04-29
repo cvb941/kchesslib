@@ -13,96 +13,97 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.github.bhlangonijr.chesslib.pgn
 
-package com.github.bhlangonijr.chesslib.pgn;
-
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import com.github.bhlangonijr.chesslib.game.Event;
-import com.github.bhlangonijr.chesslib.game.Game;
-import com.github.bhlangonijr.chesslib.game.Player;
-import com.github.bhlangonijr.chesslib.game.Round;
-import com.github.bhlangonijr.chesslib.util.LargeFile;
+import com.github.bhlangonijr.chesslib.game.Event
+import com.github.bhlangonijr.chesslib.game.Game
+import com.github.bhlangonijr.chesslib.game.Player
+import com.github.bhlangonijr.chesslib.util.LargeFile
+import java.io.FileWriter
+import java.io.IOException
+import java.io.PrintWriter
+import java.nio.file.Files
+import java.nio.file.Paths
+import java.util.Arrays
+import java.util.function.Consumer
 
 /**
  * A proxy for accessing a Portable Game Notation (PGN) file. The PGN holder can be used to optimize the way the
  * contents of the file are retrieved, and also to abstract the common operations that can be performed with the file,
  * such as saving to the PGN file the games held into memory, as well as retrieving the metadata stored in the PGN.
  */
-public class PgnHolder {
-
-    private final Map<String, Event> event = new HashMap<String, Event>();
-    private final Map<String, Player> player = new HashMap<String, Player>();
-    private final List<Game> games = new ArrayList<Game>();
-    private final List<PgnLoadListener> listener = new ArrayList<PgnLoadListener>();
-    private String fileName;
-    private Integer size;
-    private boolean lazyLoad;
-
-    /**
-     * Constructs a new PGN holder using the provided filename as a reference to the PGN file.
-     *
-     * @param filename the PGN filename
-     */
-    public PgnHolder(String filename) {
-        setFileName(filename);
-        setLazyLoad(false);
-    }
-
-    /**
-     * Resets the status of the holder, cleaning up all data previously stored.
-     */
-    public void cleanUp() {
-        event.clear();
-        player.clear();
-        games.clear();
-        listener.clear();
-        size = 0;
-    }
-
-    /**
-     * Returns the filename of the PGN file.
-     *
-     * @return the filename of the PGN
-     */
-    public String getFileName() {
-        return fileName;
-    }
-
-    /**
-     * Sets a new filename for the PGN file.
-     *
-     * @param fileName the filename of the PGN
-     */
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
-    }
-
+class PgnHolder(filename: String?) {
     /**
      * Returns all the chess events stored in the holder, accessible by name.
      *
      * @return the chess events
      */
-    public Map<String, Event> getEvent() {
-        return event;
-    }
+    val event: MutableMap<String?, Event> = HashMap()
 
     /**
      * Returns all the chess players stored in the holder, accessible by ID.
      *
      * @return the chess players
      */
-    public Map<String, Player> getPlayer() {
-        return player;
+    val player: MutableMap<String?, Player?> = HashMap()
+    private val games: MutableList<Game> = ArrayList()
+    private val listener: MutableList<PgnLoadListener> = ArrayList()
+    /**
+     * Returns the filename of the PGN file.
+     *
+     * @return the filename of the PGN
+     */
+    /**
+     * Sets a new filename for the PGN file.
+     *
+     * @param fileName the filename of the PGN
+     */
+    var fileName: String? = null
+
+    /**
+     * Returns the number of games stored in holder.
+     *
+     * @return the number of games
+     */
+    var size: Int? = null
+        private set
+    /**
+     * Checks if the PGN contents are loaded lazily.
+     *
+     *
+     * **N.B.**: at the moment lazy loading is not enabled and this flag has no impact on the behavior of the class.
+     *
+     * @return `true` if the PGN contents are loaded lazily
+     */
+    /**
+     * Sets whether to activate lazy loading or not.
+     *
+     *
+     * **N.B.**: at the moment lazy loading is not enabled and this flag has no impact on the behavior of the class.
+     *
+     * @param lazyLoad `true` to activate lazy loading
+     */
+    var isLazyLoad: Boolean = false
+
+    /**
+     * Constructs a new PGN holder using the provided filename as a reference to the PGN file.
+     *
+     * @param filename the PGN filename
+     */
+    init {
+        fileName = filename
+        isLazyLoad = false
+    }
+
+    /**
+     * Resets the status of the holder, cleaning up all data previously stored.
+     */
+    fun cleanUp() {
+        event.clear()
+        player.clear()
+        games.clear()
+        listener.clear()
+        size = 0
     }
 
     /**
@@ -110,43 +111,34 @@ public class PgnHolder {
      *
      * @return the games
      */
-    public List<Game> getGames() {
-        return games;
+    fun getGames(): List<Game> {
+        return games
     }
 
-    /**
-     * Returns all the games stored in the holder.
-     *
-     * @return the games
-     * @deprecated use {@link PgnHolder#getGames()} instead
-     */
-    @Deprecated
-    public List<Game> getGame() {
-        return games;
-    }
-
-    /**
-     * Loads into memory the chess data stored in the PGN file referred by the holder.
-     *
-     * @throws Exception in case of error loading the contents of the file
-     */
-    public void loadPgn() throws Exception {
-        loadPgn(new LargeFile(getFileName()));
-    }
+    @get:Deprecated("use {@link PgnHolder#getGames()} instead")
+    val game: List<Game>
+        /**
+         * Returns all the games stored in the holder.
+         *
+         * @return the games
+         */
+        get() = games
 
     /**
      * Counts the games present in the PGN file.
-     * <p>
+     *
+     *
      * It does not load the contents of the file, but rather checks into the data how many events are persisted. In
      * order to do so, the implementation counts the mandatory PGN tags.
      *
      * @return the number of games in PGN file
      * @throws IOException in case of error reading the PGN file
      */
-    public long countGamesInPgnFile() throws IOException {
+    @Throws(IOException::class)
+    fun countGamesInPgnFile(): Long {
         return Files.lines(Paths.get(this.fileName))
-                .filter(s -> s.startsWith("[Event "))
-                .count();
+            .filter { s: String -> s.startsWith("[Event ") }
+            .count()
     }
 
     /**
@@ -155,18 +147,28 @@ public class PgnHolder {
      * @param file the PGN file to load
      * @throws Exception in case of error loading the contents of the file
      */
-    public void loadPgn(LargeFile file) throws Exception {
+    /**
+     * Loads into memory the chess data stored in the PGN file referred by the holder.
+     *
+     * @throws Exception in case of error loading the contents of the file
+     */
+    @JvmOverloads
+    @Throws(Exception::class)
+    fun loadPgn(
+        file: LargeFile = LargeFile(
+            fileName!!
+        )
+    ) {
+        size = 0
 
-        size = 0;
-
-        PgnIterator games = new PgnIterator(file);
+        val games = PgnIterator(file)
 
         try {
-            for (Game game : games) {
-                addGame(game);
+            for (game in games.filterNotNull()) {
+                addGame(game)
             }
         } finally {
-            file.close();
+            file.close()
         }
     }
 
@@ -175,70 +177,38 @@ public class PgnHolder {
      *
      * @param pgn the raw string representing the contents of a PGN
      */
-    public void loadPgn(String pgn) {
-
-        Iterable<String> iterable = Arrays.asList(pgn.split("\n"));
-        PgnIterator games = new PgnIterator(iterable.iterator());
-        for (Game game : games) {
-            addGame(game);
+    fun loadPgn(pgn: String) {
+        val iterable = pgn.splitToSequence("\n").asIterable()
+        val games = PgnIterator(iterable)
+        for (game in games) {
+            if (game != null) {
+                addGame(game)
+            }
         }
     }
 
     /**
      * Saves to the PGN file the current data stored in the holder.
      */
-    public void savePgn() {
-
+    fun savePgn() {
         try {
-            FileWriter outFile = new FileWriter(getFileName());
-            PrintWriter out = new PrintWriter(outFile);
-            for (Event event : getEvent().values()) {
-                for (Round round : event.getRound().values()) {
-                    for (Game game : round.getGame()) {
+            val outFile = FileWriter(fileName)
+            val out = PrintWriter(outFile)
+            for (event in event.values) {
+                for (round in event.round.values) {
+                    for (game in round.game) {
                         if (game != null) {
-                            out.println();
-                            out.print(game);
-                            out.println();
+                            out.println()
+                            out.print(game)
+                            out.println()
                         }
                     }
                 }
             }
-            out.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+            out.close()
+        } catch (e: IOException) {
+            e.printStackTrace()
         }
-
-    }
-
-    /**
-     * Returns the number of games stored in holder.
-     *
-     * @return the number of games
-     */
-    public Integer getSize() {
-        return size;
-    }
-
-    /**
-     * Checks if the PGN contents are loaded lazily.
-     * <p>
-     * <b>N.B.</b>: at the moment lazy loading is not enabled and this flag has no impact on the behavior of the class.
-     *
-     * @return {@code true} if the PGN contents are loaded lazily
-     */
-    public boolean isLazyLoad() {
-        return lazyLoad;
-    }
-
-    /**
-     * Sets whether to activate lazy loading or not.
-     * <p>
-     * <b>N.B.</b>: at the moment lazy loading is not enabled and this flag has no impact on the behavior of the class.
-     *
-     * @param lazyLoad {@code true} to activate lazy loading
-     */
-    public void setLazyLoad(boolean lazyLoad) {
-        this.lazyLoad = lazyLoad;
     }
 
     /**
@@ -247,8 +217,8 @@ public class PgnHolder {
      *
      * @return the listeners to PGN loading events
      */
-    public List<PgnLoadListener> getListener() {
-        return listener;
+    fun getListener(): MutableList<PgnLoadListener> {
+        return listener
     }
 
     /**
@@ -256,40 +226,42 @@ public class PgnHolder {
      *
      * @return a string representation of the holder
      */
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        for (Event event : getEvent().values()) {
-            for (Round round : event.getRound().values()) {
-                for (Game game : round.getGame()) {
+    override fun toString(): String {
+        val sb = StringBuilder()
+        for (event in event.values) {
+            for (round in event.round.values) {
+                for (game in round.game) {
                     if (game != null) {
-                        sb.append('\n');
-                        sb.append(game);
-                        sb.append('\n');
+                        sb.append('\n')
+                        sb.append(game)
+                        sb.append('\n')
                     }
                 }
             }
         }
-        return sb.toString();
+        return sb.toString()
     }
 
-    private void addGame(Game game) {
-
-        Event event = getEvent().get(game.getRound().getEvent().getName());
+    private fun addGame(game: Game) {
+        val event = event[game.round.event.name]
         if (event == null) {
-            getEvent().put(game.getRound().getEvent().getName(), game.getRound().getEvent());
+            this.event[game.round.event.name] = game.round.event
         }
-        Player whitePlayer = getPlayer().get(game.getWhitePlayer().getId());
+        val whitePlayer = player[game.whitePlayer?.id]
         if (whitePlayer == null) {
-            getPlayer().put(game.getWhitePlayer().getId(), game.getWhitePlayer());
+            player[game.whitePlayer?.id] = game.whitePlayer
         }
-        Player blackPlayer = getPlayer().get(game.getBlackPlayer().getId());
+        val blackPlayer = player[game.blackPlayer?.id]
         if (blackPlayer == null) {
-            getPlayer().put(game.getBlackPlayer().getId(), game.getBlackPlayer());
+            player[game.blackPlayer?.id] = game.blackPlayer
         }
-        this.games.add(game);
+        games.add(game)
 
         // Notify all registered listeners about added game
-        this.getListener().forEach(pgnLoadListener -> pgnLoadListener.notifyProgress(this.games.size()));
+        getListener().forEach(Consumer { pgnLoadListener: PgnLoadListener ->
+            pgnLoadListener.notifyProgress(
+                games.size
+            )
+        })
     }
 }

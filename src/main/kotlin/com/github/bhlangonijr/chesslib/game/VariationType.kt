@@ -13,33 +13,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package com.github.bhlangonijr.chesslib.game;
+package com.github.bhlangonijr.chesslib.game
 
 /**
  * The possible types of chess variation.
  */
-public enum VariationType {
+enum class VariationType {
     /**
      * The normal (standard) chess variation.
      */
     NORMAL,
+
     /**
      * The chess 960 variation.
      */
     CHESS960,
+
     /**
      * The no-castle variation.
      */
     NOCASTLE,
+
     /**
      * The wild-castle variation.
      */
     WILDCASTLE,
+
     /**
      * The bughouse variation.
      */
     BUGHOUSE,
+
     /**
      * The crazyhouse variation.
      */

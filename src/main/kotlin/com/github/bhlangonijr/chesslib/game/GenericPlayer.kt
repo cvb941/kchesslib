@@ -13,26 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package com.github.bhlangonijr.chesslib.game;
+package com.github.bhlangonijr.chesslib.game
 
 /**
  * A generic player of a chess game.
  */
-public class GenericPlayer implements Player {
-
-    private String id;
-    private int elo;
-    private String name;
-    private PlayerType type;
-    private String description;
+class GenericPlayer : Player {
+    override var id: String? = null
+    override var elo: Int = 0
+    override var name: String? = null
+    override var type: PlayerType? = null
+    override var description: String? = null
 
     /**
      * Constructs a new chess player.
      */
-    public GenericPlayer() {
-
-    }
+    constructor()
 
     /**
      * Constructs a new chess player using their basic information.
@@ -40,78 +36,26 @@ public class GenericPlayer implements Player {
      * @param id   the ID of the player
      * @param name the name of the player
      */
-    public GenericPlayer(String id, String name) {
-        this.id = id;
-        this.name = name;
+    constructor(id: String?, name: String?) {
+        this.id = id
+        this.name = name
     }
 
-    @Override
-    public String getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    @Override
-    public int getElo() {
-        return elo;
-    }
-
-    @Override
-    public void setElo(int elo) {
-        this.elo = elo;
-    }
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @Override
-    public PlayerType getType() {
-        return type;
-    }
-
-    @Override
-    public void setType(PlayerType type) {
-        this.type = type;
-    }
-
-    @Override
-    public String getDescription() {
-        return description;
-    }
-
-    @Override
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    @Override
-    public String getLongDescription() {
-        String desc = getName();
-        if (getElo() > 0) {
-            desc += " (" + getElo() + ")";
+    override val longDescription: String?
+        get() {
+            var desc = name
+            if (elo > 0) {
+                desc += " (" + elo + ")"
+            }
+            return desc
         }
-        return desc;
-    }
 
     /**
      * Returns a string representation of this player.
      *
      * @return a string representation of this player
      */
-    @Override
-    public String toString() {
-        return getId();
+    override fun toString(): String {
+        return id!!
     }
-
 }

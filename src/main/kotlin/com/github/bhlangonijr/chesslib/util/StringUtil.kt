@@ -13,45 +13,41 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.github.bhlangonijr.chesslib.util
 
-package com.github.bhlangonijr.chesslib.util;
-
-import org.apache.commons.lang3.StringUtils;
-
-import java.util.Map;
+import org.apache.commons.lang3.StringUtils
 
 /**
  * A utility collection of operations on strings.
  *
  * @author bhlangonijr
  */
-public class StringUtil {
-
+object StringUtil {
     /**
-     * Extracts the last char sequence from a string, that is, the last {@code size} chars.
+     * Extracts the last char sequence from a string, that is, the last `size` chars.
      *
      * @param str  the string
      * @param size the number of chars to extract
      * @return the extracted substring
      */
-    public static String lastSequence(final String str, int size) {
-        return str.substring(str.length() - size);
+    fun lastSequence(str: String, size: Int): String {
+        return str.substring(str.length - size)
     }
 
     /**
-     * Extracts from a string the char sequence of length {@code size} that occurs after the given subsequence.
+     * Extracts from a string the char sequence of length `size` that occurs after the given subsequence.
      *
      * @param str  the string
      * @param seq  the subsequence to search
      * @param size the number of chars to extract
      * @return the extracted substring, or an empty string if the subsequence is not found
      */
-    public static String afterSequence(final String str, final String seq, int size) {
-        int idx = str.indexOf(seq) + seq.length();
+    fun afterSequence(str: String, seq: String, size: Int): String {
+        val idx = str.indexOf(seq) + seq.length
         if (idx == 0) {
-            return StringUtils.EMPTY;
+            return StringUtils.EMPTY
         }
-        return str.substring(idx, idx + size);
+        return str.substring(idx, idx + size)
     }
 
     /**
@@ -61,12 +57,12 @@ public class StringUtil {
      * @param seq the subsequence to search
      * @return the extracted substring, or an empty string if the subsequence is not found
      */
-    public static String afterSequence(final String str, final String seq) {
-        int idx = str.indexOf(seq) + seq.length();
+    fun afterSequence(str: String, seq: String): String {
+        val idx = str.indexOf(seq) + seq.length
         if (idx == 0) {
-            return StringUtils.EMPTY;
+            return StringUtils.EMPTY
         }
-        return str.substring(idx);
+        return str.substring(idx)
     }
 
     /**
@@ -76,12 +72,12 @@ public class StringUtil {
      * @param seq the subsequence to search
      * @return the extracted substring, or the original string if the subsequence is not found
      */
-    public static String beforeSequence(final String str, final String seq) {
-        int idx = str.indexOf(seq);
+    fun beforeSequence(str: String, seq: String): String {
+        val idx = str.indexOf(seq)
         if (idx == -1) {
-            return str;
+            return str
         }
-        return str.substring(0, idx);
+        return str.substring(0, idx)
     }
 
     /**
@@ -90,17 +86,15 @@ public class StringUtil {
      * @param str the string from which to remove extra whitespaces
      * @return the string without extra whitespaces
      */
-    public static String normalize(String str) {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < str.length(); i++) {
-            if (i < str.length() - 1 &&
-                    str.charAt(i) == ' ' &&
-                    str.charAt(i + 1) == ' ') {
-                continue;
+    fun normalize(str: String): String {
+        val sb = StringBuilder()
+        for (i in 0 until str.length) {
+            if (i < str.length - 1 && str[i] == ' ' && str[i + 1] == ' ') {
+                continue
             }
-            sb.append(str.charAt(i));
+            sb.append(str[i])
         }
-        return sb.toString();
+        return sb.toString()
     }
 
     /**
@@ -112,14 +106,14 @@ public class StringUtil {
      * @param to      the subsequence with which to replace the original one
      * @return the modified string builder
      */
-    public static StringBuilder replaceAll(StringBuilder builder, String from, String to) {
-        int index = builder.indexOf(from);
+    fun replaceAll(builder: StringBuilder, from: String, to: String): StringBuilder {
+        var index = builder.indexOf(from)
         while (index != -1) {
-            builder.replace(index, index + from.length(), to);
-            index += to.length();
-            index = builder.indexOf(from, index);
+            builder.replace(index, index + from.length, to)
+            index += to.length
+            index = builder.indexOf(from, index)
         }
-        return builder;
+        return builder
     }
 
     /**
@@ -129,12 +123,12 @@ public class StringUtil {
      * @param str   the string builder in which to replace the chars
      * @param table the translation table
      */
-    public static void translate(StringBuilder str, char[] table) {
-        for (int idx = 0; idx < str.length(); ++idx) {
-            char ch = str.charAt(idx);
-            if (ch < table.length) {
-                ch = table[ch];
-                str.setCharAt(idx, ch);
+    fun translate(str: StringBuilder, table: CharArray) {
+        for (idx in 0 until str.length) {
+            var ch = str[idx]
+            if (ch.code < table.size) {
+                ch = table[ch.code]
+                str.setCharAt(idx, ch)
             }
         }
     }
@@ -145,12 +139,11 @@ public class StringUtil {
      * @param str the string builder in which to replace the chars
      * @param map the translation map
      */
-    public static void translate(StringBuilder str, Map<Character, Character> map) {
-        for (int idx = 0; idx < str.length(); ++idx) {
-            char ch = str.charAt(idx);
-            Character conversion = map.get(ch);
-            if (conversion != null)
-                str.setCharAt(idx, conversion);
+    fun translate(str: StringBuilder, map: Map<Char?, Char?>) {
+        for (idx in 0 until str.length) {
+            val ch = str[idx]
+            val conversion = map[ch]
+            if (conversion != null) str.setCharAt(idx, conversion)
         }
     }
 
@@ -161,14 +154,13 @@ public class StringUtil {
      * @param charToCount the char to count
      * @return the number of times the char is found inside the string
      */
-    public static int countOccurrences(String str, char charToCount) {
-        int count = 0;
-        for (int i = 0; i < str.length(); i++) {
-            if (str.charAt(i) == charToCount) {
-                count++;
+    fun countOccurrences(str: String, charToCount: Char): Int {
+        var count = 0
+        for (i in 0 until str.length) {
+            if (str[i] == charToCount) {
+                count++
             }
         }
-        return count;
+        return count
     }
-
 }

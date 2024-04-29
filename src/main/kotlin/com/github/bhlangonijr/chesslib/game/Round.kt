@@ -13,63 +13,41 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package com.github.bhlangonijr.chesslib.game;
-
-import java.util.ArrayList;
-import java.util.List;
+package com.github.bhlangonijr.chesslib.game
 
 /**
  * A round of a chess event.
  */
-public class Round {
-    private final List<Game> game = new ArrayList<>();
-    private final Event event;
-    private int number;
-
+class Round
+/**
+ * Constructs a new event round.
+ *
+ * @param event the event the round belongs to
+ */(
     /**
-     * Constructs a new event round.
+     * Returns the chess event the round refers to.
      *
-     * @param event the event the round belongs to
+     * @return the event the round belongs to
      */
-    public Round(Event event) {
-        this.event = event;
-    }
+    @JvmField val event: Event
+) {
+    /**
+     * Returns the list of games scheduled in the round.
+     *
+     * @return the games of the round
+     */
+    val game: MutableList<Game?> = ArrayList()
 
     /**
      * Returns the number of the round.
      *
      * @return the number of the round
      */
-    public int getNumber() {
-        return number;
-    }
-
     /**
      * Sets the number of the round.
      *
      * @param number the number of the round
      */
-    public void setNumber(int number) {
-        this.number = number;
-    }
-
-    /**
-     * Returns the list of games scheduled in the round.
-     *
-     * @return the games of the round
-     */
-    public List<Game> getGame() {
-        return game;
-    }
-
-    /**
-     * Returns the chess event the round refers to.
-     *
-     * @return the event the round belongs to
-     */
-    public Event getEvent() {
-        return event;
-    }
-
+    @JvmField
+    var number: Int = 0
 }

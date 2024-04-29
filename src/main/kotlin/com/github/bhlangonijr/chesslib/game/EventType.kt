@@ -13,42 +13,47 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package com.github.bhlangonijr.chesslib.game;
+package com.github.bhlangonijr.chesslib.game
 
 /**
  * The types of a chess event.
  */
-public enum EventType {
-
+enum class EventType {
     /**
      * Normal match event type.
      */
     NORMAL_MATCH,
+
     /**
      * Round-robin event type.
      */
     ROUND_ROBIN,
+
     /**
      * Round-robin carousel event type.
      */
     ROUND_ROBIN_CAROUSEL,
+
     /**
      * Swiss event type.
      */
     SWISS,
+
     /**
      * Gauntlet event type.
      */
     GAUNTLET,
+
     /**
      * Single elimination event type.
      */
     SINGLE_ELIMINATION,
+
     /**
      * Double elimination event type.
      */
     DOUBLE_ELIMINATION,
+
     /**
      * Analyses event type.
      */

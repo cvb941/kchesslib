@@ -13,23 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package com.github.bhlangonijr.chesslib.pgn;
+package com.github.bhlangonijr.chesslib.pgn
 
 /**
  * Thrown to indicate a failure reading a Portable Game Notation (PGN) file, for instance because the contents are
  * invalid.
  */
-public class PgnException extends RuntimeException {
-
-    private static final long serialVersionUID = 6523240383760826752L;
-
+class PgnException : RuntimeException {
     /**
      * Constructs a new PGN exception.
      */
-    public PgnException() {
-        super();
-    }
+    constructor() : super()
 
     /**
      * Constructs a new PGN exception with the specified detail message and cause.
@@ -37,26 +31,23 @@ public class PgnException extends RuntimeException {
      * @param message the error message
      * @param cause   the cause
      */
-    public PgnException(String message, Throwable cause) {
-        super(message, cause);
-    }
+    constructor(message: String?, cause: Throwable?) : super(message, cause)
 
     /**
      * Constructs a new PGN exception with the specified detail message.
      *
      * @param message the error message
      */
-    public PgnException(String message) {
-        super(message);
-    }
+    constructor(message: String?) : super(message)
 
     /**
      * Constructs a new PGN exception with the specified cause.
      *
      * @param cause the cause
      */
-    public PgnException(Throwable cause) {
-        super(cause);
-    }
+    constructor(cause: Throwable?) : super(cause)
 
+    companion object {
+        private const val serialVersionUID = 6523240383760826752L
+    }
 }

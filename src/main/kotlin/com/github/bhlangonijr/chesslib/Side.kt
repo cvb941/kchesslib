@@ -13,45 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package com.github.bhlangonijr.chesslib;
+package com.github.bhlangonijr.chesslib
 
 /**
- * One of the two sides in a chess game, {@link Side#WHITE} or {@link Side#BLACK}.
+ * One of the two sides in a chess game, [Side.WHITE] or [Side.BLACK].
  */
-public enum Side {
-
+enum class Side {
     /**
      * The white side.
      */
     WHITE,
+
     /**
      * The black side.
      */
     BLACK;
-
-    public static final Side[] allSides = values();
-
-    /**
-     * Returns a side given its name.
-     * <p>
-     * Same as invoking {@link Side#valueOf(String)}.
-     *
-     * @param v name of the side
-     * @return the side with the specified name
-     * @throws IllegalArgumentException if the name does not correspond to any side
-     */
-    public static Side fromValue(String v) {
-        return valueOf(v);
-    }
 
     /**
      * Returns the name of the side.
      *
      * @return the name of the side
      */
-    public String value() {
-        return name();
+    fun value(): String {
+        return name
     }
 
     /**
@@ -59,8 +43,25 @@ public enum Side {
      *
      * @return the opposite side
      */
-    public Side flip() {
-        return Side.WHITE.equals(this) ?
-                Side.BLACK : Side.WHITE;
+    fun flip(): Side {
+        return if (WHITE == this) BLACK else WHITE
+    }
+
+    companion object {
+        val allSides: Array<Side> = entries.toTypedArray()
+
+        /**
+         * Returns a side given its name.
+         *
+         *
+         * Same as invoking [Side.valueOf].
+         *
+         * @param v name of the side
+         * @return the side with the specified name
+         * @throws IllegalArgumentException if the name does not correspond to any side
+         */
+        fun fromValue(v: String?): Side {
+            return valueOf(v!!)
+        }
     }
 }

@@ -13,19 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package com.github.bhlangonijr.chesslib.pgn;
+package com.github.bhlangonijr.chesslib.pgn
 
 /**
  * An observer to PGN loading events, notified when games are extracted from a Portable Game Notation file.
  */
-public interface PgnLoadListener {
-
+interface PgnLoadListener {
     /**
      * Method invoked when a game is loaded from a PGN file.
      *
      * @param games the total number of games loaded from the PGN file
      */
-    void notifyProgress(int games);
-
+    fun notifyProgress(games: Int)
 }

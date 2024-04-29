@@ -13,89 +13,76 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package com.github.bhlangonijr.chesslib.game;
+package com.github.bhlangonijr.chesslib.game
 
 /**
  * A player of a chess game.
  */
-public interface Player {
-
+interface Player {
     /**
      * Returns the ID of the player.
      *
      * @return the ID
      */
-    String getId();
-
     /**
      * Sets the ID of the player.
      *
      * @param id the ID to set
      */
-    void setId(String id);
+    var id: String?
 
     /**
      * Returns the ELO rating of the player.
      *
      * @return the ELO rating
      */
-    int getElo();
-
     /**
      * Sets the ELO rating of the player.
      *
      * @param elo the ELO rating to set
      */
-    void setElo(int elo);
+    var elo: Int
 
     /**
      * Returns the name of the player.
      *
      * @return the name
      */
-    String getName();
-
     /**
      * Sets the name of the player.
      *
      * @param name the name to set
      */
-    void setName(String name);
+    var name: String?
 
     /**
      * Returns the type of the player.
      *
      * @return the type
      */
-    PlayerType getType();
-
     /**
      * Sets the type of the player.
      *
      * @param type the type to set
      */
-    void setType(PlayerType type);
+    var type: PlayerType?
 
     /**
      * Returns the description of the player.
      *
      * @return the description
      */
-    String getDescription();
-
     /**
      * Sets the description of the player.
      *
      * @param description the description to set
      */
-    void setDescription(String description);
+    var description: String?
 
     /**
      * Returns the long description of the player.
      *
      * @return the long description
      */
-    String getLongDescription();
-
+    val longDescription: String?
 }

@@ -1,32 +1,36 @@
-package com.github.bhlangonijr.chesslib.move;
+package com.github.bhlangonijr.chesslib.move
 
-import com.github.bhlangonijr.chesslib.*;
-import org.junit.Test;
-
-import java.util.Arrays;
-import java.util.List;
-
-import static junit.framework.Assert.assertFalse;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import com.github.bhlangonijr.chesslib.Bitboard.bbToSquareList
+import com.github.bhlangonijr.chesslib.Board
+import com.github.bhlangonijr.chesslib.Constants
+import com.github.bhlangonijr.chesslib.Piece.Companion.make
+import com.github.bhlangonijr.chesslib.PieceType
+import com.github.bhlangonijr.chesslib.Side
+import com.github.bhlangonijr.chesslib.Square
+import com.github.bhlangonijr.chesslib.move.MoveGenerator.generateLegalMoves
+import com.github.bhlangonijr.chesslib.move.MoveGenerator.generatePseudoLegalCaptures
+import com.github.bhlangonijr.chesslib.move.MoveGeneratorException
+import org.junit.Assert
+import org.junit.Test
+import java.util.Arrays
 
 /**
  * The type Move generator test.
  */
-public class MoveGeneratorTest {
-
-
+class MoveGeneratorTest {
     /**
      * Test b bto square.
      */
     @Test
-    public void testBBtoSquare() {
-        assertEquals(Piece.make(Side.BLACK, PieceType.PAWN).value(), "BLACK_PAWN");
-        long pieces = (1L << 10) | (1L << 63) | (1L << 45);
+    fun testBBtoSquare() {
+        Assert.assertEquals(make(Side.BLACK, PieceType.PAWN).value(), "BLACK_PAWN")
+        val pieces = (1L shl 10) or (1L shl 63) or (1L shl 45)
 
-        List<Square> sqs = Bitboard.bbToSquareList(pieces);
-        assertEquals(sqs.size(), Arrays.asList(Square.C2, Square.F6, Square.H8).size());
-
+        val sqs = bbToSquareList(pieces)
+        Assert.assertEquals(
+            sqs.size.toLong(),
+            Arrays.asList(Square.C2, Square.F6, Square.H8).size.toLong()
+        )
     }
 
     /**
@@ -35,68 +39,73 @@ public class MoveGeneratorTest {
      * @throws MoveGeneratorException the move generator exception
      */
     @Test
-    public void testAllMoveGeneration() throws MoveGeneratorException {
-        Board board = new Board();
+    @Throws(MoveGeneratorException::class)
+    fun testAllMoveGeneration() {
+        val board = Board()
 
-        assertEquals("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", board.getFen());
-        List<Move> moves = MoveGenerator.generateLegalMoves(board);
-        assertEquals(moves.size(), 20);
+        Assert.assertEquals("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", board.fen)
+        var moves = generateLegalMoves(board)
+        Assert.assertEquals(moves.size.toLong(), 20)
 
-        String fen = "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 0";
-        board.loadFromFen(fen);
-        assertEquals("r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 0", board.getFen());
-        moves = MoveGenerator.generateLegalMoves(board);
-        assertEquals(moves.size(), 48);
+        var fen = "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 0"
+        board.loadFromFen(fen)
+        Assert.assertEquals(
+            "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 0",
+            board.fen
+        )
+        moves = generateLegalMoves(board)
+        Assert.assertEquals(moves.size.toLong(), 48)
 
-        fen = "8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - - 0 0";
-        board.loadFromFen(fen);
-        assertEquals("8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - - 0 0", board.getFen());
-        moves = MoveGenerator.generateLegalMoves(board);
-        assertEquals(moves.size(), 14);
-
+        fen = "8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - - 0 0"
+        board.loadFromFen(fen)
+        Assert.assertEquals("8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - - 0 0", board.fen)
+        moves = generateLegalMoves(board)
+        Assert.assertEquals(moves.size.toLong(), 14)
     }
 
     @Test
-    public void testAllCapturesGeneration() {
+    fun testAllCapturesGeneration() {
+        val board = Board()
+        board.loadFromFen("r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 0")
 
-        Board board = new Board();
-        board.loadFromFen("r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 0");
+        var moves: List<Move?> = generatePseudoLegalCaptures(board)
 
-        List<Move> moves = MoveGenerator.generatePseudoLegalCaptures(board);
+        Assert.assertTrue(moves.contains(Move("g2h3", Side.WHITE)))
+        Assert.assertTrue(moves.contains(Move("d5e6", Side.WHITE)))
+        Assert.assertTrue(moves.contains(Move("e5g6", Side.WHITE)))
+        Assert.assertTrue(moves.contains(Move("e5d7", Side.WHITE)))
+        Assert.assertTrue(moves.contains(Move("e5f7", Side.WHITE)))
+        Assert.assertTrue(moves.contains(Move("e2a6", Side.WHITE)))
+        Assert.assertTrue(moves.contains(Move("f3h3", Side.WHITE)))
+        Assert.assertTrue(moves.contains(Move("f3f6", Side.WHITE)))
+        Assert.assertEquals(8, moves.size.toLong())
 
-        assertTrue(moves.contains(new Move("g2h3", Side.WHITE)));
-        assertTrue(moves.contains(new Move("d5e6", Side.WHITE)));
-        assertTrue(moves.contains(new Move("e5g6", Side.WHITE)));
-        assertTrue(moves.contains(new Move("e5d7", Side.WHITE)));
-        assertTrue(moves.contains(new Move("e5f7", Side.WHITE)));
-        assertTrue(moves.contains(new Move("e2a6", Side.WHITE)));
-        assertTrue(moves.contains(new Move("f3h3", Side.WHITE)));
-        assertTrue(moves.contains(new Move("f3f6", Side.WHITE)));
-        assertEquals(8, moves.size());
+        board.loadFromFen("8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - - 0 0")
 
-        board.loadFromFen("8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - - 0 0");
+        moves = generatePseudoLegalCaptures(board)
 
-        moves = MoveGenerator.generatePseudoLegalCaptures(board);
+        Assert.assertTrue(moves.contains(Move("b4f4", Side.WHITE)))
+        Assert.assertEquals(1, moves.size.toLong())
 
-        assertTrue(moves.contains(new Move("b4f4", Side.WHITE)));
-        assertEquals(1, moves.size());
+        board.loadFromFen(Constants.startStandardFENPosition)
 
-        board.loadFromFen(Constants.startStandardFENPosition);
+        moves = generatePseudoLegalCaptures(board)
 
-        moves = MoveGenerator.generatePseudoLegalCaptures(board);
-
-        assertEquals(0, moves.size());
+        Assert.assertEquals(0, moves.size.toLong())
     }
 
     @Test
-    public void testIlegalEnPassant() throws MoveGeneratorException {
-        Board board = new Board();
+    @Throws(MoveGeneratorException::class)
+    fun testIlegalEnPassant() {
+        val board = Board()
 
-        board.loadFromFen("8/1pp3p1/4pq1p/PP1bp3/1Q2pPk1/4P1P1/2B5/6K1 b - f3 0 34");
+        board.loadFromFen("8/1pp3p1/4pq1p/PP1bp3/1Q2pPk1/4P1P1/2B5/6K1 b - f3 0 34")
 
-        List<Move> moves = MoveGenerator.generateLegalMoves(board);
-        assertEquals(25, moves.size());
-        assertFalse("Illegal move generated", moves.contains(new Move(Square.E4, Square.F3)));
-
+        val moves = generateLegalMoves(board)
+        Assert.assertEquals(25, moves.size.toLong())
+        junit.framework.Assert.assertFalse(
+            "Illegal move generated",
+            moves.contains(Move(Square.E4, Square.F3))
+        )
     }
 }

@@ -13,37 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.github.bhlangonijr.chesslib.pgn
 
-package com.github.bhlangonijr.chesslib.pgn;
-
-import com.github.bhlangonijr.chesslib.game.Event;
-import com.github.bhlangonijr.chesslib.game.Game;
-import com.github.bhlangonijr.chesslib.game.GameFactory;
-import com.github.bhlangonijr.chesslib.game.GameResult;
-import com.github.bhlangonijr.chesslib.game.GenericPlayer;
-import com.github.bhlangonijr.chesslib.game.Player;
-import com.github.bhlangonijr.chesslib.game.PlayerType;
-import com.github.bhlangonijr.chesslib.game.Round;
-import com.github.bhlangonijr.chesslib.game.Termination;
-import com.github.bhlangonijr.chesslib.game.TimeControl;
-import com.github.bhlangonijr.chesslib.util.StringUtil;
-import org.apache.commons.lang3.StringUtils;
-
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.UUID;
-
-import static com.github.bhlangonijr.chesslib.pgn.PgnProperty.UTF8_BOM;
-import static com.github.bhlangonijr.chesslib.pgn.PgnProperty.isProperty;
-import static com.github.bhlangonijr.chesslib.pgn.PgnProperty.parsePgnProperty;
+import com.github.bhlangonijr.chesslib.game.Event
+import com.github.bhlangonijr.chesslib.game.Game
+import com.github.bhlangonijr.chesslib.game.GameResult
+import com.github.bhlangonijr.chesslib.game.GenericPlayer
+import com.github.bhlangonijr.chesslib.game.Player
+import com.github.bhlangonijr.chesslib.game.PlayerType
+import com.github.bhlangonijr.chesslib.game.Round
+import com.github.bhlangonijr.chesslib.game.Termination
+import com.github.bhlangonijr.chesslib.game.TimeControl
+import com.github.bhlangonijr.chesslib.util.StringUtil
+import org.apache.commons.lang3.StringUtils
+import java.util.Locale
+import java.util.UUID
+import kotlin.math.max
 
 /**
  * A convenient loader to extract a chess game and its metadata from an iterator over the lines of the PGN file.
- * <p>
+ *
+ *
  * The implementation allows loading only a single PGN game at a time.
  */
-public class GameLoader {
-
+object GameLoader {
     /**
      * Loads the next game of chess from an iterator over the lines of a Portable Game Notation (PGN) file. The
      * iteration ends when the game is fully loaded, hence the iterator is not consumed more than necessary.
@@ -51,207 +44,182 @@ public class GameLoader {
      * @param iterator the iterator over the lines of a PGN file
      * @return the next game read from the iterator
      */
-    public static Game loadNextGame(Iterator<String> iterator) {
-
+    fun loadNextGame(iterator: Iterator<String?>): Game? {
         if (!iterator.hasNext()) {
-            return null;
+            return null
         }
 
-        PgnTempContainer container = new PgnTempContainer();
+        val container = PgnTempContainer()
 
         while (iterator.hasNext()) {
-            String line = iterator.next().trim();
-            if (line.startsWith(UTF8_BOM)) {
-                line = line.substring(1);
+            var line = iterator.next()!!.trim { it <= ' ' }
+            if (line.startsWith(PgnProperty.Companion.UTF8_BOM)) {
+                line = line.substring(1)
             }
             try {
-                if (isProperty(line)) {
-                    addProperty(line, container);
+                if (PgnProperty.Companion.isProperty(line)) {
+                    addProperty(line, container)
                 } else if (StringUtils.isNotEmpty(line)) {
-                    addMoveText(line, container);
+                    addMoveText(line, container)
                     if (isEndGame(line)) {
-                        setMoveText(container.game, container.moveText);
-                        return container.initGame ? container.game : null;
+                        setMoveText(container.game, container.moveText)
+                        return if (container.initGame) container.game else null
                     }
                 }
-            } catch (Exception e) { //TODO stricter exceptions
-                String name = container.event.getName();
-                int r = container.round.getNumber();
-                throw new PgnException(String.format("Error parsing PGN[%d, %s]: ", r, name), e);
+            } catch (e: Exception) { //TODO stricter exceptions
+                val name = container.event.name
+                val r = container.round.number
+                throw PgnException(String.format("Error parsing PGN[%d, %s]: ", r, name), e)
             }
         }
-        return container.initGame ? container.game : null;
+        return if (container.initGame) container.game else null
     }
 
-    private static void addProperty(String line, PgnTempContainer container) throws Exception {
-        PgnProperty property = parsePgnProperty(line);
-        if (property == null) {
-            return;
-        }
-        container.initGame = true;
-        String tag = property.name.toLowerCase().trim();
-        //begin
-        switch (tag) {
-            case "event":
-                if (container.moveTextParsing && container.game.getHalfMoves().size() == 0) {
-                    setMoveText(container.game, container.moveText);
+    @Throws(Exception::class)
+    private fun addProperty(line: String, container: PgnTempContainer) {
+        val property: PgnProperty = PgnProperty.Companion.parsePgnProperty(line) ?: return
+        container.initGame = true
+        val tag = property.name!!.lowercase(Locale.getDefault()).trim { it <= ' ' }
+        when (tag) {
+            "event" -> {
+                if (container.moveTextParsing && container.game.halfMoves.size == 0) {
+                    setMoveText(container.game, container.moveText)
                 }
-                container.event.setName(property.value);
-                container.event.setId(property.value);
-                break;
-            case "site":
-                container.event.setSite(property.value);
-                break;
-            case "date":
-                container.event.setStartDate(property.value);
-                break;
-            case "round":
-                int r = 1;
-                try {
-                    r = Integer.parseInt(property.value); //TODO isParseable
-                } catch (Exception e1) {
-                }
-                r = Math.max(0, r);
-                container.round.setNumber(r);
-                if (!container.event.getRound().containsKey(r)) {
-                    container.event.getRound().put(r, container.round);
-                }
-                break;
-            case "white": {
-                if (container.round.getNumber() < 1) {
-                    container.round.setNumber(1); //TODO this is just to have the same behaviour as before...
-                }
-
-                container.game.setDate(container.event.getStartDate()); //TODO this should be done only once
-
-                container.whitePlayer.setId(property.value);
-                container.whitePlayer.setName(property.value);
-                container.whitePlayer.setDescription(property.value);
-                break;
+                container.event.name = property.value
+                container.event.id = property.value
             }
-            case "black": {
-                if (container.round.getNumber() < 1) {
-                    container.round.setNumber(1); //TODO this just to have the same behaviour as before...
+
+            "site" -> container.event.site = property.value
+            "date" -> container.event.startDate = property.value
+            "round" -> {
+                var r = 1
+                try {
+                    r = property.value!!.toInt() //TODO isParseable
+                } catch (e1: Exception) {
                 }
-
-                container.game.setDate(container.event.getStartDate()); //TODO this should be done only once
-
-                container.blackPlayer.setId(property.value);
-                container.blackPlayer.setName(property.value);
-                container.blackPlayer.setDescription(property.value);
-                break;
+                r = max(0.0, r.toDouble()).toInt()
+                container.round.number = r
+                if (!container.event.round.containsKey(r)) {
+                    container.event.round[r] = container.round
+                }
             }
-            case "result":
-                container.game.setResult(GameResult.fromNotation(property.value));
-                break;
-            case "plycount":
-                container.game.setPlyCount(property.value);
-                break;
-            case "termination":
-                try {
-                    container.game.setTermination(Termination.fromValue(property.value.toUpperCase()));
-                } catch (Exception e1) {
-                    container.game.setTermination(Termination.UNTERMINATED);
-                }
-                break;
-            case "timecontrol":
-                if (container.event.getTimeControl() == null) {
-                    try {
-                        container.event.setTimeControl(TimeControl.parseFromString(property.value.toUpperCase()));
-                    } catch (Exception e1) {
-                        //ignore errors in time control tag as it's not required by standards
-                    }
-                }
-                break;
-            case "annotator":
-                container.game.setAnnotator(property.value);
-                break;
-            case "fen":
-                container.game.setFen(property.value);
-                break;
-            case "eco":
-                container.game.setEco(property.value);
-                break;
-            case "opening":
-                container.game.setOpening(property.value);
-                break;
-            case "variation":
-                container.game.setVariation(property.value);
-                break;
-            case "whiteelo":
-                try {
-                    container.whitePlayer.setElo(Integer.parseInt(property.value));
-                } catch (NumberFormatException e) {
 
+            "white" -> {
+                if (container.round.number < 1) {
+                    container.round.number =
+                        1 //TODO this is just to have the same behaviour as before...
                 }
-                break;
-            case "blackelo":
-                try {
-                    container.blackPlayer.setElo(Integer.parseInt(property.value));
-                } catch (NumberFormatException e) {
 
+                container.game.date = container.event.startDate //TODO this should be done only once
+
+                container.whitePlayer.id = property.value
+                container.whitePlayer.name = property.value
+                container.whitePlayer.description = property.value
+            }
+
+            "black" -> {
+                if (container.round.number < 1) {
+                    container.round.number =
+                        1 //TODO this just to have the same behaviour as before...
                 }
-                break;
-            default:
-                if (container.game.getProperty() == null) {
-                    container.game.setProperty(new HashMap<>());
+
+                container.game.date = container.event.startDate //TODO this should be done only once
+
+                container.blackPlayer.id = property.value
+                container.blackPlayer.name = property.value
+                container.blackPlayer.description = property.value
+            }
+
+            "result" -> container.game.result = GameResult.Companion.fromNotation(property.value)
+            "plycount" -> container.game.plyCount = property.value
+            "termination" -> try {
+                container.game.termination =
+                    Termination.Companion.fromValue(property.value!!.uppercase(Locale.getDefault()))
+            } catch (e1: Exception) {
+                container.game.termination = Termination.UNTERMINATED
+            }
+
+            "timecontrol" -> if (container.event.timeControl == null) {
+                try {
+                    container.event.timeControl =
+                        TimeControl.Companion.parseFromString(property.value!!.uppercase(Locale.getDefault()))
+                } catch (e1: Exception) {
+                    //ignore errors in time control tag as it's not required by standards
                 }
-                container.game.getProperty().put(property.name, property.value);
-                break;
+            }
+
+            "annotator" -> container.game.annotator = property.value
+            "fen" -> container.game.fen = property.value
+            "eco" -> container.game.eco = property.value
+            "opening" -> container.game.opening = property.value
+            "variation" -> container.game.variation = property.value
+            "whiteelo" -> try {
+                container.whitePlayer.elo = property.value!!.toInt()
+            } catch (e: NumberFormatException) {
+            }
+
+            "blackelo" -> try {
+                container.blackPlayer.elo = property.value!!.toInt()
+            } catch (e: NumberFormatException) {
+            }
+
+            else -> {
+                if (container.game.property == null) {
+                    container.game.property = HashMap()
+                }
+                container.game.property!![property.name] = property.value
+            }
         }
     }
 
-    private static void addMoveText(String line, PgnTempContainer container) {
-        container.initGame = true;
-        container.moveText.append(line);
-        container.moveText.append('\n');
-        container.moveTextParsing = true;
+    private fun addMoveText(line: String, container: PgnTempContainer) {
+        container.initGame = true
+        container.moveText.append(line)
+        container.moveText.append('\n')
+        container.moveTextParsing = true
     }
 
-    private static boolean isEndGame(String line) {
-        return line.endsWith("1-0") || line.endsWith("0-1") || line.endsWith("1/2-1/2") || line.endsWith("*");
+    private fun isEndGame(line: String): Boolean {
+        return line.endsWith("1-0") || line.endsWith("0-1") || line.endsWith("1/2-1/2") || line.endsWith(
+            "*"
+        )
     }
 
-    private static class PgnTempContainer {
-
-        //TODO many of this stuff can be accessed through game
-
-        final Event event;
-        final Round round;
-        final Game game;
-        Player whitePlayer;
-        Player blackPlayer;
-        final StringBuilder moveText;
-        boolean moveTextParsing;
-        boolean initGame;
-
-        PgnTempContainer() {
-            this.event = new Event();
-            this.round = new Round(event);
-            this.game = new Game(UUID.randomUUID().toString(), round);
-            this.round.getGame().add(this.game);
-            this.whitePlayer = new GenericPlayer();
-            this.whitePlayer.setType(PlayerType.HUMAN);
-            this.game.setWhitePlayer(this.whitePlayer);
-            this.blackPlayer = new GenericPlayer();
-            this.blackPlayer.setType(PlayerType.HUMAN);
-            this.game.setBlackPlayer(this.blackPlayer);
-            this.moveText = new StringBuilder();
-        }
-    }
-
-    private static void setMoveText(Game game, StringBuilder moveText) throws Exception {
-
+    @Throws(Exception::class)
+    private fun setMoveText(game: Game, moveText: StringBuilder) {
         //clear game result
-        StringUtil.replaceAll(moveText, "1-0", StringUtils.EMPTY);
-        StringUtil.replaceAll(moveText, "0-1", StringUtils.EMPTY);
-        StringUtil.replaceAll(moveText, "1/2-1/2", StringUtils.EMPTY);
-        StringUtil.replaceAll(moveText, "*", StringUtils.EMPTY);
 
-        game.setMoveText(moveText);
-        game.loadMoveText(moveText);
+        StringUtil.replaceAll(moveText, "1-0", StringUtils.EMPTY)
+        StringUtil.replaceAll(moveText, "0-1", StringUtils.EMPTY)
+        StringUtil.replaceAll(moveText, "1/2-1/2", StringUtils.EMPTY)
+        StringUtil.replaceAll(moveText, "*", StringUtils.EMPTY)
 
-        game.setPlyCount(String.valueOf(game.getHalfMoves().size()));
+        game.moveText = moveText
+        game.loadMoveText(moveText)
 
+        game.plyCount = game.halfMoves.size.toString()
+    }
+
+    private class PgnTempContainer {
+        //TODO many of this stuff can be accessed through game
+        val event: Event = Event()
+        val round: Round = Round(event)
+        val game: Game = Game(UUID.randomUUID().toString(), round)
+        var whitePlayer: Player
+        var blackPlayer: Player
+        val moveText: StringBuilder
+        var moveTextParsing: Boolean = false
+        var initGame: Boolean = false
+
+        init {
+            round.game.add(this.game)
+            this.whitePlayer = GenericPlayer()
+            whitePlayer.type = PlayerType.HUMAN
+            game.whitePlayer = this.whitePlayer
+            this.blackPlayer = GenericPlayer()
+            blackPlayer.type = PlayerType.HUMAN
+            game.blackPlayer = this.blackPlayer
+            this.moveText = StringBuilder()
+        }
     }
 }

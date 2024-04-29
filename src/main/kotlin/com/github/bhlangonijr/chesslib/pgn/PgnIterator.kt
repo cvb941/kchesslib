@@ -13,24 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.github.bhlangonijr.chesslib.pgn
 
-package com.github.bhlangonijr.chesslib.pgn;
-
-import java.util.Iterator;
-
-import com.github.bhlangonijr.chesslib.game.Game;
-import com.github.bhlangonijr.chesslib.util.LargeFile;
+import com.github.bhlangonijr.chesslib.game.Game
+import com.github.bhlangonijr.chesslib.util.LargeFile
 
 /**
  * A Portable Game Notation (PGN) iterator, used to navigate the games contained in PGN file.
- * <p>
+ *
+ *
  * The iterator permits iterating over large PGN files without piling up every game into the memory.
  */
-public class PgnIterator implements Iterable<Game>, AutoCloseable {
+class PgnIterator : Iterable<Game?>, AutoCloseable {
+    private val pgnLines: Iterable<String?>
 
-    private final Iterator<String> pgnLines;
-
-    private Game game;
+    private var game: Game? = null
 
     /**
      * Constructs a new PGN iterator from the filename of the PGN file.
@@ -38,42 +35,26 @@ public class PgnIterator implements Iterable<Game>, AutoCloseable {
      * @param filename the PGN filename
      * @throws Exception in case the PGN file can not be accessed
      */
-    public PgnIterator(String filename) throws Exception {
-
-        this(new LargeFile(filename));
-    }
+    constructor(filename: String) : this(LargeFile(filename))
 
     /**
      * Constructs a new PGN iterator from the PGN file.
      *
      * @param file the PGN file
      */
-    public PgnIterator(LargeFile file) {
-
-        this.pgnLines = file.iterator();
-        loadNextGame();
+    constructor(file: LargeFile) {
+        this.pgnLines = file
+        loadNextGame()
     }
 
     /**
-     * Constructs a new PGN iterator from an {@link Iterable} object that can iterate over the lines of the PGN file.
+     * Constructs a new PGN iterator from an [Iterable] object that can iterate over the lines of the PGN file.
      *
      * @param pgnLines an iterable over the PGN lines
      */
-    public PgnIterator(Iterable<String> pgnLines) {
-
-        this.pgnLines = pgnLines.iterator();
-        loadNextGame();
-    }
-
-    /**
-     * Constructs a new PGN iterator from another iterator over the lines of the PGN file.
-     *
-     * @param pgnLines an iterator over PGN lines
-     */
-    public PgnIterator(Iterator<String> pgnLines) {
-
-        this.pgnLines = pgnLines;
-        loadNextGame();
+    constructor(pgnLines: Iterable<String?>) {
+        this.pgnLines = pgnLines
+        loadNextGame()
     }
 
     /**
@@ -81,42 +62,36 @@ public class PgnIterator implements Iterable<Game>, AutoCloseable {
      *
      * @return the iterator to navigate the games stored in the PGN file
      */
-    @Override
-    public Iterator<Game> iterator() {
-        return new GameIterator();
+    override fun iterator(): MutableIterator<Game?> {
+        return GameIterator()
     }
 
     /**
      * Attempts to close the PGN file and releases any system resources associated with it.
      */
-    @Override
-    public void close() throws Exception {
-
-        if (pgnLines instanceof LargeFile) {
-            ((LargeFile) (pgnLines)).close();
+    @Throws(Exception::class)
+    override fun close() {
+        if (pgnLines is LargeFile) {
+            pgnLines.close()
         }
     }
 
-    private void loadNextGame() {
-
-        game = GameLoader.loadNextGame(pgnLines);
+    private fun loadNextGame() {
+        game = GameLoader.loadNextGame(pgnLines.iterator())
     }
 
-    private class GameIterator implements Iterator<Game> {
-
-        public boolean hasNext() {
-
-            return game != null;
+    private inner class GameIterator : MutableIterator<Game?> {
+        override fun hasNext(): Boolean {
+            return game != null
         }
 
-        public Game next() {
-
-            Game current = game;
-            loadNextGame();
-            return current;
+        override fun next(): Game? {
+            val current = game
+            loadNextGame()
+            return current
         }
 
-        public void remove() {
+        override fun remove() {
         }
     }
 }

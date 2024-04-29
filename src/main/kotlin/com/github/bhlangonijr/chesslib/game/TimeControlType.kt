@@ -13,36 +13,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package com.github.bhlangonijr.chesslib.game;
+package com.github.bhlangonijr.chesslib.game
 
 /**
  * All possible types of time control.
  */
-public enum TimeControlType {
+enum class TimeControlType {
     /**
      * An unknown type of time control, used when it is not possible to infer the type of time control.
      */
     UNKNOW,
+
     /**
-     * The time bonus time control type, for example {@code "4500+60"}.
+     * The time bonus time control type, for example `"4500+60"`.
      */
     TIME_BONUS,
+
     /**
-     * The fixed depth time control type, for example {@code "4500"}.
+     * The fixed depth time control type, for example `"4500"`.
      */
     FIXED_DEPTH,
+
     /**
-     * The time-per-move time control type, for example {@code "*180"}.
+     * The time-per-move time control type, for example `"*180"`.
      */
     TIME_PER_MOVE,
+
     /**
-     * The moves-per-time time control type, for example {@code "40/9000"}.
+     * The moves-per-time time control type, for example `"40/9000"`.
      */
     MOVES_PER_TIME,
+
     /**
      * The nodes time control type.
      */
     NODES
-
 }

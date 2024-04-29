@@ -1,59 +1,69 @@
-package com.github.bhlangonijr.chesslib.bitboard;
+package com.github.bhlangonijr.chesslib.bitboard
 
-import com.github.bhlangonijr.chesslib.Bitboard;
-import com.github.bhlangonijr.chesslib.Square;
-import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
+import com.github.bhlangonijr.chesslib.Bitboard.bitScanForward
+import com.github.bhlangonijr.chesslib.Bitboard.bitScanReverse
+import com.github.bhlangonijr.chesslib.Bitboard.bitboardToString
+import com.github.bhlangonijr.chesslib.Bitboard.extractLsb
+import com.github.bhlangonijr.chesslib.Bitboard.getBishopAttacks
+import com.github.bhlangonijr.chesslib.Bitboard.getRookAttacks
+import com.github.bhlangonijr.chesslib.Square
+import org.junit.Assert
+import org.junit.Test
 
 /**
  * The type Bitboard test.
  */
-public class BitboardTest {
-
+class BitboardTest {
     /**
      * Test bb functions.
      */
     @Test
-    public void testBBFunctions() {
-
-        for (int x = 0; x < 64; x++) {
-            assertEquals(Bitboard.bitScanForward(1L << x), x);
-            assertEquals(Bitboard.bitScanReverse(1L << x), x);
+    fun testBBFunctions() {
+        for (x in 0..63) {
+            Assert.assertEquals(bitScanForward(1L shl x).toLong(), x.toLong())
+            Assert.assertEquals(bitScanReverse(1L shl x).toLong(), x.toLong())
         }
-        long t = (1L << 10) | (1L << 20);
-        long lsb = Bitboard.extractLsb(t);
+        val t = (1L shl 10) or (1L shl 20)
+        var lsb = extractLsb(t)
 
-        assertEquals(1L << 20, lsb);
+        Assert.assertEquals(1L shl 20, lsb)
 
-        lsb = Bitboard.extractLsb(0L);
+        lsb = extractLsb(0L)
 
-        assertEquals(0L, lsb);
+        Assert.assertEquals(0L, lsb)
 
-        long ba = Bitboard.getBishopAttacks(0L, Square.D5);
+        val ba = getBishopAttacks(0L, Square.D5)
 
-        assertEquals(Bitboard.bitboardToString(ba),
-                "00000001\n" +
-                        "10000010\n" +
-                        "01000100\n" +
-                        "00101000\n" +
-                        "00000000\n" +
-                        "00101000\n" +
-                        "01000100\n" +
-                        "10000010\n");
+        Assert.assertEquals(
+            bitboardToString(ba),
+            """
+                00000001
+                10000010
+                01000100
+                00101000
+                00000000
+                00101000
+                01000100
+                10000010
+                
+                """.trimIndent()
+        )
 
-        long ra = Bitboard.getRookAttacks(0L, Square.D5);
+        val ra = getRookAttacks(0L, Square.D5)
 
-        assertEquals(Bitboard.bitboardToString(ra),
-                "00010000\n" +
-                        "00010000\n" +
-                        "00010000\n" +
-                        "00010000\n" +
-                        "11101111\n" +
-                        "00010000\n" +
-                        "00010000\n" +
-                        "00010000\n");
-
+        Assert.assertEquals(
+            bitboardToString(ra),
+            """
+                00010000
+                00010000
+                00010000
+                00010000
+                11101111
+                00010000
+                00010000
+                00010000
+                
+                """.trimIndent()
+        )
     }
-
 }

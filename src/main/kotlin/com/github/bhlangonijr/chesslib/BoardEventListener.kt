@@ -13,20 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package com.github.bhlangonijr.chesslib;
+package com.github.bhlangonijr.chesslib
 
 /**
  * An observer to board events. Events listeners can be registered to the board using the method
- * {@link Board#addEventListener(BoardEventType, BoardEventListener)}.
+ * [Board.addEventListener].
  */
-public interface BoardEventListener {
-
+interface BoardEventListener {
     /**
      * Method invoked when a board event is emitted and notified to the observer.
      *
      * @param event the board event occurred
      */
-    void onEvent(BoardEvent event);
-
+    fun onEvent(event: BoardEvent?)
 }

@@ -13,23 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.github.bhlangonijr.chesslib.util
 
-package com.github.bhlangonijr.chesslib.util;
-
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.Iterator;
+import java.io.BufferedReader
+import java.io.FileReader
+import java.io.InputStream
+import java.io.InputStreamReader
 
 /**
  * An abstract representation of a potentially large text-based file that can be read line by line.
  */
-public class LargeFile implements Iterable<String>, AutoCloseable {
+class LargeFile : Iterable<String?>, AutoCloseable {
+    private val reader: BufferedReader
 
-    private final BufferedReader reader;
-
-    private String nextLine;
+    private var nextLine: String? = null
 
     /**
      * Constructs a new large file from its path.
@@ -37,10 +34,9 @@ public class LargeFile implements Iterable<String>, AutoCloseable {
      * @param filePath the file path
      * @throws Exception in case the file can not be accessed
      */
-    public LargeFile(String filePath) throws Exception {
-
-        reader = new BufferedReader(new FileReader(filePath));
-        readNextLine();
+    constructor(filePath: String) {
+        reader = BufferedReader(FileReader(filePath))
+        readNextLine()
     }
 
     /**
@@ -48,20 +44,18 @@ public class LargeFile implements Iterable<String>, AutoCloseable {
      *
      * @param inputStream the input stream
      */
-    public LargeFile(InputStream inputStream) {
-
-        reader = new BufferedReader(new InputStreamReader(inputStream));
-        readNextLine();
+    constructor(inputStream: InputStream) {
+        reader = BufferedReader(InputStreamReader(inputStream))
+        readNextLine()
     }
 
     /**
      * Closes this large file and releases any system resources associated with it.
      */
-    @Override
-    public void close() {
+    override fun close() {
         try {
-            reader.close();
-        } catch (Exception ex) {
+            reader.close()
+        } catch (ex: Exception) {
         }
     }
 
@@ -70,36 +64,31 @@ public class LargeFile implements Iterable<String>, AutoCloseable {
      *
      * @return the iterator to read the lines of the file
      */
-    @Override
-    public Iterator<String> iterator() {
-        return new FileIterator();
+    override fun iterator(): MutableIterator<String?> {
+        return FileIterator()
     }
 
-    private void readNextLine() {
-
+    private fun readNextLine() {
         try {
-            nextLine = reader.readLine();
-        } catch (Exception ex) {
-            nextLine = null;
-            throw new IllegalStateException("Error reading file", ex);
+            nextLine = reader.readLine()
+        } catch (ex: Exception) {
+            nextLine = null
+            throw IllegalStateException("Error reading file", ex)
         }
     }
 
-    private class FileIterator implements Iterator<String> {
-
-        public boolean hasNext() {
-
-            return nextLine != null;
+    private inner class FileIterator : MutableIterator<String?> {
+        override fun hasNext(): Boolean {
+            return nextLine != null
         }
 
-        public String next() {
-
-            String currentLine = nextLine;
-            readNextLine();
-            return currentLine;
+        override fun next(): String? {
+            val currentLine = nextLine
+            readNextLine()
+            return currentLine
         }
 
-        public void remove() {
+        override fun remove() {
         }
     }
 }

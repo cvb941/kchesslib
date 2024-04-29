@@ -13,18 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package com.github.bhlangonijr.chesslib.game;
+package com.github.bhlangonijr.chesslib.game
 
 /**
  * The possible types of chess player.
  */
-public enum PlayerType {
-
+enum class PlayerType {
     /**
      * The human player type.
      */
     HUMAN,
+
     /**
      * The engine player type.
      */

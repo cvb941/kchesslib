@@ -1,30 +1,35 @@
-package com.github.bhlangonijr.chesslib.unicode;
+package com.github.bhlangonijr.chesslib.unicode
 
-import static org.junit.Assert.assertEquals;
+import com.github.bhlangonijr.chesslib.Board
+import com.github.bhlangonijr.chesslib.Square
+import com.github.bhlangonijr.chesslib.move.Move
+import org.junit.Assert
+import org.junit.Test
+import java.io.ByteArrayOutputStream
+import java.io.PrintStream
+import java.nio.charset.StandardCharsets
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
-import java.nio.charset.StandardCharsets;
-
-import com.github.bhlangonijr.chesslib.Board;
-import com.github.bhlangonijr.chesslib.Square;
-import com.github.bhlangonijr.chesslib.move.Move;
-
-import org.junit.Test;
-
-public class UnicodePrinterTest {
+class UnicodePrinterTest {
     @Test
-    public void testPrintBoard() {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(256);
-        UnicodePrinter printer = new UnicodePrinter(new PrintStream(baos));
+    fun testPrintBoard() {
+        val baos = ByteArrayOutputStream(256)
+        val printer = UnicodePrinter(PrintStream(baos))
 
-        Board board = new Board();
-        board.doMove(new Move(Square.E2, Square.E4));
-        board.doMove(new Move(Square.E7, Square.E5));
-        printer.print(board);
+        val board = Board()
+        board.doMove(Move(Square.E2, Square.E4))
+        board.doMove(Move(Square.E7, Square.E5))
+        printer.print(board)
 
-        String repr = baos.toString(StandardCharsets.UTF_8);
-        assertEquals("Should be a white rook at pos 0\n"+repr, '\u2656', repr.charAt(0));
-        assertEquals("Should be a black rook at pos 63\n"+repr, '\u265C', repr.split("\n")[7].charAt(7));
+        val repr = baos.toString(StandardCharsets.UTF_8)
+        Assert.assertEquals(
+            "Should be a white rook at pos 0\n$repr",
+            '\u2656'.code.toLong(),
+            repr[0].code.toLong()
+        )
+        Assert.assertEquals(
+            "Should be a black rook at pos 63\n$repr",
+            '\u265C'.code.toLong(),
+            repr.split("\n".toRegex()).dropLastWhile { it.isEmpty() }
+                .toTypedArray()[7][7].code.toLong())
     }
 }

@@ -13,21 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package com.github.bhlangonijr.chesslib;
+package com.github.bhlangonijr.chesslib
 
 /**
  * An event emitted whenever a change of status happens or a move is played on the board.
- * <p>
- * Board events can be listened using implementations of the {@link BoardEventListener} interface.
+ *
+ *
+ * Board events can be listened using implementations of the [BoardEventListener] interface.
  */
-public interface BoardEvent {
-
+interface BoardEvent {
     /**
      * Returns the type of the board event.
      *
      * @return the type of the event
      */
-    BoardEventType getType();
-
+    val type: BoardEventType
 }

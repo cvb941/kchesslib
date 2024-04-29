@@ -1,0 +1,4 @@
+pluginManagement {
+}
+
+rootProject.name = "kchesslib"

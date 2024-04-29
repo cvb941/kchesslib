@@ -1,50 +1,42 @@
-package com.github.bhlangonijr.chesslib.unicode;
+package com.github.bhlangonijr.chesslib.unicode
 
-import java.io.PrintStream;
-import com.github.bhlangonijr.chesslib.Board;
-import com.github.bhlangonijr.chesslib.Piece;
+import com.github.bhlangonijr.chesslib.Board
+import com.github.bhlangonijr.chesslib.Piece
+import java.io.PrintStream
 
 /**
  * A printer class for conveniently printing boards using Unicode chess symbols in a reliable and consistent way.
  */
-public class UnicodePrinter {
-    private final PrintStream printStream;
-
+class UnicodePrinter
+/**
+ * Construct a printer using `System.out` as a print stream.
+ *
+ *
+ * Same as invoking `new UnicodePrinter(System.out)`.
+ *
+ * @see UnicodePrinter.UnicodePrinter
+ */ @JvmOverloads constructor(private val printStream: PrintStream = System.out) {
     /**
      * Construct a printer using the specified print stream.
-     * 
+     *
      * @param printStream the print stream where to output the board
      */
-    public UnicodePrinter(PrintStream printStream) {
-        this.printStream = printStream;
-    }
-
-    /**
-     * Construct a printer using {@code System.out} as a print stream.
-     * <p>
-     * Same as invoking {@code new UnicodePrinter(System.out)}.
-     *
-     * @see UnicodePrinter#UnicodePrinter(PrintStream)
-     */
-    public UnicodePrinter() {
-        this(System.out);
-    }
 
     /**
      * Prints the board using Unicode chess symbols.
-     * 
+     *
      * @param board the board to print
      */
-    public void print(Board board) {
-        int row = 0;
-        for (Piece p : board.boardToArray()) {
+    fun print(board: Board) {
+        var row = 0
+        for (p in board.boardToArray()) {
             if (p == Piece.NONE) {
-                printStream.print(' ');
+                printStream.print(' ')
             } else {
-                printStream.print(p.getFanSymbol());
+                printStream.print(p.fanSymbol)
             }
             if (++row % 8 == 0) {
-                printStream.println();
+                printStream.println()
             }
         }
     }
