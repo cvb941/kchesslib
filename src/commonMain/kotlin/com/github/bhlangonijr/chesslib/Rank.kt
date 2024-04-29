@@ -15,7 +15,6 @@
  */
 package com.github.bhlangonijr.chesslib
 
-import org.apache.commons.lang3.StringUtils
 
 /**
  * The ranks in a board. A *rank* is a raw in the chessboard, and it is identified as a number from 1 to 8.
@@ -74,7 +73,7 @@ enum class Rank(
     /**
      * Special value that represents no rank in particular.
      */
-    NONE(StringUtils.EMPTY);
+    NONE("");
 
     /**
      * Returns the name of the rank.

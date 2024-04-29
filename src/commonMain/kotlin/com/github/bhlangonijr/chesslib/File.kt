@@ -15,8 +15,6 @@
  */
 package com.github.bhlangonijr.chesslib
 
-import org.apache.commons.lang3.StringUtils
-
 /**
  * The files in a board. A *file* is a column in the chessboard, and it is identified as a letter from `A` to
  * `H`.
@@ -75,7 +73,7 @@ enum class File(
     /**
      * Special value that represents no file in particular.
      */
-    NONE(StringUtils.EMPTY);
+    NONE("");
 
     /**
      * Returns the name of the file.

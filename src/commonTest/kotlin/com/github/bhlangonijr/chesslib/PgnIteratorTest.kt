@@ -2,7 +2,6 @@ package com.github.bhlangonijr.chesslib
 
 import com.github.bhlangonijr.chesslib.game.GameResult
 import com.github.bhlangonijr.chesslib.pgn.PgnIterator
-import org.apache.commons.lang3.StringUtils
 import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -126,7 +125,7 @@ class PgnIteratorTest {
             val comments: Map<Int, String>? = game.comments
             for (i in moves!!.indices) {
                 val halfMove =
-                    ((i + 2) / 2).toString() + (if (i % 2 != 0) ".." else StringUtils.SPACE)
+                    ((i + 2) / 2).toString() + (if (i % 2 != 0) ".." else " ")
                 val move = moves[i]
                 val comment = comments!![i + 1].toString()
                 commentedMoves[halfMove + move] = comment.trim { it <= ' ' }

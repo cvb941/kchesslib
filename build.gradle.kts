@@ -8,7 +8,6 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                api("org.apache.commons:commons-lang3:3.12.0")
             }
         }
         jvmTest {
@@ -20,9 +19,6 @@ kotlin {
 }
 
 repositories {
-    maven {
-        url = uri("https://repo.maven.apache.org/maven2/")
-    }
     mavenCentral()
     google()
 }

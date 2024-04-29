@@ -21,7 +21,6 @@ import com.github.bhlangonijr.chesslib.move.MoveException
 import com.github.bhlangonijr.chesslib.move.MoveList
 import com.github.bhlangonijr.chesslib.pgn.PgnException
 import com.github.bhlangonijr.chesslib.util.StringUtil
-import org.apache.commons.lang3.StringUtils
 import java.util.LinkedList
 import java.util.Locale
 
@@ -351,16 +350,16 @@ class Game(
         } else {
             sb.append(makeProp("TimeControl", "-"))
         }
-        if (StringUtils.isNotEmpty(annotator)) {
+        if (!annotator.isNullOrEmpty()) {
             sb.append(makeProp("Annotator", annotator))
         }
-        if (StringUtils.isNotEmpty(fen)) {
+        if (!fen.isNullOrEmpty()) {
             sb.append(makeProp("FEN", fen))
         }
-        if (StringUtils.isNotEmpty(eco)) {
+        if (!eco.isNullOrEmpty()) {
             sb.append(makeProp("ECO", eco))
         }
-        if (StringUtils.isNotEmpty(opening)) {
+        if (!opening.isNullOrEmpty()) {
             sb.append(makeProp("Opening", opening))
         }
         if (whitePlayer != null && whitePlayer!!.elo > 0) {
@@ -586,7 +585,7 @@ class Game(
         var onLineCommentBlock = false
         for (token in text.split(" ")) {
             var token = token
-            if (StringUtils.isBlank(token)) {
+            if (token.isBlank()) {
                 continue
             }
             if (!(onLineCommentBlock || onCommentBlock) &&
@@ -694,7 +693,7 @@ class Game(
             if (onCommentBlock || onLineCommentBlock) {
                 if (comment != null) {
                     comment.append(token)
-                    comment.append(StringUtils.SPACE)
+                    comment.append(" ")
                 }
                 continue
             }
@@ -702,7 +701,7 @@ class Game(
             if (onVariationBlock) {
                 if (variation != null) {
                     variation.last.text.append(token)
-                    variation.last.text.append(StringUtils.SPACE)
+                    variation.last.text.append(" ")
                     variation.last.size++
                     variantIndex++
                 }
@@ -711,7 +710,7 @@ class Game(
             variantIndex++
             halfMove++
             moves.append(token)
-            moves.append(StringUtils.SPACE)
+            moves.append(" ")
         }
 
         StringUtil.replaceAll(moves, "\n", " ")
@@ -909,7 +908,7 @@ class Game(
         private fun getMovesAt(moves: String, index: Int): String {
             val b = StringBuilder()
             var count = 0
-            for (m in moves.split(StringUtils.SPACE)) {
+            for (m in moves.split(" ")) {
                 count++
                 if (count >= index) {
                     break

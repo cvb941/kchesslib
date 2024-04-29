@@ -1,14 +1,13 @@
 package com.github.bhlangonijr.chesslib
 
 import com.github.bhlangonijr.chesslib.PieceType.Companion.fromSanSymbol
-import org.apache.commons.lang3.StringUtils
 import org.junit.Assert
 import org.junit.Test
 
 class PieceTypeTest {
     @Test
     fun fromSanSymbol() {
-        Assert.assertEquals(PieceType.PAWN, fromSanSymbol(StringUtils.EMPTY))
+        Assert.assertEquals(PieceType.PAWN, fromSanSymbol(""))
         Assert.assertEquals(PieceType.KNIGHT, fromSanSymbol("N"))
         Assert.assertEquals(PieceType.BISHOP, fromSanSymbol("B"))
         Assert.assertEquals(PieceType.ROOK, fromSanSymbol("R"))

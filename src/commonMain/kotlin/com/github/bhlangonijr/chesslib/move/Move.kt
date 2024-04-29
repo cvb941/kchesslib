@@ -20,7 +20,6 @@ import com.github.bhlangonijr.chesslib.BoardEventType
 import com.github.bhlangonijr.chesslib.Piece
 import com.github.bhlangonijr.chesslib.Side
 import com.github.bhlangonijr.chesslib.Square
-import org.apache.commons.lang3.StringUtils
 import java.util.Locale
 
 /**
@@ -135,7 +134,7 @@ class Move
      * @return a string representation of this move
      */
     override fun toString(): String {
-        var promo: String? = StringUtils.EMPTY
+        var promo: String? = ""
         if (Piece.NONE != promotion) {
             promo = promotion.fenSymbol
         }

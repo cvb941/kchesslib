@@ -15,8 +15,6 @@
  */
 package com.github.bhlangonijr.chesslib.util
 
-import org.apache.commons.lang3.StringUtils
-
 /**
  * A utility collection of operations on strings.
  *
@@ -45,7 +43,7 @@ object StringUtil {
     fun afterSequence(str: String, seq: String, size: Int): String {
         val idx = str.indexOf(seq) + seq.length
         if (idx == 0) {
-            return StringUtils.EMPTY
+            return ""
         }
         return str.substring(idx, idx + size)
     }
@@ -60,7 +58,7 @@ object StringUtil {
     fun afterSequence(str: String, seq: String): String {
         val idx = str.indexOf(seq) + seq.length
         if (idx == 0) {
-            return StringUtils.EMPTY
+            return ""
         }
         return str.substring(idx)
     }

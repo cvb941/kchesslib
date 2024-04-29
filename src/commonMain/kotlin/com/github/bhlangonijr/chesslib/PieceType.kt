@@ -15,7 +15,6 @@
  */
 package com.github.bhlangonijr.chesslib
 
-import org.apache.commons.lang3.StringUtils
 
 /**
  * All possible piece types in a chess game.
@@ -36,7 +35,7 @@ enum class PieceType(
     /**
      * The pawn piece type.
      */
-    PAWN(StringUtils.EMPTY),
+    PAWN(""),
 
     /**
      * The knight piece type.

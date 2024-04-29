@@ -21,7 +21,6 @@ import com.github.bhlangonijr.chesslib.move.Move
 import com.github.bhlangonijr.chesslib.move.MoveGenerator
 import com.github.bhlangonijr.chesslib.move.MoveList
 import com.github.bhlangonijr.chesslib.util.XorShiftRandom
-import org.apache.commons.lang3.StringUtils
 import java.util.Arrays
 import java.util.EnumMap
 import java.util.LinkedList
@@ -736,7 +735,7 @@ class Board @JvmOverloads constructor(
             castleRight[Side.BLACK] = CastleRight.NONE
         }
 
-        val flags = state.split(StringUtils.SPACE)
+        val flags = state.split(" ")
         if (flags.size >= 3) {
             val s = flags[2].uppercase(Locale.getDefault()).trim { it <= ' ' }
             if (s != "-") {
@@ -855,7 +854,7 @@ class Board @JvmOverloads constructor(
             fen.append(" b")
         }
 
-        var rights = StringUtils.EMPTY
+        var rights = ""
         if (CastleRight.KING_AND_QUEEN_SIDE == castleRight[Side.WHITE]) {
             rights += "KQ"
         } else if (CastleRight.KING_SIDE == castleRight[Side.WHITE]) {
@@ -872,10 +871,10 @@ class Board @JvmOverloads constructor(
             rights += "q"
         }
 
-        if (StringUtils.isEmpty(rights)) {
+        if (rights.isEmpty()) {
             fen.append(" -")
         } else {
-            fen.append(StringUtils.SPACE + rights)
+            fen.append(" " + rights)
         }
 
         if (Square.NONE == enPassant || (onlyOutputEnPassantIfCapturable
@@ -883,14 +882,14 @@ class Board @JvmOverloads constructor(
         ) {
             fen.append(" -")
         } else {
-            fen.append(StringUtils.SPACE)
+            fen.append(" ")
             fen.append(enPassant.toString().lowercase(Locale.getDefault()))
         }
 
         if (includeCounters) {
-            fen.append(StringUtils.SPACE)
+            fen.append(" ")
             fen.append(halfMoveCounter)
-            fen.append(StringUtils.SPACE)
+            fen.append(" ")
             fen.append(moveCounter)
         }
 
@@ -1417,8 +1416,8 @@ class Board @JvmOverloads constructor(
          */
         get() {
             val parts =
-                this.getFen(false).split(StringUtils.SPACE)
-            return parts[0] + StringUtils.SPACE + parts[1] + StringUtils.SPACE + parts[2] +
+                this.getFen(false).split(" ")
+            return parts[0] + " " + parts[1] + " " + parts[2] +
                     (if (this.enPassantTarget != Square.NONE) parts[3] else "-")
         }
 

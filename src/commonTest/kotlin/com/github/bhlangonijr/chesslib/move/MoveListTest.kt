@@ -1,8 +1,6 @@
 package com.github.bhlangonijr.chesslib.move
 
 import com.github.bhlangonijr.chesslib.Square
-import com.github.bhlangonijr.chesslib.move.MoveConversionException
-import org.apache.commons.lang3.StringUtils
 import org.junit.Assert
 import org.junit.Test
 
@@ -63,8 +61,7 @@ class MoveListTest {
         val san = "e4 Nc6 d4 Nf6 d5 Ne5 Nf3 d6 Nxe5 dxe5 Bb5+ Bd7 Bxd7+ Qxd7 Nc3 e6 O-O exd5 "
         val list = MoveList()
         list.loadFromText(s)
-        val mvs = s.split(StringUtils.SPACE.toRegex()).dropLastWhile { it.isEmpty() }
-            .toTypedArray()
+        val mvs = s.split(" ")
         var i = 0
         for (move in list) {
             Assert.assertEquals(mvs[i++], move.toString())
@@ -84,7 +81,7 @@ class MoveListTest {
     @Test
     fun testToSanWithMoveNumbers() {
         // No moves yet:
-        var expectedSan = StringUtils.EMPTY
+        var expectedSan = ""
         var list = MoveList()
         Assert.assertEquals(expectedSan, list.toSan())
         Assert.assertEquals(expectedSan, list.toSanWithMoveNumbers())
@@ -117,7 +114,7 @@ class MoveListTest {
     @Test
     fun testToFanWithMoveNumbers() {
         // No moves yet:
-        var expectedFan = StringUtils.EMPTY
+        var expectedFan = ""
         var list = MoveList()
         Assert.assertEquals(expectedFan, list.toFan())
         Assert.assertEquals(expectedFan, list.toFanWithMoveNumbers())

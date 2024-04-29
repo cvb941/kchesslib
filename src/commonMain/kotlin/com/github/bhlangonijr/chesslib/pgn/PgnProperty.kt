@@ -1,7 +1,6 @@
 package com.github.bhlangonijr.chesslib.pgn
 
 import com.github.bhlangonijr.chesslib.util.StringUtil
-import org.apache.commons.lang3.StringUtils
 import java.util.regex.Pattern
 
 /**
@@ -60,13 +59,13 @@ class PgnProperty {
          */
         fun parsePgnProperty(line: String): PgnProperty? {
             try {
-                var l = line.replace("[", StringUtils.EMPTY)
-                l = l.replace("]", StringUtils.EMPTY)
-                l = l.replace("\"", StringUtils.EMPTY)
+                var l = line.replace("[", "")
+                l = l.replace("]", "")
+                l = l.replace("\"", "")
 
                 return PgnProperty(
-                    StringUtil.beforeSequence(l, StringUtils.SPACE),
-                    StringUtil.afterSequence(l, StringUtils.SPACE)
+                    StringUtil.beforeSequence(l, " "),
+                    StringUtil.afterSequence(l, " ")
                 )
             } catch (e: Exception) {
                 // do nothing

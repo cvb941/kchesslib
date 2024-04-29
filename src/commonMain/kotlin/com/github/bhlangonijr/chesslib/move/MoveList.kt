@@ -25,7 +25,6 @@ import com.github.bhlangonijr.chesslib.Rank
 import com.github.bhlangonijr.chesslib.Side
 import com.github.bhlangonijr.chesslib.Square
 import com.github.bhlangonijr.chesslib.util.StringUtil
-import org.apache.commons.lang3.StringUtils
 import java.util.LinkedList
 import java.util.Locale
 import java.util.function.Function
@@ -193,7 +192,7 @@ class MoveList
         val sb = StringBuilder()
         for (move in moveArray) {
             sb.append(move)
-            sb.append(StringUtils.SPACE)
+            sb.append(" ")
         }
         return sb.toString()
     }
@@ -205,7 +204,7 @@ class MoveList
             if (halfMove % 2 == 0) {
                 sb.append((halfMove / 2) + 1).append(". ")
             }
-            sb.append(moveArray[halfMove]).append(StringUtils.SPACE)
+            sb.append(moveArray[halfMove]).append(" ")
         }
         return sb.toString()
     }
@@ -288,7 +287,7 @@ class MoveList
         try {
             var side = b.sideToMove
             text = StringUtil.normalize(text)
-            val m = text.split(StringUtils.SPACE)
+            val m = text.split(" ")
             var i = 0
             for (strMove in m) {
                 val move = Move(strMove, side)
@@ -368,7 +367,7 @@ class MoveList
         }
         try {
             text = StringUtil.normalize(text)
-            val m = text.split(StringUtils.SPACE)
+            val m = text.split(" ")
             for (strMove in m) {
                 var strMove = strMove
                 if (strMove.startsWith("$")) {
@@ -380,7 +379,7 @@ class MoveList
                 if (strMove.contains(".")) {
                     strMove = StringUtil.afterSequence(strMove, ".")
                 }
-                if (StringUtils.isBlank(strMove)) {
+                if (strMove.isBlank()) {
                     continue
                 }
                 addSanMove(strMove)
@@ -447,7 +446,7 @@ class MoveList
             )
         }
         val promotion =
-            if (StringUtils.isEmpty(strPromotion)) Piece.NONE else Piece.Companion.fromFenSymbol(
+            if (strPromotion.isEmpty()) Piece.NONE else Piece.Companion.fromFenSymbol(
                 if (side == Side.WHITE) strPromotion.uppercase(Locale.getDefault()) else strPromotion.lowercase(
                     Locale.getDefault()
                 )
@@ -485,7 +484,7 @@ class MoveList
             if (strFrom.length == 3) {
                 from = Square.valueOf(strFrom.substring(1, 3).uppercase(Locale.getDefault()))
             } else {
-                var location = StringUtils.EMPTY
+                var location = ""
                 if (strFrom.length == 2) {
                     if (Character.isUpperCase(strFrom[0])) {
                         location = strFrom.substring(1, 2)
@@ -607,7 +606,7 @@ class MoveList
         val b = StringBuilder()
         for (move in this) {
             b.append(move.toString())
-            b.append(StringUtils.SPACE)
+            b.append(" ")
         }
         return b.toString().trim { it <= ' ' }
     }
@@ -647,12 +646,12 @@ class MoveList
     }
 
     private fun normalizeSan(san: String): String { //TODO regex?
-        return san.replace("+", StringUtils.EMPTY)
-            .replace("#", StringUtils.EMPTY)
-            .replace("!", StringUtils.EMPTY)
-            .replace("?", StringUtils.EMPTY)
-            .replace("ep", StringUtils.EMPTY)
-            .replace("\n", StringUtils.SPACE)
+        return san.replace("+", "")
+            .replace("#", "")
+            .replace("!", "")
+            .replace("?", "")
+            .replace("ep", "")
+            .replace("\n", " ")
     }
 
     companion object {

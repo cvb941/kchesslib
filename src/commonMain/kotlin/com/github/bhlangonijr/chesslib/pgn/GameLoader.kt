@@ -25,7 +25,6 @@ import com.github.bhlangonijr.chesslib.game.Round
 import com.github.bhlangonijr.chesslib.game.Termination
 import com.github.bhlangonijr.chesslib.game.TimeControl
 import com.github.bhlangonijr.chesslib.util.StringUtil
-import org.apache.commons.lang3.StringUtils
 import java.util.Locale
 import java.util.UUID
 import kotlin.math.max
@@ -59,7 +58,7 @@ object GameLoader {
             try {
                 if (PgnProperty.Companion.isProperty(line)) {
                     addProperty(line, container)
-                } else if (StringUtils.isNotEmpty(line)) {
+                } else if (line.isNotEmpty()) {
                     addMoveText(line, container)
                     if (isEndGame(line)) {
                         setMoveText(container.game, container.moveText)
@@ -189,10 +188,10 @@ object GameLoader {
     private fun setMoveText(game: Game, moveText: StringBuilder) {
         //clear game result
 
-        StringUtil.replaceAll(moveText, "1-0", StringUtils.EMPTY)
-        StringUtil.replaceAll(moveText, "0-1", StringUtils.EMPTY)
-        StringUtil.replaceAll(moveText, "1/2-1/2", StringUtils.EMPTY)
-        StringUtil.replaceAll(moveText, "*", StringUtils.EMPTY)
+        StringUtil.replaceAll(moveText, "1-0", "")
+        StringUtil.replaceAll(moveText, "0-1", "")
+        StringUtil.replaceAll(moveText, "1/2-1/2", "")
+        StringUtil.replaceAll(moveText, "*", "")
 
         game.moveText = moveText
         game.loadMoveText(moveText)
