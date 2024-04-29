@@ -11,6 +11,8 @@ kotlin {
     watchosArm32()
     watchosArm64()
     watchosSimulatorArm64()
+    macosX64()
+    macosArm64()
 
     applyDefaultHierarchyTemplate()
 

@@ -25,7 +25,7 @@ class PgnHolderTest {
     @Test
     @Throws(Exception::class)
     fun testPGNLoad1() {
-        val pgn = PgnHolder("src/commonTest/resources/cct131.pgn")
+        val pgn = PgnHolder(getResourcePath("src/commonTest/resources/cct131.pgn"))
         pgn.loadPgn()
         val game = pgn.getGames()[0]
         game.loadMoveText()
@@ -59,7 +59,7 @@ class PgnHolderTest {
     @Test
     @Throws(Exception::class)
     fun testPGNLoad2() {
-        val pgn = PgnHolder("src/commonTest/resources/rav_alternative.pgn")
+        val pgn = PgnHolder(getResourcePath("src/commonTest/resources/rav_alternative.pgn"))
         pgn.loadPgn()
         val game = pgn.getGames()[0]
         game.loadMoveText()
@@ -94,7 +94,7 @@ class PgnHolderTest {
     @Test
     @Throws(Exception::class)
     fun testPGNLoad3() {
-        val pgn = PgnHolder("src/commonTest/resources/linares_2002.pgn")
+        val pgn = PgnHolder(getResourcePath("src/commonTest/resources/linares_2002.pgn"))
         pgn.loadPgn()
         val game = pgn.getGames()[1]
         game.loadMoveText()
@@ -130,7 +130,7 @@ class PgnHolderTest {
     @Test
     @Throws(Exception::class)
     fun testPGNLoad4() {
-        val pgn = PgnHolder("src/commonTest/resources/redqueen.pgn")
+        val pgn = PgnHolder(getResourcePath("src/commonTest/resources/redqueen.pgn"))
         pgn.loadPgn()
         val game = pgn.getGames()[1]
         game.loadMoveText()
@@ -162,7 +162,7 @@ class PgnHolderTest {
     @Test
     @Throws(Exception::class)
     fun testPromotionWithMissingEqualSign() {
-        val pgn = PgnHolder("src/commonTest/resources/promoting.pgn")
+        val pgn = PgnHolder(getResourcePath("src/commonTest/resources/promoting.pgn"))
         pgn.loadPgn()
         val game = pgn.getGames()[0]
         game.loadMoveText()
@@ -184,7 +184,7 @@ class PgnHolderTest {
     @Test
     @Throws(Exception::class)
     fun testCupPgn() {
-        val pgn = PgnHolder("src/commonTest/resources/cup.pgn")
+        val pgn = PgnHolder(getResourcePath("src/commonTest/resources/cup.pgn"))
         pgn.loadPgn()
         for (game in pgn.getGames()) {
             game.loadMoveText()
@@ -199,7 +199,7 @@ class PgnHolderTest {
     @Test
     @Throws(Exception::class)
     fun testOO() {
-        val pgn = PgnHolder("src/commonTest/resources/oo.pgn")
+        val pgn = PgnHolder(getResourcePath("src/commonTest/resources/oo.pgn"))
         pgn.loadPgn()
         for (game in pgn.getGames()) {
             game.loadMoveText()
@@ -214,7 +214,7 @@ class PgnHolderTest {
     @Test
     @Throws(Exception::class)
     fun testEP() {
-        val pgn = PgnHolder("src/commonTest/resources/ep.pgn")
+        val pgn = PgnHolder(getResourcePath("src/commonTest/resources/ep.pgn"))
         pgn.loadPgn()
         for (game in pgn.getGames()) {
             game.loadMoveText()
@@ -245,7 +245,7 @@ class PgnHolderTest {
     @Throws(Exception::class)
     fun testErr() {
         assertFailsWith(PgnException::class) {
-            val pgn = PgnHolder("src/commonTest/resources/err.pgn")
+            val pgn = PgnHolder(getResourcePath("src/commonTest/resources/err.pgn"))
             pgn.loadPgn()
             for (game in pgn.getGames()) {
                 game.loadMoveText()
@@ -261,7 +261,7 @@ class PgnHolderTest {
     @Test
     @Throws(Exception::class)
     fun testAnsi() {
-        val pgn = PgnHolder("src/commonTest/resources/Morphy_ANSI.pgn")
+        val pgn = PgnHolder(getResourcePath("src/commonTest/resources/Morphy_ANSI.pgn"))
         pgn.loadPgn()
         for (game in pgn.getGames()) {
             game.loadMoveText()
@@ -276,7 +276,7 @@ class PgnHolderTest {
     @Test
     @Throws(Exception::class)
     fun testUtf8() {
-        val pgn = PgnHolder("src/commonTest/resources/Morphy_UTF8.pgn")
+        val pgn = PgnHolder(getResourcePath("src/commonTest/resources/Morphy_UTF8.pgn"))
         pgn.loadPgn()
         for (game in pgn.getGames()) {
             game.loadMoveText()
@@ -292,7 +292,7 @@ class PgnHolderTest {
     @Throws(Exception::class)
     fun testLongMoves() {
         val init = Clock.System.now().toEpochMilliseconds()
-        val pgn = PgnHolder("src/commonTest/resources/longest.pgn")
+        val pgn = PgnHolder(getResourcePath("src/commonTest/resources/longest.pgn"))
         pgn.loadPgn()
         for (game in pgn.getGames()) {
             game.loadMoveText()
@@ -309,7 +309,7 @@ class PgnHolderTest {
     @Test
     @Throws(Exception::class)
     fun testRepetition() {
-        val pgn = PgnHolder("src/commonTest/resources/test.pgn")
+        val pgn = PgnHolder(getResourcePath("src/commonTest/resources/test.pgn"))
         pgn.loadPgn()
         val game = pgn.getGames()[0]
         game.loadMoveText()
@@ -324,7 +324,7 @@ class PgnHolderTest {
     @Test
     @Throws(Exception::class)
     fun testRepetition2() {
-        val pgn = PgnHolder("src/commonTest/resources/alekseenko_grachev_2017.pgn")
+        val pgn = PgnHolder(getResourcePath("src/commonTest/resources/alekseenko_grachev_2017.pgn"))
         pgn.loadPgn()
         val game = pgn.getGames()[0]
         game.loadMoveText()
@@ -339,7 +339,7 @@ class PgnHolderTest {
     @Test
     @Throws(Exception::class)
     fun testRepetition3() {
-        val pgn = PgnHolder("src/commonTest/resources/nikolic_arsovic_1989.pgn")
+        val pgn = PgnHolder(getResourcePath("src/commonTest/resources/nikolic_arsovic_1989.pgn"))
         pgn.loadPgn()
         val game = pgn.getGames()[0]
         game.loadMoveText()
@@ -355,7 +355,7 @@ class PgnHolderTest {
     @Test
     @Throws(Exception::class)
     fun testRepetition4() {
-        val pgn = PgnHolder("src/commonTest/resources/no_repetition_1.pgn")
+        val pgn = PgnHolder(getResourcePath("src/commonTest/resources/no_repetition_1.pgn"))
         pgn.loadPgn()
         val game = pgn.getGames()[0]
         game.loadMoveText()
@@ -372,7 +372,7 @@ class PgnHolderTest {
     @Test
     @Throws(Exception::class)
     fun testRepetition5() {
-        val pgn = PgnHolder("src/commonTest/resources/no_repetition_2.pgn")
+        val pgn = PgnHolder(getResourcePath("src/commonTest/resources/no_repetition_2.pgn"))
         pgn.loadPgn()
         val game = pgn.getGames()[0]
         game.loadMoveText()
@@ -390,7 +390,7 @@ class PgnHolderTest {
     @Throws(Exception::class)
     fun testPGNLoadInputStream() {
         val pgn = PgnHolder(null)
-        pgn.loadPgn(LargeFile("src/commonTest/resources/cct131.pgn"))
+        pgn.loadPgn(LargeFile(getResourcePath("src/commonTest/resources/cct131.pgn")))
         val game = pgn.getGames()[0]
         game.loadMoveText()
 
@@ -492,7 +492,7 @@ class PgnHolderTest {
     @Test
     @Throws(Exception::class)
     fun testBoardHashKeyConsistency() {
-        val pgn = PgnHolder("src/commonTest/resources/Stockfish_DD_64-bit_4CPU.pgn")
+        val pgn = PgnHolder(getResourcePath("src/commonTest/resources/Stockfish_DD_64-bit_4CPU.pgn"))
         pgn.loadPgn()
 
         var numberOfInconsistencies = 0
@@ -540,7 +540,7 @@ class PgnHolderTest {
     @Test
     @Throws(Exception::class)
     fun testLoadFromStartPosition() {
-        val pgn = PgnHolder("src/commonTest/resources/teststartpos.pgn")
+        val pgn = PgnHolder(getResourcePath("src/commonTest/resources/teststartpos.pgn"))
         pgn.loadPgn()
         val game = pgn.getGames()[0]
         game.loadMoveText()
@@ -574,7 +574,7 @@ class PgnHolderTest {
     @Test
     @Throws(Exception::class)
     fun testPgnLoadListenerWith3Events() {
-        val pgn = PgnHolder("src/commonTest/resources/3_events.pgn")
+        val pgn = PgnHolder(getResourcePath("src/commonTest/resources/3_events.pgn"))
 
         val notifyProgressCallList: MutableList<Int> = ArrayList()
 
@@ -598,7 +598,7 @@ class PgnHolderTest {
     @Test
     @Throws(Exception::class)
     fun testPgnLoadListenerWith31Events() {
-        val pgn = PgnHolder("src/commonTest/resources/31_events.pgn")
+        val pgn = PgnHolder(getResourcePath("src/commonTest/resources/31_events.pgn"))
 
         val notifyProgressCallList: MutableList<Int> = ArrayList()
 
@@ -623,7 +623,7 @@ class PgnHolderTest {
     @Test
     @Throws(Exception::class)
     fun testCountGamesInPgnFileWith3Games() {
-        val pgn = PgnHolder("src/commonTest/resources/3_games.pgn")
+        val pgn = PgnHolder(getResourcePath("src/commonTest/resources/3_games.pgn"))
 
         assertEquals(3, pgn.countGamesInPgnFile())
         pgn.loadPgn()
@@ -638,7 +638,7 @@ class PgnHolderTest {
     @Test
     @Throws(Exception::class)
     fun testCountGamesInPgnFileWith31Games() {
-        val pgn = PgnHolder("src/commonTest/resources/31_games.pgn")
+        val pgn = PgnHolder(getResourcePath("src/commonTest/resources/31_games.pgn"))
 
         assertEquals(31, pgn.countGamesInPgnFile())
         pgn.loadPgn()
