@@ -7,8 +7,8 @@ import com.github.bhlangonijr.chesslib.Bitboard.extractLsb
 import com.github.bhlangonijr.chesslib.Bitboard.getBishopAttacks
 import com.github.bhlangonijr.chesslib.Bitboard.getRookAttacks
 import com.github.bhlangonijr.chesslib.Square
-import org.junit.Assert
-import org.junit.Test
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 /**
  * The type Bitboard test.
@@ -20,21 +20,21 @@ class BitboardTest {
     @Test
     fun testBBFunctions() {
         for (x in 0..63) {
-            Assert.assertEquals(bitScanForward(1L shl x).toLong(), x.toLong())
-            Assert.assertEquals(bitScanReverse(1L shl x).toLong(), x.toLong())
+            assertEquals(bitScanForward(1L shl x).toLong(), x.toLong())
+            assertEquals(bitScanReverse(1L shl x).toLong(), x.toLong())
         }
         val t = (1L shl 10) or (1L shl 20)
         var lsb = extractLsb(t)
 
-        Assert.assertEquals(1L shl 20, lsb)
+        assertEquals(1L shl 20, lsb)
 
         lsb = extractLsb(0L)
 
-        Assert.assertEquals(0L, lsb)
+        assertEquals(0L, lsb)
 
         val ba = getBishopAttacks(0L, Square.D5)
 
-        Assert.assertEquals(
+        assertEquals(
             bitboardToString(ba),
             """
                 00000001
@@ -51,7 +51,7 @@ class BitboardTest {
 
         val ra = getRookAttacks(0L, Square.D5)
 
-        Assert.assertEquals(
+        assertEquals(
             bitboardToString(ra),
             """
                 00010000

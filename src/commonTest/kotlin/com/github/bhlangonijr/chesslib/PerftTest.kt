@@ -1,9 +1,12 @@
 package com.github.bhlangonijr.chesslib
 
 import com.github.bhlangonijr.chesslib.move.MoveGeneratorException
-import junit.framework.Assert
-import org.junit.Test
-
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertNotSame
+import kotlin.test.assertNull
+import kotlin.test.assertTrue
 /**
  * The type Perft test.
  */
@@ -17,7 +20,7 @@ class PerftTest {
     @Throws(MoveGeneratorException::class)
     fun testPerft1() {
         val nodes = testPerft("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", 5)
-        Assert.assertEquals(4865609, nodes)
+        assertEquals(4865609, nodes)
     }
 
     /**
@@ -29,7 +32,7 @@ class PerftTest {
     @Throws(MoveGeneratorException::class)
     fun testPerft2() {
         val nodes = testPerft("rnbq1k1r/pp1Pbppp/2p5/8/2B5/8/PPP1NnPP/RNBQK2R w KQ - 1 8", 4)
-        Assert.assertEquals(2103487, nodes)
+        assertEquals(2103487, nodes)
     }
 
     /**
@@ -42,7 +45,7 @@ class PerftTest {
     fun testPerft3() {
         val nodes =
             testPerft("r4rk1/1pp1qppp/p1np1n2/2b1p1B1/2B1P1b1/P1NP1N2/1PP1QPPP/R4RK1 w - - 0 10", 4)
-        Assert.assertEquals(3894594, nodes)
+        assertEquals(3894594, nodes)
     }
 
     /**
@@ -54,7 +57,7 @@ class PerftTest {
     @Throws(MoveGeneratorException::class)
     fun testPerft4() {
         val nodes = testPerft("r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq -", 4)
-        Assert.assertEquals(4085603, nodes)
+        assertEquals(4085603, nodes)
     }
 
     /**
@@ -66,7 +69,7 @@ class PerftTest {
     @Throws(MoveGeneratorException::class)
     fun testPerft5() {
         val nodes = testPerft("rnbq1k1r/pp1Pbppp/2p5/8/2B5/8/PPP1NnPP/RNBQK2R w KQ - 1 8", 4)
-        Assert.assertEquals(2103487, nodes)
+        assertEquals(2103487, nodes)
     }
 
     /**
@@ -78,7 +81,7 @@ class PerftTest {
     @Throws(MoveGeneratorException::class)
     fun testPerft6() {
         val nodes = testPerft("r3k2r/Pppp1ppp/1b3nbN/nP6/BBP1P3/q4N2/Pp1P2PP/R2Q1RK1 w kq - 0 1", 4)
-        Assert.assertEquals(422333, nodes)
+        assertEquals(422333, nodes)
     }
 
     /**
@@ -90,7 +93,7 @@ class PerftTest {
     @Throws(MoveGeneratorException::class)
     fun testPerft7() {
         val nodes = testPerft("r3k2r/1b4bq/8/8/8/8/7B/R3K2R w KQkq - 0 1", 4)
-        Assert.assertEquals(1274206, nodes)
+        assertEquals(1274206, nodes)
     }
 
     /**
@@ -102,7 +105,7 @@ class PerftTest {
     @Throws(MoveGeneratorException::class)
     fun testPerft8() {
         val nodes = testPerft("r3k2r/8/3Q4/8/8/5q2/8/R3K2R b KQkq - 0 1", 4)
-        Assert.assertEquals(1720476, nodes)
+        assertEquals(1720476, nodes)
     }
 
     /**
@@ -114,7 +117,7 @@ class PerftTest {
     @Throws(MoveGeneratorException::class)
     fun testPerft9() {
         val nodes = testPerft("8/8/1P2K3/8/2n5/1q6/8/5k2 b - - 0 1", 5)
-        Assert.assertEquals(1004658, nodes)
+        assertEquals(1004658, nodes)
     }
 
     /**
@@ -126,7 +129,7 @@ class PerftTest {
     @Throws(MoveGeneratorException::class)
     fun testPerft10() {
         val nodes = testPerft("4k3/1P6/8/8/8/8/K7/8 w - - 0 1", 6)
-        Assert.assertEquals(217342, nodes)
+        assertEquals(217342, nodes)
     }
 
     /**
@@ -138,7 +141,7 @@ class PerftTest {
     @Throws(MoveGeneratorException::class)
     fun testPerft11() {
         val nodes = testPerft("8/P1k5/K7/8/8/8/8/8 w - - 0 1", 6)
-        Assert.assertEquals(92683, nodes)
+        assertEquals(92683, nodes)
     }
 
     /**
@@ -150,7 +153,7 @@ class PerftTest {
     @Throws(MoveGeneratorException::class)
     fun testPerft12() {
         val nodes = testPerft("K1k5/8/P7/8/8/8/8/8 w - - 0 1", 6)
-        Assert.assertEquals(2217, nodes)
+        assertEquals(2217, nodes)
     }
 
     /**
@@ -162,7 +165,7 @@ class PerftTest {
     @Throws(MoveGeneratorException::class)
     fun testPerft13() {
         val nodes = testPerft("8/k1P5/8/1K6/8/8/8/8 w - - 0 1", 7)
-        Assert.assertEquals(567584, nodes)
+        assertEquals(567584, nodes)
     }
 
     /**
@@ -174,14 +177,14 @@ class PerftTest {
     @Throws(MoveGeneratorException::class)
     fun testPerft14() {
         val nodes = testPerft("8/8/2k5/5q2/5n2/8/5K2/8 b - - 0 1", 4)
-        Assert.assertEquals(23527, nodes)
+        assertEquals(23527, nodes)
     }
 
     @Test
     @Throws(MoveGeneratorException::class)
     fun testPerft15() {
         val nodes = testPerft("8/1pp3p1/4pq1p/PP1bpk2/1Q2p3/4P1P1/2B2P2/6K1 b - - 2 33", 5)
-        Assert.assertEquals(6421514, nodes)
+        assertEquals(6421514, nodes)
     }
 
     /**
@@ -229,7 +232,7 @@ class PerftTest {
                 board.undoMove()
                 require(!(CHECK_BOARD_STATE && hash != board.hashCode())) { "Illegal board state after move: $move" }
             } catch (e: Exception) {
-                System.err.println("depth $depth - ply $ply")
+                println("depth $depth - ply $ply")
                 e.printStackTrace()
                 throw IllegalArgumentException(e)
             }

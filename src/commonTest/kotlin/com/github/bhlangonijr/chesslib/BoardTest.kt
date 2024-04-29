@@ -4,9 +4,12 @@ import com.github.bhlangonijr.chesslib.move.Move
 import com.github.bhlangonijr.chesslib.move.MoveConversionException
 import com.github.bhlangonijr.chesslib.move.MoveGeneratorException
 import com.github.bhlangonijr.chesslib.move.MoveList
-import org.junit.Assert
-import org.junit.Assert.assertEquals
-import org.junit.Test
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertNotSame
+import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 /**
  * The type Board test.
@@ -29,59 +32,59 @@ class BoardTest {
 
         board.loadFromFen(fen1)
 
-        Assert.assertEquals(Piece.BLACK_BISHOP, board.getPiece(Square.C8))
-        Assert.assertEquals(Piece.WHITE_BISHOP, board.getPiece(Square.C1))
-        Assert.assertEquals(Piece.BLACK_ROOK, board.getPiece(Square.H8))
-        Assert.assertEquals(Piece.WHITE_ROOK, board.getPiece(Square.H1))
+        assertEquals(Piece.BLACK_BISHOP, board.getPiece(Square.C8))
+        assertEquals(Piece.WHITE_BISHOP, board.getPiece(Square.C1))
+        assertEquals(Piece.BLACK_ROOK, board.getPiece(Square.H8))
+        assertEquals(Piece.WHITE_ROOK, board.getPiece(Square.H1))
 
         assertEquals(0, board.halfMoveCounter)
         assertEquals(1, board.moveCounter)
-        Assert.assertEquals(Square.E3, board.enPassant)
-        Assert.assertEquals(Square.NONE, board.enPassantTarget)
+        assertEquals(Square.E3, board.enPassant)
+        assertEquals(Square.NONE, board.enPassantTarget)
 
-        Assert.assertEquals(fen1, board.fen)
+        assertEquals(fen1, board.fen)
 
         var move = Move(Square.E7, Square.E5) //sm: b
         board.doMove(move, true)
         println("new FEN after: " + move.toString() + ": " + board.fen)
         println("hash code is: " + board.hashCode())
 
-        Assert.assertEquals(fen2, board.fen) //sm: w
+        assertEquals(fen2, board.fen) //sm: w
 
         board.undoMove()
         println("new FEN after: undo: " + board.fen)
         println("hash code is: " + board.hashCode())
-        Assert.assertEquals(fen1, board.fen) // sm: b
+        assertEquals(fen1, board.fen) // sm: b
 
         move = Move(Square.D7, Square.D5) //sm: b
         board.doMove(move, true)
         println("new FEN after: " + move.toString() + ": " + board.fen)
         println("hash code is: " + board.hashCode())
-        Assert.assertEquals(fen3, board.fen) // sm: w
+        assertEquals(fen3, board.fen) // sm: w
 
         move = Move(Square.E4, Square.E5) //sm: w
         board.doMove(move, true)
         println("new FEN after: " + move.toString() + ": " + board.fen)
         println("hash code is: " + board.hashCode())
-        Assert.assertEquals(fen4, board.fen) // sm: b
+        assertEquals(fen4, board.fen) // sm: b
 
         move = Move(Square.F7, Square.F5) //sm: b
         board.doMove(move, true)
         println("new FEN after: " + move.toString() + ": " + board.fen)
         println("hash code is: " + board.hashCode())
-        Assert.assertEquals(fen5, board.fen) // sm: w
+        assertEquals(fen5, board.fen) // sm: w
 
         move = Move(Square.E5, Square.F6) //sm: w
         board.doMove(move, true)
         println("new FEN after: " + move.toString() + ": " + board.fen)
         println("hash code is: " + board.hashCode())
-        Assert.assertEquals(fen6, board.fen) // sm: b
+        assertEquals(fen6, board.fen) // sm: b
 
         move = Move(Square.E7, Square.F6) //sm: b
         board.doMove(move, true)
         println("new FEN after: " + move.toString() + ": " + board.fen)
         println("hash code is: " + board.hashCode())
-        Assert.assertEquals(fen7, board.fen) // sm: w
+        assertEquals(fen7, board.fen) // sm: w
     }
 
     /**
@@ -97,26 +100,26 @@ class BoardTest {
 
         board.loadFromFen(fen1)
 
-        Assert.assertEquals(fen1, board.fen)
+        assertEquals(fen1, board.fen)
 
         var move = Move(Square.E1, Square.G1) //sm: b
         board.doMove(move, true)
         println("new FEN after: " + move.toString() + ": " + board.fen)
         println("hash code is: " + board.hashCode())
 
-        Assert.assertEquals(fen2, board.fen) //sm: w
+        assertEquals(fen2, board.fen) //sm: w
 
         move = Move(Square.E8, Square.G8) //sm: w
         board.doMove(move, true)
         println("new FEN after: " + move.toString() + ": " + board.fen)
         println("hash code is: " + board.hashCode())
 
-        Assert.assertEquals(fen3, board.fen) //sm: b
+        assertEquals(fen3, board.fen) //sm: b
 
         board.undoMove()
         println("new FEN after: undo: " + board.fen)
         println("hash code is: " + board.hashCode())
-        Assert.assertEquals(fen2, board.fen) // sm: w
+        assertEquals(fen2, board.fen) // sm: w
     }
 
     /**
@@ -130,7 +133,7 @@ class BoardTest {
         val expectedOutputFen = "rnbqkbnr/1pp1pppp/p7/3pP3/8/8/PPPP1PPP/RNBQKBNR w KQkq d6"
         val board = Board()
         board.loadFromFen(fenWhereEnPassantPossible)
-        Assert.assertEquals(expectedOutputFen, board.getFen(false, true))
+        assertEquals(expectedOutputFen, board.getFen(false, true))
     }
 
     /**
@@ -144,7 +147,7 @@ class BoardTest {
         val expectedOutputFen = "rnbqkbnr/1pp1pppp/p7/3pP3/8/8/PPPP1PPP/RNBQKBNR w KQkq -"
         val board = Board()
         board.loadFromFen(fenWhereEnPassantNotPossible)
-        Assert.assertEquals(expectedOutputFen, board.getFen(false, true))
+        assertEquals(expectedOutputFen, board.getFen(false, true))
     }
 
     /**
@@ -159,7 +162,7 @@ class BoardTest {
         val expectedOutputFen = "rnbqkbnr/1pp1pppp/p7/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq -"
         val board = Board()
         board.loadFromFen(fenWithTwoSquarePawnMoveNoEnPassantPossible)
-        Assert.assertEquals(expectedOutputFen, board.getFen(false, true))
+        assertEquals(expectedOutputFen, board.getFen(false, true))
     }
 
 
@@ -174,7 +177,7 @@ class BoardTest {
 
         val b2 = b1.clone()
 
-        Assert.assertEquals(b1.hashCode().toLong(), b2.hashCode().toLong())
+        assertEquals(b1.hashCode().toLong(), b2.hashCode().toLong())
     }
 
     /**
@@ -191,8 +194,8 @@ class BoardTest {
         b2.loadFromFen(fen1)
         println("hash code is: " + b2.hashCode())
 
-        Assert.assertEquals(b1, b2)
-        Assert.assertEquals(b1.positionId, b2.positionId)
+        assertEquals(b1, b2)
+        assertEquals(b1.positionId, b2.positionId)
     }
 
     /**
@@ -207,7 +210,7 @@ class BoardTest {
         b1.doMove(Move(Square.B5, Square.A6))
         b1.undoMove()
 
-        Assert.assertEquals(fen1, b1.fen)
+        assertEquals(fen1, b1.fen)
     }
 
     /**
@@ -224,7 +227,7 @@ class BoardTest {
 
         val moves = b1.legalMoves()
 
-        Assert.assertEquals(47, moves.size.toLong())
+        assertEquals(47, moves.size.toLong())
     }
 
     /**
@@ -241,7 +244,7 @@ class BoardTest {
 
         val moves = b.legalMoves()
 
-        Assert.assertEquals(Move(Square.A4, Square.A3), moves[0])
+        assertEquals(Move(Square.A4, Square.A3), moves[0])
     }
 
     /**
@@ -258,11 +261,11 @@ class BoardTest {
 
         val moves = b.legalMoves()
 
-        Assert.assertTrue(moves.contains(Move(Square.E4, Square.F5)))
-        Assert.assertTrue(moves.contains(Move(Square.G4, Square.F3)))
-        Assert.assertTrue(moves.contains(Move(Square.G4, Square.G3)))
-        Assert.assertTrue(moves.contains(Move(Square.G4, Square.H3)))
-        Assert.assertTrue(moves.contains(Move(Square.G4, Square.H5)))
+        assertTrue(moves.contains(Move(Square.E4, Square.F5)))
+        assertTrue(moves.contains(Move(Square.G4, Square.F3)))
+        assertTrue(moves.contains(Move(Square.G4, Square.G3)))
+        assertTrue(moves.contains(Move(Square.G4, Square.H3)))
+        assertTrue(moves.contains(Move(Square.G4, Square.H5)))
     }
 
     /**
@@ -279,15 +282,15 @@ class BoardTest {
 
         val moves = b.legalMoves()
 
-        Assert.assertTrue(moves.contains(Move(Square.D5, Square.C6)))
-        Assert.assertTrue(moves.contains(Move(Square.D4, Square.C3)))
-        Assert.assertTrue(moves.contains(Move(Square.D4, Square.D3)))
-        Assert.assertTrue(moves.contains(Move(Square.D4, Square.E3)))
-        Assert.assertTrue(moves.contains(Move(Square.D4, Square.C4)))
-        Assert.assertTrue(moves.contains(Move(Square.D4, Square.E4)))
-        Assert.assertTrue(moves.contains(Move(Square.D4, Square.C5)))
-        Assert.assertTrue(moves.contains(Move(Square.D4, Square.E5)))
-        Assert.assertEquals(8, moves.size.toLong())
+        assertTrue(moves.contains(Move(Square.D5, Square.C6)))
+        assertTrue(moves.contains(Move(Square.D4, Square.C3)))
+        assertTrue(moves.contains(Move(Square.D4, Square.D3)))
+        assertTrue(moves.contains(Move(Square.D4, Square.E3)))
+        assertTrue(moves.contains(Move(Square.D4, Square.C4)))
+        assertTrue(moves.contains(Move(Square.D4, Square.E4)))
+        assertTrue(moves.contains(Move(Square.D4, Square.C5)))
+        assertTrue(moves.contains(Move(Square.D4, Square.E5)))
+        assertEquals(8, moves.size.toLong())
     }
 
     @Test
@@ -299,84 +302,84 @@ class BoardTest {
 
         val initialHash = b.zobristKey
 
-        Assert.assertEquals(b.zobristKey, b.incrementalHashKey)
-        Assert.assertEquals(b.hashCode().toLong(), b2.hashCode().toLong())
+        assertEquals(b.zobristKey, b.incrementalHashKey)
+        assertEquals(b.hashCode().toLong(), b2.hashCode().toLong())
 
         b.doMove(Move(Square.D1, Square.E1))
         b2.doMove(Move(Square.D1, Square.E1))
-        Assert.assertEquals(b.zobristKey, b.incrementalHashKey)
-        Assert.assertEquals(b.hashCode().toLong(), b2.hashCode().toLong())
+        assertEquals(b.zobristKey, b.incrementalHashKey)
+        assertEquals(b.hashCode().toLong(), b2.hashCode().toLong())
 
         b.doMove(Move(Square.F2, Square.H1))
         b2.doMove(Move(Square.F2, Square.H1))
 
-        Assert.assertEquals(b.zobristKey, b.incrementalHashKey)
-        Assert.assertEquals(b.hashCode().toLong(), b2.hashCode().toLong())
+        assertEquals(b.zobristKey, b.incrementalHashKey)
+        assertEquals(b.hashCode().toLong(), b2.hashCode().toLong())
 
         b.doMove(Move(Square.F8, Square.C5))
         b2.doMove(Move(Square.F8, Square.C5))
 
-        Assert.assertEquals(b.zobristKey, b.incrementalHashKey)
-        Assert.assertEquals(b.hashCode().toLong(), b2.hashCode().toLong())
+        assertEquals(b.zobristKey, b.incrementalHashKey)
+        assertEquals(b.hashCode().toLong(), b2.hashCode().toLong())
         println(b.zobristKey)
 
         b.doMove(Move(Square.G1, Square.E2))
         b2.doMove(Move(Square.G1, Square.E2))
 
-        Assert.assertEquals(b.zobristKey, b.incrementalHashKey)
-        Assert.assertEquals(b.hashCode().toLong(), b2.hashCode().toLong())
+        assertEquals(b.zobristKey, b.incrementalHashKey)
+        assertEquals(b.hashCode().toLong(), b2.hashCode().toLong())
         println(b.zobristKey)
 
         b.doMove(Move(Square.C1, Square.D2))
         b2.doMove(Move(Square.C1, Square.D2))
 
-        Assert.assertEquals(b.zobristKey, b.incrementalHashKey)
-        Assert.assertEquals(b.hashCode().toLong(), b2.hashCode().toLong())
+        assertEquals(b.zobristKey, b.incrementalHashKey)
+        assertEquals(b.hashCode().toLong(), b2.hashCode().toLong())
 
         b.doMove(Move(Square.C8, Square.E6))
         b2.doMove(Move(Square.C8, Square.E6))
 
-        Assert.assertEquals(b.zobristKey, b.incrementalHashKey)
-        Assert.assertEquals(b.hashCode().toLong(), b2.hashCode().toLong())
+        assertEquals(b.zobristKey, b.incrementalHashKey)
+        assertEquals(b.hashCode().toLong(), b2.hashCode().toLong())
 
         b.doMove(Move(Square.E2, Square.F4))
         b2.doMove(Move(Square.E2, Square.F4))
 
-        Assert.assertEquals(b.zobristKey, b.incrementalHashKey)
-        Assert.assertEquals(b.hashCode().toLong(), b2.hashCode().toLong())
+        assertEquals(b.zobristKey, b.incrementalHashKey)
+        assertEquals(b.hashCode().toLong(), b2.hashCode().toLong())
 
         b.doMove(Move(Square.C3, Square.C4))
         b2.doMove(Move(Square.C3, Square.C4))
 
-        Assert.assertEquals(b.zobristKey, b.incrementalHashKey)
-        Assert.assertEquals(b.hashCode().toLong(), b2.hashCode().toLong())
+        assertEquals(b.zobristKey, b.incrementalHashKey)
+        assertEquals(b.hashCode().toLong(), b2.hashCode().toLong())
 
         b.doMove(Move(Square.A8, Square.D8))
         b2.doMove(Move(Square.A8, Square.D8))
 
-        Assert.assertEquals(b.zobristKey, b.incrementalHashKey)
-        Assert.assertEquals(b.hashCode().toLong(), b2.hashCode().toLong())
+        assertEquals(b.zobristKey, b.incrementalHashKey)
+        assertEquals(b.hashCode().toLong(), b2.hashCode().toLong())
 
         b.doMove(Move(Square.B1, Square.C3))
         b2.doMove(Move(Square.B1, Square.C3))
 
-        Assert.assertEquals(b.zobristKey, b.incrementalHashKey)
-        Assert.assertEquals(b.hashCode().toLong(), b2.hashCode().toLong())
+        assertEquals(b.zobristKey, b.incrementalHashKey)
+        assertEquals(b.hashCode().toLong(), b2.hashCode().toLong())
 
         b.doMove(Move(Square.D8, Square.D6))
         b2.doMove(Move(Square.D8, Square.D6))
 
-        Assert.assertEquals(b.zobristKey, b.incrementalHashKey)
-        Assert.assertEquals(b.hashCode().toLong(), b2.hashCode().toLong())
+        assertEquals(b.zobristKey, b.incrementalHashKey)
+        assertEquals(b.hashCode().toLong(), b2.hashCode().toLong())
 
         for (i in 1..11) {
             b.undoMove()
             b2.undoMove()
         }
 
-        Assert.assertEquals(initialHash, b.zobristKey)
-        Assert.assertEquals(b.hashCode().toLong(), b2.hashCode().toLong())
-        Assert.assertEquals(b, b2)
+        assertEquals(initialHash, b.zobristKey)
+        assertEquals(b.hashCode().toLong(), b2.hashCode().toLong())
+        assertEquals(b, b2)
     }
 
     @Test
@@ -385,53 +388,53 @@ class BoardTest {
         val b2 = b.clone()
         val initialHash = b.zobristKey
 
-        Assert.assertEquals(b.zobristKey, b.incrementalHashKey)
-        Assert.assertEquals(b.hashCode().toLong(), b2.hashCode().toLong())
+        assertEquals(b.zobristKey, b.incrementalHashKey)
+        assertEquals(b.hashCode().toLong(), b2.hashCode().toLong())
 
         b.doMove(Move(Square.E2, Square.E4))
         b2.doMove(Move(Square.E2, Square.E4))
-        Assert.assertEquals(b.zobristKey, b.incrementalHashKey)
-        Assert.assertEquals(b.hashCode().toLong(), b2.hashCode().toLong())
+        assertEquals(b.zobristKey, b.incrementalHashKey)
+        assertEquals(b.hashCode().toLong(), b2.hashCode().toLong())
 
         b.doMove(Move(Square.E7, Square.E5))
         b2.doMove(Move(Square.E7, Square.E5))
-        Assert.assertEquals(b.zobristKey, b.incrementalHashKey)
-        Assert.assertEquals(b.hashCode().toLong(), b2.hashCode().toLong())
+        assertEquals(b.zobristKey, b.incrementalHashKey)
+        assertEquals(b.hashCode().toLong(), b2.hashCode().toLong())
 
         b.doMove(Move(Square.G1, Square.F3))
         b2.doMove(Move(Square.G1, Square.F3))
-        Assert.assertEquals(b.zobristKey, b.incrementalHashKey)
-        Assert.assertEquals(b.hashCode().toLong(), b2.hashCode().toLong())
+        assertEquals(b.zobristKey, b.incrementalHashKey)
+        assertEquals(b.hashCode().toLong(), b2.hashCode().toLong())
 
         b.doMove(Move(Square.B8, Square.C6))
         b2.doMove(Move(Square.B8, Square.C6))
-        Assert.assertEquals(b.zobristKey, b.incrementalHashKey)
-        Assert.assertEquals(b.hashCode().toLong(), b2.hashCode().toLong())
+        assertEquals(b.zobristKey, b.incrementalHashKey)
+        assertEquals(b.hashCode().toLong(), b2.hashCode().toLong())
 
         b.doMove(Move(Square.F1, Square.B5))
         b2.doMove(Move(Square.F1, Square.B5))
-        Assert.assertEquals(b.zobristKey, b.incrementalHashKey)
-        Assert.assertEquals(b.hashCode().toLong(), b2.hashCode().toLong())
+        assertEquals(b.zobristKey, b.incrementalHashKey)
+        assertEquals(b.hashCode().toLong(), b2.hashCode().toLong())
 
         b.doMove(Move(Square.G8, Square.F6))
         b2.doMove(Move(Square.G8, Square.F6))
-        Assert.assertEquals(b.zobristKey, b.incrementalHashKey)
-        Assert.assertEquals(b.hashCode().toLong(), b2.hashCode().toLong())
+        assertEquals(b.zobristKey, b.incrementalHashKey)
+        assertEquals(b.hashCode().toLong(), b2.hashCode().toLong())
 
         b.doMove(Move(Square.E1, Square.G1))
         b2.doMove(Move(Square.E1, Square.G1))
-        Assert.assertEquals(b.zobristKey, b.incrementalHashKey)
-        Assert.assertEquals(b.hashCode().toLong(), b2.hashCode().toLong())
+        assertEquals(b.zobristKey, b.incrementalHashKey)
+        assertEquals(b.hashCode().toLong(), b2.hashCode().toLong())
         println(b.fen)
         for (i in 1..7) {
             b.undoMove()
             b2.undoMove()
         }
 
-        Assert.assertEquals(initialHash, b.zobristKey)
-        Assert.assertEquals(b.hashCode().toLong(), b2.hashCode().toLong())
+        assertEquals(initialHash, b.zobristKey)
+        assertEquals(b.hashCode().toLong(), b2.hashCode().toLong())
 
-        Assert.assertEquals(b, b2)
+        assertEquals(b, b2)
     }
 
     @Test
@@ -441,12 +444,12 @@ class BoardTest {
 
         b.doNullMove()
 
-        Assert.assertNotSame(b.sideToMove, b2.sideToMove)
-        Assert.assertNotSame(b.hashCode(), b2.hashCode())
+        assertNotSame(b.sideToMove, b2.sideToMove)
+        assertNotSame(b.hashCode(), b2.hashCode())
 
         b.undoMove()
-        Assert.assertEquals(b.sideToMove, b2.sideToMove)
-        Assert.assertEquals(b.hashCode().toLong(), b2.hashCode().toLong())
+        assertEquals(b.sideToMove, b2.sideToMove)
+        assertEquals(b.hashCode().toLong(), b2.hashCode().toLong())
     }
 
     @Test
@@ -455,65 +458,65 @@ class BoardTest {
         b.loadFromFen("rnbqkbnr/p1pppppp/8/8/1p2P3/1P6/P1PP1PPP/RNBQKBNR w KQkq - 0 1")
 
         b.doMove(Move(Square.D1, Square.E2))
-        Assert.assertFalse(b.isDraw)
+        assertFalse(b.isDraw)
 
         b.doMove(Move(Square.C8, Square.B7))
-        Assert.assertFalse(b.isDraw)
+        assertFalse(b.isDraw)
 
         b.doMove(Move(Square.E2, Square.D1))
-        Assert.assertFalse(b.isDraw)
+        assertFalse(b.isDraw)
 
         b.doMove(Move(Square.B7, Square.C8))
-        Assert.assertFalse(b.isDraw)
+        assertFalse(b.isDraw)
 
         b.doMove(Move(Square.D1, Square.E2))
-        Assert.assertFalse(b.isDraw)
+        assertFalse(b.isDraw)
 
         b.doMove(Move(Square.C8, Square.B7))
-        Assert.assertFalse(b.isDraw)
+        assertFalse(b.isDraw)
 
         b.doMove(Move(Square.E2, Square.D1))
-        Assert.assertFalse(b.isDraw)
+        assertFalse(b.isDraw)
 
         b.doMove(Move(Square.B7, Square.C8))
-        Assert.assertTrue(b.isDraw)
+        assertTrue(b.isDraw)
 
         b.loadFromFen("1kr5/8/Q7/8/8/7q/4r3/6K1 w - - 0 1")
 
         b.doMove(Move(Square.A6, Square.B6))
-        Assert.assertFalse(b.isDraw)
+        assertFalse(b.isDraw)
 
         b.doMove(Move(Square.B8, Square.A8))
-        Assert.assertFalse(b.isDraw)
+        assertFalse(b.isDraw)
 
         b.doMove(Move(Square.B6, Square.A6))
-        Assert.assertFalse(b.isDraw)
+        assertFalse(b.isDraw)
 
         b.doMove(Move(Square.A8, Square.B8))
-        Assert.assertFalse(b.isDraw)
+        assertFalse(b.isDraw)
 
         b.doMove(Move(Square.A6, Square.B6))
-        Assert.assertFalse(b.isDraw)
+        assertFalse(b.isDraw)
 
         b.doMove(Move(Square.B8, Square.A8))
-        Assert.assertFalse(b.isDraw)
+        assertFalse(b.isDraw)
 
         b.doMove(Move(Square.B6, Square.A6))
-        Assert.assertFalse(b.isDraw)
+        assertFalse(b.isDraw)
 
         b.doMove(Move(Square.A8, Square.B8))
-        Assert.assertTrue(b.isDraw)
+        assertTrue(b.isDraw)
     }
 
     @Test
     fun testCastleMove() {
         val board = Board()
         board.loadFromFen("r1bqk1nr/pppp1ppp/2n5/2b1p3/4P3/5N2/PPPPBPPP/RNBQK2R w KQkq - 0 1")
-        Assert.assertEquals(CastleRight.KING_AND_QUEEN_SIDE, board.getCastleRight(Side.WHITE))
+        assertEquals(CastleRight.KING_AND_QUEEN_SIDE, board.getCastleRight(Side.WHITE))
         board.doMove(Move(Square.E1, Square.G1)) // castle
         val moveBackup = board.backup.last!!
-        Assert.assertTrue(moveBackup.isCastleMove)
-        Assert.assertEquals(Move(Square.H1, Square.F1), moveBackup.rookCastleMove)
+        assertTrue(moveBackup.isCastleMove)
+        assertEquals(Move(Square.H1, Square.F1), moveBackup.rookCastleMove)
     }
 
     @Test
@@ -524,26 +527,26 @@ class BoardTest {
         val whiteRookMoveE1G1 = Move("e1g1", Side.WHITE)
         board.doMove(whiteRookMoveE1G1)
         val moveBackup = board.backup.last!!
-        Assert.assertFalse(moveBackup.isCastleMove)
-        Assert.assertNull(moveBackup.rookCastleMove)
+        assertFalse(moveBackup.isCastleMove)
+        assertNull(moveBackup.rookCastleMove)
     }
 
     @Test
     fun testInsufficientMaterial() {
         val board = Board()
         board.loadFromFen("8/8/8/4k3/8/3K4/8/2BB4 w - - 0 1")
-        Assert.assertFalse(board.isInsufficientMaterial)
+        assertFalse(board.isInsufficientMaterial)
         board.loadFromFen("8/8/8/4k3/5b2/3K4/8/2B5 w - - 0 1")
-        Assert.assertTrue(board.isInsufficientMaterial)
+        assertTrue(board.isInsufficientMaterial)
     }
 
     @Test
     fun testInsufficientMaterial1() {
         val board = Board()
         board.loadFromFen("B3k3/8/8/8/8/8/8/4KB2 w - - 0 1")
-        Assert.assertTrue(board.isInsufficientMaterial)
+        assertTrue(board.isInsufficientMaterial)
         board.loadFromFen("B1b1k3/3b4/4b3/8/8/8/8/4KB2 w - - 0 1")
-        Assert.assertTrue(board.isInsufficientMaterial)
+        assertTrue(board.isInsufficientMaterial)
     }
 
     @Test
@@ -551,10 +554,10 @@ class BoardTest {
         val board = Board()
         val bishopOnSameColorSquares = "8/8/8/4k3/5b2/3K4/8/2B5 w - - 0 1"
         board.loadFromFen(bishopOnSameColorSquares)
-        Assert.assertTrue(board.isInsufficientMaterial)
+        assertTrue(board.isInsufficientMaterial)
         val bishopOnDifferentColorSquares = "8/8/8/4k3/5b2/3K4/2B5/8 w - - 0 1"
         board.loadFromFen(bishopOnDifferentColorSquares)
-        Assert.assertFalse(board.isInsufficientMaterial)
+        assertFalse(board.isInsufficientMaterial)
     }
 
     @Test
@@ -567,7 +570,7 @@ class BoardTest {
         for (move in moveList) {
             board.doMove(move)
         }
-        Assert.assertTrue(board.isRepetition)
+        assertTrue(board.isRepetition)
     }
 
     @Test
@@ -580,7 +583,7 @@ class BoardTest {
         for (move in moveList) {
             board.doMove(move)
         }
-        Assert.assertFalse(board.isRepetition)
+        assertFalse(board.isRepetition)
     }
 
     @Test
@@ -594,7 +597,7 @@ class BoardTest {
             board.doMove(move)
             println(board.zobristKey.toString() + "\t = " + move + "\n = " + board.fen)
         }
-        Assert.assertFalse(board.isRepetition)
+        assertFalse(board.isRepetition)
     }
 
     @Test
@@ -607,7 +610,7 @@ class BoardTest {
         for (move in moves) {
             board.doMove(move)
         }
-        Assert.assertTrue(board.isRepetition)
+        assertTrue(board.isRepetition)
     }
 
     @Test
@@ -621,7 +624,7 @@ class BoardTest {
         for (move in moves) {
             board.doMove(move)
         }
-        Assert.assertTrue(board.isRepetition)
+        assertTrue(board.isRepetition)
     }
 
     @Test
@@ -649,7 +652,7 @@ class BoardTest {
         board.doMove(Move(Square.H7, Square.G8))
 
         board.doMove(Move(Square.H2, Square.G1)) // threefold repetiton
-        Assert.assertTrue(board.isRepetition)
+        assertTrue(board.isRepetition)
     }
 
     @Test
@@ -678,7 +681,7 @@ class BoardTest {
         board.doMove(Move(Square.H1, Square.H2))
 
         board.doMove(Move(Square.A3, Square.A2)) // threefold repetiton
-        Assert.assertTrue(board.isRepetition)
+        assertTrue(board.isRepetition)
     }
 
     @Test
@@ -691,7 +694,7 @@ class BoardTest {
         for (move in moves) {
             board.doMove(move)
         }
-        Assert.assertFalse(board.isRepetition)
+        assertFalse(board.isRepetition)
     }
 
     @Test
@@ -720,7 +723,7 @@ class BoardTest {
             RNBQK.NR
             Side: BLACK
             """.trimIndent()
-        Assert.assertEquals(expected, board.toString())
+        assertEquals(expected, board.toString())
     }
 
     @Test
@@ -746,8 +749,8 @@ class BoardTest {
             RNBQK.NR
             
             """.trimIndent()
-        Assert.assertEquals(expected, board.toStringFromWhiteViewPoint())
-        Assert.assertEquals(expected, board.toStringFromViewPoint(Side.WHITE))
+        assertEquals(expected, board.toStringFromWhiteViewPoint())
+        assertEquals(expected, board.toStringFromViewPoint(Side.WHITE))
     }
 
     @Test
@@ -773,8 +776,8 @@ class BoardTest {
             rnbkqb.r
             
             """.trimIndent()
-        Assert.assertEquals(expected, board.toStringFromBlackViewPoint())
-        Assert.assertEquals(expected, board.toStringFromViewPoint(Side.BLACK))
+        assertEquals(expected, board.toStringFromBlackViewPoint())
+        assertEquals(expected, board.toStringFromViewPoint(Side.BLACK))
     }
 
     @Test
@@ -787,14 +790,14 @@ class BoardTest {
 
         val board2 = board.clone()
 
-        Assert.assertEquals(board, board2)
-        Assert.assertTrue(board.strictEquals(board2))
+        assertEquals(board, board2)
+        assertTrue(board.strictEquals(board2))
 
         val board3 = Board()
         board3.loadFromFen(board.fen)
 
-        Assert.assertEquals(board, board3)
-        Assert.assertFalse(board.strictEquals(board3))
+        assertEquals(board, board3)
+        assertFalse(board.strictEquals(board3))
     }
 
     @Test
@@ -809,9 +812,9 @@ class BoardTest {
 
         board.undoMove()
         board.doMove(e7e5)
-        Assert.assertEquals(initialKey, board.incrementalHashKey)
-        Assert.assertEquals(board.history.last as Long, board.incrementalHashKey)
-        Assert.assertEquals(board.zobristKey, initialKey)
+        assertEquals(initialKey, board.incrementalHashKey)
+        assertEquals(board.history.last as Long, board.incrementalHashKey)
+        assertEquals(board.zobristKey, initialKey)
     }
 
     @Test
@@ -819,18 +822,18 @@ class BoardTest {
         val board = Board()
         board.loadFromFen("4k3/8/8/8/1b6/2N5/8/4K1N1 w - - 0 1")
         board.doMove("Ne2")
-        Assert.assertEquals("4k3/8/8/8/1b6/2N5/4N3/4K3 b - - 1 1", board.fen)
+        assertEquals("4k3/8/8/8/1b6/2N5/4N3/4K3 b - - 1 1", board.fen)
         board.doMove("Bxc3")
-        Assert.assertEquals("4k3/8/8/8/8/2b5/4N3/4K3 w - - 0 2", board.fen)
+        assertEquals("4k3/8/8/8/8/2b5/4N3/4K3 w - - 0 2", board.fen)
         board.doMove("Nxc3")
-        Assert.assertEquals("4k3/8/8/8/8/2N5/8/4K3 b - - 0 2", board.fen)
+        assertEquals("4k3/8/8/8/8/2N5/8/4K3 b - - 0 2", board.fen)
     }
 
     @Test
     fun testDoSanMove2() {
         val board = Board()
         board.doMove("e4")
-        Assert.assertEquals(
+        assertEquals(
             "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1",
             board.fen
         )

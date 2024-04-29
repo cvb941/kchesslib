@@ -4,15 +4,30 @@ plugins {
 
 kotlin {
     jvm()
+    iosX64()
+    iosArm64()
+    iosSimulatorArm64()
+    watchosX64()
+    watchosArm32()
+    watchosArm64()
+    watchosSimulatorArm64()
+
+    applyDefaultHierarchyTemplate()
 
     sourceSets {
         commonMain {
             dependencies {
             }
         }
+        commonTest {
+            dependencies {
+                implementation(kotlin("test-common"))
+                implementation(kotlin("test-annotations-common"))
+            }
+        }
         jvmTest {
             dependencies {
-               implementation("junit:junit:4.13.1")
+                implementation("org.jetbrains.kotlin:kotlin-test-junit")
             }
         }
     }

@@ -4,11 +4,13 @@ import com.github.bhlangonijr.chesslib.pgn.PgnException
 import com.github.bhlangonijr.chesslib.pgn.PgnHolder
 import com.github.bhlangonijr.chesslib.pgn.PgnLoadListener
 import com.github.bhlangonijr.chesslib.util.LargeFile
-import junit.framework.TestCase
-import junit.framework.TestCase.assertEquals
-import org.junit.Assert
-import org.junit.Test
-
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
+import kotlin.test.assertFalse
+import kotlin.test.assertNotSame
+import kotlin.test.assertNull
+import kotlin.test.assertTrue
 /**
  * The type Pgn holder test.
  */
@@ -26,20 +28,20 @@ class PgnHolderTest {
         val game = pgn.getGames()[0]
         game.loadMoveText()
 
-        Assert.assertEquals(3, pgn.getGames().size.toLong())
+        assertEquals(3, pgn.getGames().size.toLong())
         assertEquals("Rookie", game.whitePlayer!!.name)
         assertEquals("JabbaChess", game.blackPlayer!!.name)
-        Assert.assertEquals("2011.01.29", game.date)
-        Assert.assertEquals(2, game.round.number.toLong())
-        Assert.assertEquals("1-0", game.result!!.description)
-        Assert.assertEquals("67", game.plyCount)
-        Assert.assertEquals("Albert Silver", game.annotator)
+        assertEquals("2011.01.29", game.date)
+        assertEquals(2, game.round.number.toLong())
+        assertEquals("1-0", game.result!!.description)
+        assertEquals("67", game.plyCount)
+        assertEquals("Albert Silver", game.annotator)
         assertEquals(2285, game.whitePlayer!!.elo)
         assertEquals(1680, game.blackPlayer!!.elo)
 
-        Assert.assertEquals("C00", game.eco)
-        Assert.assertEquals(67, game.halfMoves.size.toLong())
-        Assert.assertEquals(
+        assertEquals("C00", game.eco)
+        assertEquals(67, game.halfMoves.size.toLong())
+        assertEquals(
             "e2e4 e7e6 d2d4 a7a6 g1f3 d7d5 e4d5 e6d5 f1d3 b8c6 e1g1 g8f6 f1e1 f8e7 c2c3 e8g8 b1d2 f8e8 f3e5 " +
                     "c6e5 d4e5 f6d7 d2b3 g7g6 b3d4 c7c5 d4f3 b7b5 c1h6 c8b7 h2h4 e7h4 a2a4 b5b4 c3b4 c5b4 d1c1 h4e7 c1f4 " +
                     "d7c5 a1d1 b7c6 e5e6 f7f6 f3h4 c6a4 h4g6 c5e6 e1e6 e7d6 f4g4 d6h2 g1h2 d8c7 h2g1 c7g7 e6e7 e8e7 g6e7 " +
@@ -60,20 +62,20 @@ class PgnHolderTest {
         val game = pgn.getGames()[0]
         game.loadMoveText()
 
-        Assert.assertEquals(1, pgn.getGames().size.toLong())
+        assertEquals(1, pgn.getGames().size.toLong())
         assertEquals("Ponomariov, Ruslan", game.whitePlayer!!.name)
         assertEquals("Ivanchuk, Vassily", game.blackPlayer!!.name)
-        Assert.assertEquals("2002.02.23", game.date)
-        Assert.assertEquals(1, game.round.number.toLong())
-        Assert.assertEquals("1-0", game.result!!.description)
-        Assert.assertEquals("89", game.plyCount)
-        Assert.assertEquals("Hathaway, Mark", game.annotator)
+        assertEquals("2002.02.23", game.date)
+        assertEquals(1, game.round.number.toLong())
+        assertEquals("1-0", game.result!!.description)
+        assertEquals("89", game.plyCount)
+        assertEquals("Hathaway, Mark", game.annotator)
         assertEquals(2727, game.whitePlayer!!.elo)
         assertEquals(2717, game.blackPlayer!!.elo)
 
-        Assert.assertEquals("C18", game.eco)
-        Assert.assertEquals(89, game.halfMoves.size.toLong())
-        Assert.assertEquals(
+        assertEquals("C18", game.eco)
+        assertEquals(89, game.halfMoves.size.toLong())
+        assertEquals(
             "e2e4 e7e6 d2d4 d7d5 b1c3 f8b4 e4e5 c7c5 a2a3 b4c3 b2c3 g8e7 d1g4 e8g8 f1d3 f7f5 e5f6 f8f6 c1g5" +
                     " f6f7 g4h5 g7g6 h5d1 b8c6 g1f3 d8f8 e1g1 c5c4 d3e2 h7h6 g5c1 c8d7 f3e1 g6g5 g2g3 e7f5 e1g2 f8g7 f2f4" +
                     " f5d6 d1e1 b7b5 f4g5 f7f1 e2f1 h6g5 g2e3 a8f8 f1g2 a7a5 c1d2 g7g6 e3g4 f8f5 e1e3 g8g7 a1b1 g7h7 a3a4" +
@@ -95,20 +97,20 @@ class PgnHolderTest {
         val game = pgn.getGames()[1]
         game.loadMoveText()
 
-        Assert.assertEquals(42, pgn.getGames().size.toLong())
+        assertEquals(42, pgn.getGames().size.toLong())
         assertEquals("Shirov, Alexei", game.whitePlayer!!.name)
         assertEquals("Anand, Viswanathan", game.blackPlayer!!.name)
-        Assert.assertEquals("2002.02.23", game.date)
-        Assert.assertEquals(1, game.round.number.toLong())
-        Assert.assertEquals("1/2-1/2", game.result!!.description)
-        Assert.assertEquals("104", game.plyCount)
-        Assert.assertEquals("Hathaway, Mark", game.annotator)
+        assertEquals("2002.02.23", game.date)
+        assertEquals(1, game.round.number.toLong())
+        assertEquals("1/2-1/2", game.result!!.description)
+        assertEquals("104", game.plyCount)
+        assertEquals("Hathaway, Mark", game.annotator)
         assertEquals(2715, game.whitePlayer!!.elo)
         assertEquals(2757, game.blackPlayer!!.elo)
 
-        Assert.assertEquals("B49", game.eco)
-        Assert.assertEquals(104, game.halfMoves.size.toLong())
-        Assert.assertEquals(
+        assertEquals("B49", game.eco)
+        assertEquals(104, game.halfMoves.size.toLong())
+        assertEquals(
             "e2e4 c7c5 g1f3 e7e6 d2d4 c5d4 f3d4 b8c6 b1c3 d8c7 f1e2 a7a6 e1g1 g8f6 c1e3 f8b4 c3a4 b4e7 d4c6" +
                     " b7c6 a4b6 a8b8 b6c8 c7c8 e3d4 e8g8 d1d3 c8c7 b2b3 a6a5 a1d1 d7d5 e4d5 f6d5 e2f3 f8d8 c2c4 d5f6 d3c3" +
                     " e7d6 g2g3 c6c5 d4f6 g7f6 c3f6 d6e7 f6h6 c7e5 d1e1 e5f6 h6h5 e7f8 e1e4 d8d4 e4d4 f6d4 f1e1 d4f6 e1e4" +
@@ -131,20 +133,20 @@ class PgnHolderTest {
         val game = pgn.getGames()[1]
         game.loadMoveText()
 
-        Assert.assertEquals(270, pgn.getGames().size.toLong())
+        assertEquals(270, pgn.getGames().size.toLong())
         assertEquals("Amoeba 1.2 64-bit", game.whitePlayer!!.name)
         assertEquals("RedQueen 1.1.98 64-bit", game.blackPlayer!!.name)
-        Assert.assertEquals("2016.06.08", game.date)
-        Assert.assertEquals(1, game.round.number.toLong())
-        Assert.assertEquals("1-0", game.result!!.description)
-        Assert.assertEquals("97", game.plyCount)
-        Assert.assertEquals(null, game.annotator)
+        assertEquals("2016.06.08", game.date)
+        assertEquals(1, game.round.number.toLong())
+        assertEquals("1-0", game.result!!.description)
+        assertEquals("97", game.plyCount)
+        assertEquals(null, game.annotator)
         assertEquals(0, game.whitePlayer!!.elo)
         assertEquals(0, game.blackPlayer!!.elo)
 
-        Assert.assertEquals("B90", game.eco)
-        Assert.assertEquals(97, game.halfMoves.size.toLong())
-        Assert.assertEquals(
+        assertEquals("B90", game.eco)
+        assertEquals(97, game.halfMoves.size.toLong())
+        assertEquals(
             "e2e4 c7c5 g1f3 d7d6 d2d4 c5d4 f3d4 g8f6 b1c3 a7a6 f2f3 d8b6 d4b3 e7e6 g2g4 b8c6 d1e2 b6c7 c1e3 " +
                     "b7b5 e1c1 f6d7 c1b1 d7b6 e2f2 a8b8 h2h4 f8e7 f1b5 a6b5 c3b5 c7b7 e3b6 e8g8 b6c7 b7b5 h4h5 c8a6 h5h6 " +
                     "g7g6 c7d6 b5e2 f2g3 b8d8 b3c1 e7d6 d1d6 e2b5 h1d1 b5g5 d6d8 f8d8 d1d8 g5d8 f3f4 c6d4 f4f5 e6f5 e4f5 " +
@@ -167,7 +169,7 @@ class PgnHolderTest {
         for (move in moves) {
             board.doMove(move)
         }
-        Assert.assertEquals(
+        assertEquals(
             moves.toString(),
             "g1f3 d7d5 e2e3 g8f6 c2c4 e7e6 d2d4 c7c5 a2a3 b8c6 d4c5 f8c5 b2b4 c5e7 " +
                     "c1b2 e8g8 b1d2 a7a5 b4b5 c6b8 f1e2 b8d7 e1g1 b7b6 a1c1 c8b7 c4d5 f6d5 d2c4 d7c5 f3d4 e7f6 e2f3 e6e5 " +
@@ -237,17 +239,19 @@ class PgnHolderTest {
         }
     }
 
-    @Test(expected = PgnException::class)
+    @Test
     @Throws(Exception::class)
     fun testErr() {
-        val pgn = PgnHolder("src/commonTest/resources/err.pgn")
-        pgn.loadPgn()
-        for (game in pgn.getGames()) {
-            game.loadMoveText()
-            val moves = game.halfMoves
-            val board = Board()
-            for (move in moves) {
-                board.doMove(move)
+        assertFailsWith(PgnException::class) {
+            val pgn = PgnHolder("src/commonTest/resources/err.pgn")
+            pgn.loadPgn()
+            for (game in pgn.getGames()) {
+                game.loadMoveText()
+                val moves = game.halfMoves
+                val board = Board()
+                for (move in moves) {
+                    board.doMove(move)
+                }
             }
         }
     }
@@ -297,7 +301,7 @@ class PgnHolderTest {
             }
         }
         val timeSpent = System.currentTimeMillis() - init
-        Assert.assertTrue(timeSpent < 5000)
+        assertTrue(timeSpent < 5000)
     }
 
     @Test
@@ -312,7 +316,7 @@ class PgnHolderTest {
         for (move in game.halfMoves) {
             board.doMove(move)
         }
-        TestCase.assertFalse(board.isRepetition)
+        assertFalse(board.isRepetition)
     }
 
     @Test
@@ -327,7 +331,7 @@ class PgnHolderTest {
         for (move in game.halfMoves) {
             board.doMove(move)
         }
-        TestCase.assertFalse(board.isRepetition)
+        assertFalse(board.isRepetition)
     }
 
     @Test
@@ -343,7 +347,7 @@ class PgnHolderTest {
             board.doMove(move)
             if (board.isRepetition) break
         }
-        Assert.assertTrue(board.isRepetition)
+        assertTrue(board.isRepetition)
     }
 
     @Test
@@ -357,9 +361,9 @@ class PgnHolderTest {
         val board = Board()
         for (move in game.halfMoves) {
             board.doMove(move)
-            TestCase.assertFalse(keys.contains(board.positionId))
+            assertFalse(keys.contains(board.positionId))
             keys.add(board.positionId)
-            TestCase.assertFalse(board.isRepetition)
+            assertFalse(board.isRepetition)
         }
     }
 
@@ -374,9 +378,9 @@ class PgnHolderTest {
         val board = Board()
         for (move in game.halfMoves) {
             board.doMove(move)
-            TestCase.assertFalse(keys.contains(board.positionId))
+            assertFalse(keys.contains(board.positionId))
             keys.add(board.positionId)
-            TestCase.assertFalse(board.isRepetition)
+            assertFalse(board.isRepetition)
         }
     }
 
@@ -384,24 +388,24 @@ class PgnHolderTest {
     @Throws(Exception::class)
     fun testPGNLoadInputStream() {
         val pgn = PgnHolder(null)
-        pgn.loadPgn(LargeFile(this.javaClass.getResourceAsStream("/cct131.pgn")))
+        pgn.loadPgn(LargeFile("src/commonTest/resources/cct131.pgn"))
         val game = pgn.getGames()[0]
         game.loadMoveText()
 
-        Assert.assertEquals(3, pgn.getGames().size.toLong())
+        assertEquals(3, pgn.getGames().size.toLong())
         assertEquals("Rookie", game.whitePlayer!!.name)
         assertEquals("JabbaChess", game.blackPlayer!!.name)
-        Assert.assertEquals("2011.01.29", game.date)
-        Assert.assertEquals(2, game.round.number.toLong())
-        Assert.assertEquals("1-0", game.result!!.description)
-        Assert.assertEquals("67", game.plyCount)
-        Assert.assertEquals("Albert Silver", game.annotator)
+        assertEquals("2011.01.29", game.date)
+        assertEquals(2, game.round.number.toLong())
+        assertEquals("1-0", game.result!!.description)
+        assertEquals("67", game.plyCount)
+        assertEquals("Albert Silver", game.annotator)
         assertEquals(2285, game.whitePlayer!!.elo)
         assertEquals(1680, game.blackPlayer!!.elo)
 
-        Assert.assertEquals("C00", game.eco)
-        Assert.assertEquals(67, game.halfMoves.size.toLong())
-        Assert.assertEquals(
+        assertEquals("C00", game.eco)
+        assertEquals(67, game.halfMoves.size.toLong())
+        assertEquals(
             "e2e4 e7e6 d2d4 a7a6 g1f3 d7d5 e4d5 e6d5 f1d3 b8c6 e1g1 g8f6 f1e1 f8e7 c2c3 e8g8 b1d2 f8e8 f3e5 " +
                     "c6e5 d4e5 f6d7 d2b3 g7g6 b3d4 c7c5 d4f3 b7b5 c1h6 c8b7 h2h4 e7h4 a2a4 b5b4 c3b4 c5b4 d1c1 h4e7 c1f4 " +
                     "d7c5 a1d1 b7c6 e5e6 f7f6 f3h4 c6a4 h4g6 c5e6 e1e6 e7d6 f4g4 d6h2 g1h2 d8c7 h2g1 c7g7 e6e7 e8e7 g6e7 " +
@@ -462,20 +466,20 @@ class PgnHolderTest {
         val game = pgn.getGames()[0]
         game.loadMoveText()
 
-        Assert.assertEquals(1, pgn.getGames().size.toLong())
+        assertEquals(1, pgn.getGames().size.toLong())
         assertEquals("Rookie", game.whitePlayer!!.name)
         assertEquals("JabbaChess", game.blackPlayer!!.name)
-        Assert.assertEquals("2011.01.29", game.date)
-        Assert.assertEquals(2, game.round.number.toLong())
-        Assert.assertEquals("1-0", game.result!!.description)
-        Assert.assertEquals("67", game.plyCount)
-        Assert.assertEquals("Albert Silver", game.annotator)
+        assertEquals("2011.01.29", game.date)
+        assertEquals(2, game.round.number.toLong())
+        assertEquals("1-0", game.result!!.description)
+        assertEquals("67", game.plyCount)
+        assertEquals("Albert Silver", game.annotator)
         assertEquals(2285, game.whitePlayer!!.elo)
         assertEquals(1680, game.blackPlayer!!.elo)
 
-        Assert.assertEquals("C00", game.eco)
-        Assert.assertEquals(67, game.halfMoves.size.toLong())
-        Assert.assertEquals(
+        assertEquals("C00", game.eco)
+        assertEquals(67, game.halfMoves.size.toLong())
+        assertEquals(
             "e2e4 e7e6 d2d4 a7a6 g1f3 d7d5 e4d5 e6d5 f1d3 b8c6 e1g1 g8f6 f1e1 f8e7 c2c3 e8g8 b1d2 f8e8 f3e5 " +
                     "c6e5 d4e5 f6d7 d2b3 g7g6 b3d4 c7c5 d4f3 b7b5 c1h6 c8b7 h2h4 e7h4 a2a4 b5b4 c3b4 c5b4 d1c1 h4e7 c1f4 " +
                     "d7c5 a1d1 b7c6 e5e6 f7f6 f3h4 c6a4 h4g6 c5e6 e1e6 e7d6 f4g4 d6h2 g1h2 d8c7 h2g1 c7g7 e6e7 e8e7 g6e7 " +
@@ -501,7 +505,7 @@ class PgnHolderTest {
             var i = 0
             for (move in game.halfMoves) {
                 board.doMove(move)
-                Assert.assertEquals(board.incrementalHashKey, board.zobristKey)
+                assertEquals(board.incrementalHashKey, board.zobristKey)
                 s.append(i++)
                 s.append(" -> ")
                 s.append(board.fen)
@@ -528,7 +532,7 @@ class PgnHolderTest {
                 }
             }
         }
-        Assert.assertEquals(0, numberOfInconsistencies.toLong())
+        assertEquals(0, numberOfInconsistencies.toLong())
     }
 
     @Test
@@ -544,7 +548,7 @@ class PgnHolderTest {
         for (move in game.halfMoves) {
             board.doMove(move)
         }
-        Assert.assertEquals("8/8/2k5/4R3/3K4/8/8/8 w - - 19 102", board.fen)
+        assertEquals("8/8/2k5/4R3/3K4/8/8/8 w - - 19 102", board.fen)
     }
 
     /**
@@ -556,7 +560,7 @@ class PgnHolderTest {
         var index = 0
 
         for (notifyProgressCall in notifyProgressCallList) {
-            Assert.assertEquals(++index, notifyProgressCall)
+            assertEquals(++index, notifyProgressCall)
         }
     }
 
@@ -580,7 +584,7 @@ class PgnHolderTest {
 
         pgn.loadPgn()
 
-        Assert.assertEquals(3, notifyProgressCallList.size.toLong())
+        assertEquals(3, notifyProgressCallList.size.toLong())
         validateNotifyProgressCalls(notifyProgressCallList)
     }
 
@@ -604,7 +608,7 @@ class PgnHolderTest {
 
         pgn.loadPgn()
 
-        Assert.assertEquals(31, notifyProgressCallList.size.toLong())
+        assertEquals(31, notifyProgressCallList.size.toLong())
         validateNotifyProgressCalls(notifyProgressCallList)
     }
 
@@ -619,9 +623,9 @@ class PgnHolderTest {
     fun testCountGamesInPgnFileWith3Games() {
         val pgn = PgnHolder("src/commonTest/resources/3_games.pgn")
 
-        Assert.assertEquals(3, pgn.countGamesInPgnFile())
+        assertEquals(3, pgn.countGamesInPgnFile())
         pgn.loadPgn()
-        Assert.assertEquals(3, pgn.getGames().size.toLong())
+        assertEquals(3, pgn.getGames().size.toLong())
     }
 
     /**
@@ -634,8 +638,8 @@ class PgnHolderTest {
     fun testCountGamesInPgnFileWith31Games() {
         val pgn = PgnHolder("src/commonTest/resources/31_games.pgn")
 
-        Assert.assertEquals(31, pgn.countGamesInPgnFile())
+        assertEquals(31, pgn.countGamesInPgnFile())
         pgn.loadPgn()
-        Assert.assertEquals(31, pgn.getGames().size.toLong())
+        assertEquals(31, pgn.getGames().size.toLong())
     }
 }

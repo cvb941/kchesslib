@@ -1,8 +1,8 @@
 package com.github.bhlangonijr.chesslib.move
 
 import com.github.bhlangonijr.chesslib.Square
-import org.junit.Assert
-import org.junit.Test
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 /**
  * The type Move list test.
@@ -27,7 +27,7 @@ class MoveListTest {
             val list = MoveList()
             list.loadFromSan(san[i])
             list.fen
-            Assert.assertEquals(fen[i], list.fen)
+            assertEquals(fen[i], list.fen)
         }
     }
 
@@ -42,7 +42,7 @@ class MoveListTest {
         val san = "e4 Nc6 d4 Nf6 d5 Ne5 Nf3 d6 Nxe5 dxe5 Bb5+ Bd7 Bxd7+ Qxd7 Nc3 e6 O-O exd5 "
         val list1 = MoveList()
         list1.loadFromSan(san)
-        Assert.assertEquals(
+        assertEquals(
             "r3kb1r/pppq1ppp/5n2/3pp3/4P3/2N5/PPP2PPP/R1BQ1RK1 w kq - 0 10",
             list1.fen
         )
@@ -64,14 +64,14 @@ class MoveListTest {
         val mvs = s.split(" ")
         var i = 0
         for (move in list) {
-            Assert.assertEquals(mvs[i++], move.toString())
+            assertEquals(mvs[i++], move.toString())
         }
-        Assert.assertEquals(san, list.toSan())
+        assertEquals(san, list.toSan())
         val list1 = MoveList()
         list1.loadFromSan(san)
         i = 0
         for (move in list1) {
-            Assert.assertEquals(mvs[i++], move.toString())
+            assertEquals(mvs[i++], move.toString())
         }
     }
 
@@ -83,8 +83,8 @@ class MoveListTest {
         // No moves yet:
         var expectedSan = ""
         var list = MoveList()
-        Assert.assertEquals(expectedSan, list.toSan())
-        Assert.assertEquals(expectedSan, list.toSanWithMoveNumbers())
+        assertEquals(expectedSan, list.toSan())
+        assertEquals(expectedSan, list.toSanWithMoveNumbers())
 
         // Ends with a move by Black:
         var s = "e2e4 b8c6 d2d4 g8f6 d4d5 c6e5 g1f3 d7d6 f3e5 d6e5 f1b5 c8d7 b5d7 d8d7 b1c3 e7e6"
@@ -92,7 +92,7 @@ class MoveListTest {
             "1. e4 Nc6 2. d4 Nf6 3. d5 Ne5 4. Nf3 d6 5. Nxe5 dxe5 6. Bb5+ Bd7 7. Bxd7+ Qxd7 8. Nc3 e6 "
         list = MoveList()
         list.loadFromText(s)
-        Assert.assertEquals(expectedSan, list.toSanWithMoveNumbers())
+        assertEquals(expectedSan, list.toSanWithMoveNumbers())
 
         // Ends with a move by White:
         s = "e2e4 b8c6 d2d4 g8f6 d4d5 c6e5 g1f3 d7d6 f3e5 d6e5 f1b5 c8d7 b5d7 d8d7 b1c3"
@@ -100,12 +100,12 @@ class MoveListTest {
             "1. e4 Nc6 2. d4 Nf6 3. d5 Ne5 4. Nf3 d6 5. Nxe5 dxe5 6. Bb5+ Bd7 7. Bxd7+ Qxd7 8. Nc3 "
         list = MoveList()
         list.loadFromText(s)
-        Assert.assertEquals(expectedSan, list.toSanWithMoveNumbers())
+        assertEquals(expectedSan, list.toSanWithMoveNumbers())
 
         // Read a SAN string with numbers, assert that the same string is returned:
         list = MoveList()
         list.loadFromSan(expectedSan)
-        Assert.assertEquals(expectedSan, list.toSanWithMoveNumbers())
+        assertEquals(expectedSan, list.toSanWithMoveNumbers())
     }
 
     /**
@@ -116,8 +116,8 @@ class MoveListTest {
         // No moves yet:
         var expectedFan = ""
         var list = MoveList()
-        Assert.assertEquals(expectedFan, list.toFan())
-        Assert.assertEquals(expectedFan, list.toFanWithMoveNumbers())
+        assertEquals(expectedFan, list.toFan())
+        assertEquals(expectedFan, list.toFanWithMoveNumbers())
 
         // Ends with a move by Black:
         var s = "e2e4 b8c6 d2d4 g8f6 d4d5 c6e5 g1f3 d7d6 f3e5 d6e5 f1b5 c8d7 b5d7 d8d7 b1c3 e7e6"
@@ -125,7 +125,7 @@ class MoveListTest {
             "1. ♙e4 ♞c6 2. ♙d4 ♞f6 3. ♙d5 ♞e5 4. ♘f3 ♟d6 5. ♘xe5 ♟dxe5 6. ♗b5+ ♝d7 7. ♗xd7+ ♛xd7 8. ♘c3 ♟e6 "
         list = MoveList()
         list.loadFromText(s)
-        Assert.assertEquals(expectedFan, list.toFanWithMoveNumbers())
+        assertEquals(expectedFan, list.toFanWithMoveNumbers())
 
         // Ends with a move by White:
         s = "e2e4 b8c6 d2d4 g8f6 d4d5 c6e5 g1f3 d7d6 f3e5 d6e5 f1b5 c8d7 b5d7 d8d7 b1c3"
@@ -133,7 +133,7 @@ class MoveListTest {
             "1. ♙e4 ♞c6 2. ♙d4 ♞f6 3. ♙d5 ♞e5 4. ♘f3 ♟d6 5. ♘xe5 ♟dxe5 6. ♗b5+ ♝d7 7. ♗xd7+ ♛xd7 8. ♘c3 "
         list = MoveList()
         list.loadFromText(s)
-        Assert.assertEquals(expectedFan, list.toFanWithMoveNumbers())
+        assertEquals(expectedFan, list.toFanWithMoveNumbers())
     }
 
     /**
@@ -155,7 +155,7 @@ class MoveListTest {
                 "Qxe4 47.Qxg7+ Kxg7 48.h6+ Kh8"
         val list = MoveList()
         list.loadFromSan(moveText)
-        Assert.assertEquals("7k/8/7P/6K1/pr2q3/6p1/8/8 w - - 1 49", list.fen)
+        assertEquals("7k/8/7P/6K1/pr2q3/6p1/8/8 w - - 1 49", list.fen)
     }
 
     /**
@@ -184,7 +184,7 @@ class MoveListTest {
                 "Nd5 88.Ke6 Nc7+"
         val list = MoveList()
         list.loadFromSan(moveText)
-        Assert.assertEquals("8/2n4R/2P1K3/8/8/6b1/6kp/8 w - - 7 89", list.fen)
+        assertEquals("8/2n4R/2P1K3/8/8/6b1/6kp/8 w - - 7 89", list.fen)
     }
 
     /**
@@ -208,21 +208,21 @@ class MoveListTest {
                 "Ra4 57.Kf2 Rxh4 58.Be3 "
         val list = MoveList()
         list.loadFromSan(moveText)
-        Assert.assertEquals("8/8/4k3/4r3/7r/4BP2/3R1KP1/8 b - - 1 58", list.fen)
+        assertEquals("8/8/4k3/4r3/7r/4BP2/3R1KP1/8 b - - 1 58", list.fen)
     }
 
     @Test
     fun testEncodingSanAmbiguityResolution() {
         val moveList = MoveList("4k3/8/8/8/1b6/2N5/8/4K1N1 w - - 0 1")
         moveList.add(Move(Square.G1, Square.E2)) // Ne2
-        Assert.assertEquals("Ne2", moveList.toSan().trim { it <= ' ' })
+        assertEquals("Ne2", moveList.toSan().trim { it <= ' ' })
     }
 
     @Test
     fun testDecodingSanAmbiguityResolution() {
         val moveList = MoveList("4k3/8/8/8/1b6/2N5/8/4K1N1 w - - 0 1")
         moveList.addSanMove("Nge2", true, true)
-        Assert.assertEquals("Ne2", moveList.toSanArray()!![moveList.size - 1])
+        assertEquals("Ne2", moveList.toSanArray()!![moveList.size - 1])
     }
 
     @Test(expected = MoveConversionException::class)
@@ -240,6 +240,6 @@ class MoveListTest {
         val moveList = MoveList()
         moveList.loadFromSan(san)
         val sanGeneratedLastMove = moveList.toSanArray()!![moveList.toSanArray()!!.size - 1]!!
-        Assert.assertEquals("O-O-O#", sanGeneratedLastMove)
+        assertEquals("O-O-O#", sanGeneratedLastMove)
     }
 }
