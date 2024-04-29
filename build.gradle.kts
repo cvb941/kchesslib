@@ -13,6 +13,15 @@ kotlin {
     watchosSimulatorArm64()
     macosX64()
     macosArm64()
+    mingwX64()
+    linuxX64()
+    linuxArm64()
+
+    js {
+        browser()
+        nodejs()
+    }
+    wasmJs()
 
     applyDefaultHierarchyTemplate()
 
@@ -26,8 +35,7 @@ kotlin {
         }
         commonTest {
             dependencies {
-                implementation(kotlin("test-common"))
-                implementation(kotlin("test-annotations-common"))
+                implementation(kotlin("test"))
             }
         }
         jvmTest {

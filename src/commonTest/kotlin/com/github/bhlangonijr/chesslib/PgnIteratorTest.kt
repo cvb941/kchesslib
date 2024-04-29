@@ -16,7 +16,7 @@ class PgnIteratorTest {
     @Test
     @Throws(Exception::class)
     fun testPGNOrder() {
-        val games = PgnIterator("src/commonTest/resources/pgn_order.pgn")
+        val games = PgnIterator(getResourcePath("src/commonTest/resources/pgn_order.pgn"))
         val game = games.iterator().next()!!
         assertEquals("1st World U20 ch", game.round.event.name)
         assertEquals("Birmingham ENG", game.round.event.site)
@@ -36,7 +36,7 @@ class PgnIteratorTest {
     @Test
     @Throws(Exception::class)
     fun testPGNIteration() {
-        val games = PgnIterator("src/commonTest/resources/cct131.pgn")
+        val games = PgnIterator(getResourcePath("src/commonTest/resources/cct131.pgn"))
 
         var count = 0
         for (game in games.filterNotNull()) {
@@ -121,7 +121,7 @@ class PgnIteratorTest {
     @Test
     @Throws(Exception::class)
     fun testPGNIterationWithComments() {
-        val games = PgnIterator("src/commonTest/resources/rav_alternative.pgn")
+        val games = PgnIterator(getResourcePath("src/commonTest/resources/rav_alternative.pgn"))
         val commentedMoves: MutableMap<String, String> = HashMap()
         for (game in games.filterNotNull()) {
             val moves = game.halfMoves.toSanArray()

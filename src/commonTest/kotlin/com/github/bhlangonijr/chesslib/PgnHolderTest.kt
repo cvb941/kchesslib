@@ -229,7 +229,7 @@ class PgnHolderTest {
     @Test
     @Throws(Exception::class)
     fun testZ0() {
-        val pgn = PgnHolder("src/commonTest/resources/z0.pgn")
+        val pgn = PgnHolder(getResourcePath("src/commonTest/resources/z0.pgn"))
         pgn.loadPgn()
         for (game in pgn.getGames()) {
             game.loadMoveText()
