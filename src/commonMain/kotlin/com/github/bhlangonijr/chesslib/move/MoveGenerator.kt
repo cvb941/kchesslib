@@ -433,7 +433,7 @@ object MoveGenerator {
      */
     @JvmStatic
     @Throws(MoveGeneratorException::class)
-    fun generateLegalMoves(board: Board): List<Move?> {
+    fun generateLegalMoves(board: Board): List<Move> {
         try {
             val moves = generatePseudoLegalMoves(board)
             moves.removeAll { move -> !board.isMoveLegal(move, false) }

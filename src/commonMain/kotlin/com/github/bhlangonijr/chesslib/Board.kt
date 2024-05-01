@@ -53,9 +53,9 @@ class Board @JvmOverloads constructor(
      * @return the list of move backups
      */
     @JvmField
-    val backup: MutableList<MoveBackup?> = mutableListOf()
-    private val eventListener = mutableMapOf<BoardEventType, MutableList<BoardEventListener>?>()
-    private val bitboard = LongArray(Piece.Companion.allPieces.size)
+    val backup: MutableList<MoveBackup> = mutableListOf()
+    private val eventListener = mutableMapOf<BoardEventType, MutableList<BoardEventListener>>()
+    private val bitboard = LongArray(Piece.allPieces.size)
 
     /**
      * Returns the bitboards that represents all the pieces present on the board, one for each side. The bitboard for
@@ -63,7 +63,7 @@ class Board @JvmOverloads constructor(
      *
      * @return the bitboards of all the pieces for both sides
      */
-    val bbSide: LongArray = LongArray(Side.Companion.allSides.size)
+    val bbSide: LongArray = LongArray(Side.allSides.size)
     private val occupation = arrayOfNulls<Piece>(Square.entries.size)
 
     /**
@@ -359,7 +359,7 @@ class Board @JvmOverloads constructor(
                     (move.to.rank.ordinal - move.from.rank.ordinal)
                 ) == 2
             ) {
-                val otherPawn: Piece = Piece.Companion.make(side!!.flip(), PieceType.PAWN)
+                val otherPawn: Piece = Piece.make(side!!.flip(), PieceType.PAWN)
                 enPassant = findEnPassant(move.to, side)
                 if (hasPiece(otherPawn, move.to.sideSquares) &&
                     verifyNotPinnedPiece(side, enPassant!!, move.to)
@@ -524,7 +524,7 @@ class Board @JvmOverloads constructor(
         unsetPiece(movingPiece, to)
 
         if (Piece.NONE != promotion) {
-            setPiece(Piece.Companion.make(sideToMove!!, PieceType.PAWN), from!!)
+            setPiece(Piece.make(sideToMove!!, PieceType.PAWN), from!!)
         } else {
             setPiece(movingPiece, from!!)
         }
@@ -608,7 +608,7 @@ class Board @JvmOverloads constructor(
      */
     fun getFistPieceLocation(piece: Piece): Square {
         if (getBitboard(piece) != 0L) {
-            return Square.Companion.squareAt(Bitboard.bitScanForward(getBitboard(piece)))
+            return Square.squareAt(Bitboard.bitScanForward(getBitboard(piece)))
         }
         return Square.NONE
     }
@@ -619,7 +619,7 @@ class Board @JvmOverloads constructor(
      * @param side the side for which the castle right must be returned
      * @return the castle right of the side
      */
-    fun getCastleRight(side: Side?): CastleRight? {
+    fun getCastleRight(side: Side): CastleRight? {
         return castleRight[side]
     }
 
@@ -695,11 +695,11 @@ class Board @JvmOverloads constructor(
                 if (c.isDigit()) {
                     file += c.digitToIntOrNull() ?: -1
                 } else {
-                    val sq: Square = Square.Companion.encode(
-                        Rank.Companion.allRanks.get(rank),
-                        File.Companion.allFiles.get(file)
+                    val sq: Square = Square.encode(
+                        Rank.allRanks.get(rank),
+                        File.allFiles.get(file)
                     )
-                    setPiece(Piece.Companion.fromFenSymbol(c.toString()), sq)
+                    setPiece(Piece.fromFenSymbol(c.toString()), sq)
                     file++
                 }
             }
@@ -734,7 +734,7 @@ class Board @JvmOverloads constructor(
             if (s != "-") {
                 val ep = Square.valueOf(s)
                 enPassant = ep
-                enPassantTarget = findEnPassantTarget(ep, sideToMove!!)
+                enPassantTarget = findEnPassantTarget(ep, sideToMove)
                 if (!pawnCanBeCapturedEnPassant()) {
                     enPassantTarget = Square.NONE
                 }
@@ -809,15 +809,15 @@ class Board @JvmOverloads constructor(
         val fen = StringBuilder()
         var emptySquares = 0
         for (i in 7 downTo 0) {
-            val r: Rank = Rank.Companion.allRanks.get(i)
+            val r: Rank = Rank.allRanks.get(i)
             if (r == Rank.NONE) {
                 continue
             }
-            for (f in File.Companion.allFiles) {
+            for (f in File.allFiles) {
                 if (f == File.NONE) {
                     continue
                 }
-                val sq: Square = Square.Companion.encode(r, f)
+                val sq: Square = Square.encode(r, f)
                 val piece = getPiece(sq)
                 if (Piece.NONE == piece) {
                     emptySquares++
@@ -921,7 +921,7 @@ class Board @JvmOverloads constructor(
      *
      * @return the event listeners registered to this board
      */
-    fun getEventListener(): MutableMap<BoardEventType, MutableList<BoardEventListener>?> {
+    fun getEventListener(): MutableMap<BoardEventType, MutableList<BoardEventListener>> {
         return eventListener
     }
 
@@ -982,17 +982,17 @@ class Board @JvmOverloads constructor(
     @JvmOverloads
     fun squareAttackedBy(square: Square, side: Side, occ: Long = getBitboard()): Long {
         var result = Bitboard.getPawnAttacks(side.flip(), square) and
-                getBitboard(Piece.Companion.make(side, PieceType.PAWN)) and occ
+                getBitboard(Piece.make(side, PieceType.PAWN)) and occ
         result = result or (Bitboard.getKnightAttacks(square, occ) and
-                getBitboard(Piece.Companion.make(side, PieceType.KNIGHT)))
+                getBitboard(Piece.make(side, PieceType.KNIGHT)))
         result = result or (Bitboard.getBishopAttacks(occ, square) and
-                ((getBitboard(Piece.Companion.make(side, PieceType.BISHOP)) or
-                        getBitboard(Piece.Companion.make(side, PieceType.QUEEN)))))
+                ((getBitboard(Piece.make(side, PieceType.BISHOP)) or
+                        getBitboard(Piece.make(side, PieceType.QUEEN)))))
         result = result or (Bitboard.getRookAttacks(occ, square) and
-                ((getBitboard(Piece.Companion.make(side, PieceType.ROOK)) or
-                        getBitboard(Piece.Companion.make(side, PieceType.QUEEN)))))
+                ((getBitboard(Piece.make(side, PieceType.ROOK)) or
+                        getBitboard(Piece.make(side, PieceType.QUEEN)))))
         result = result or (Bitboard.getKingAttacks(square, occ) and
-                getBitboard(Piece.Companion.make(side, PieceType.KING)))
+                getBitboard(Piece.make(side, PieceType.KING)))
         return result
     }
 
@@ -1009,22 +1009,22 @@ class Board @JvmOverloads constructor(
         val occ = getBitboard()
         when (type) {
             PieceType.PAWN -> result = Bitboard.getPawnAttacks(side.flip(), square) and
-                    getBitboard(Piece.Companion.make(side, PieceType.PAWN))
+                    getBitboard(Piece.make(side, PieceType.PAWN))
 
             PieceType.KNIGHT -> result = Bitboard.getKnightAttacks(square, occ) and
-                    getBitboard(Piece.Companion.make(side, PieceType.KNIGHT))
+                    getBitboard(Piece.make(side, PieceType.KNIGHT))
 
             PieceType.BISHOP -> result = Bitboard.getBishopAttacks(occ, square) and
-                    getBitboard(Piece.Companion.make(side, PieceType.BISHOP))
+                    getBitboard(Piece.make(side, PieceType.BISHOP))
 
             PieceType.ROOK -> result = Bitboard.getRookAttacks(occ, square) and
-                    getBitboard(Piece.Companion.make(side, PieceType.ROOK))
+                    getBitboard(Piece.make(side, PieceType.ROOK))
 
             PieceType.QUEEN -> result = Bitboard.getQueenAttacks(occ, square) and
-                    getBitboard(Piece.Companion.make(side, PieceType.QUEEN))
+                    getBitboard(Piece.make(side, PieceType.QUEEN))
 
             PieceType.KING -> result = result or (Bitboard.getKingAttacks(square, occ) and
-                    getBitboard(Piece.Companion.make(side, PieceType.KING)))
+                    getBitboard(Piece.make(side, PieceType.KING)))
 
             else -> {}
         }
@@ -1039,10 +1039,10 @@ class Board @JvmOverloads constructor(
      */
     fun getKingSquare(side: Side): Square {
         val result = Square.NONE
-        val piece: Long = getBitboard(Piece.Companion.make(side, PieceType.KING))
+        val piece: Long = getBitboard(Piece.make(side, PieceType.KING))
         if (piece != 0L) {
             val sq = Bitboard.bitScanForward(piece)
-            return Square.Companion.squareAt(sq)
+            return Square.squareAt(sq)
         }
         return result
     }
@@ -1159,8 +1159,8 @@ class Board @JvmOverloads constructor(
         ) enPassantTarget.bitboard else 0
         val allPieces = (getBitboard() xor moveFrom xor ep) or moveTo
 
-        val bishopAndQueens: Long = ((getBitboard(Piece.Companion.make(other, PieceType.BISHOP)) or
-                getBitboard(Piece.Companion.make(other, PieceType.QUEEN)))) and moveTo.inv()
+        val bishopAndQueens: Long = ((getBitboard(Piece.make(other, PieceType.BISHOP)) or
+                getBitboard(Piece.make(other, PieceType.QUEEN)))) and moveTo.inv()
 
         if (bishopAndQueens != 0L &&
             (Bitboard.getBishopAttacks(allPieces, kingSq!!) and bishopAndQueens) != 0L
@@ -1168,8 +1168,8 @@ class Board @JvmOverloads constructor(
             return false
         }
 
-        val rookAndQueens: Long = ((getBitboard(Piece.Companion.make(other, PieceType.ROOK)) or
-                getBitboard(Piece.Companion.make(other, PieceType.QUEEN)))) and moveTo.inv()
+        val rookAndQueens: Long = ((getBitboard(Piece.make(other, PieceType.ROOK)) or
+                getBitboard(Piece.make(other, PieceType.QUEEN)))) and moveTo.inv()
 
         if (rookAndQueens != 0L &&
             (Bitboard.getRookAttacks(allPieces, kingSq!!) and rookAndQueens) != 0L
@@ -1178,7 +1178,7 @@ class Board @JvmOverloads constructor(
         }
 
         val knights: Long =
-            (getBitboard(Piece.Companion.make(other, PieceType.KNIGHT))) and moveTo.inv()
+            (getBitboard(Piece.make(other, PieceType.KNIGHT))) and moveTo.inv()
 
         if (knights != 0L &&
             (Bitboard.getKnightAttacks(kingSq!!, allPieces) and knights) != 0L
@@ -1187,7 +1187,7 @@ class Board @JvmOverloads constructor(
         }
 
         val pawns: Long =
-            (getBitboard(Piece.Companion.make(other, PieceType.PAWN))) and moveTo.inv() and ep.inv()
+            (getBitboard(Piece.make(other, PieceType.PAWN))) and moveTo.inv() and ep.inv()
 
         return pawns == 0L ||
                 (Bitboard.getPawnAttacks(side, kingSq!!) and pawns) == 0L
@@ -1420,7 +1420,7 @@ class Board @JvmOverloads constructor(
      *
      * @return the list of legal moves available in the current position
      */
-    fun legalMoves(): List<Move?> {
+    fun legalMoves(): List<Move> {
         return MoveGenerator.generateLegalMoves(this)
     }
 
@@ -1433,7 +1433,7 @@ class Board @JvmOverloads constructor(
      *
      * @return the list of pseudo-legal moves available in the current position
      */
-    fun pseudoLegalMoves(): List<Move?> {
+    fun pseudoLegalMoves(): List<Move> {
         return MoveGenerator.generatePseudoLegalMoves(this)
     }
 
@@ -1447,7 +1447,7 @@ class Board @JvmOverloads constructor(
      *
      * @return the list of pseudo-legal captures available in the current position
      */
-    fun pseudoLegalCaptures(): List<Move?> {
+    fun pseudoLegalCaptures(): List<Move> {
         return MoveGenerator.generatePseudoLegalCaptures(this)
     }
 
@@ -1470,7 +1470,7 @@ class Board @JvmOverloads constructor(
     override fun equals(obj: Any?): Boolean {
         if (obj is Board) {
             val board = obj
-            for (piece in Piece.Companion.allPieces) {
+            for (piece in Piece.allPieces) {
                 if (piece != Piece.NONE && getBitboard(piece) != board.getBitboard(piece)) {
                     return false
                 }
@@ -1604,11 +1604,11 @@ class Board @JvmOverloads constructor(
         val fileIterator = if (side == Side.WHITE) zeroToSeven() else sevenToZero()
 
         rankIterator.forEach { i: Int ->
-            val r: Rank = Rank.Companion.allRanks.get(i)
+            val r: Rank = Rank.allRanks.get(i)
             fileIterator.forEach { n: Int ->
-                val f: File = File.Companion.allFiles.get(n)
+                val f: File = File.allFiles.get(n)
                 if (File.NONE != f && Rank.NONE != r) {
-                    val sq: Square = Square.Companion.encode(r, f)
+                    val sq: Square = Square.encode(r, f)
                     val piece = getPiece(sq)
                     sb.append(piece.fenSymbol)
                 }
@@ -1657,7 +1657,7 @@ class Board @JvmOverloads constructor(
         val pawns = Bitboard.getPawnAttacks(
             side,
             enPassant
-        ) and getBitboard(Piece.Companion.make(side.flip(), PieceType.PAWN))
+        ) and getBitboard(Piece.make(side.flip(), PieceType.PAWN))
         return pawns != 0L && verifyAllPins(pawns, side, enPassant, target)
     }
 
@@ -1712,10 +1712,10 @@ class Board @JvmOverloads constructor(
         private fun findEnPassantTarget(sq: Square, side: Side): Square {
             var ep = Square.NONE
             if (Square.NONE != sq) {
-                ep = if (Side.WHITE == side) Square.Companion.encode(
+                ep = if (Side.WHITE == side) Square.encode(
                     Rank.RANK_5,
                     sq.file
-                ) else Square.Companion.encode(Rank.RANK_4, sq.file)
+                ) else Square.encode(Rank.RANK_4, sq.file)
             }
             return ep
         }
@@ -1723,10 +1723,10 @@ class Board @JvmOverloads constructor(
         private fun findEnPassant(sq: Square, side: Side?): Square {
             var ep = Square.NONE
             if (Square.NONE != sq) {
-                ep = if (Side.WHITE == side) Square.Companion.encode(
+                ep = if (Side.WHITE == side) Square.encode(
                     Rank.RANK_3,
                     sq.file
-                ) else Square.Companion.encode(Rank.RANK_6, sq.file)
+                ) else Square.encode(Rank.RANK_6, sq.file)
             }
             return ep
         }

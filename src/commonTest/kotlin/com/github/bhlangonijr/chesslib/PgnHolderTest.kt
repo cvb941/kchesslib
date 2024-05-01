@@ -10,8 +10,6 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
-import kotlin.test.assertNotSame
-import kotlin.test.assertNull
 import kotlin.test.assertTrue
 /**
  * The type Pgn holder test.
@@ -27,10 +25,10 @@ class PgnHolderTest {
     fun testPGNLoad1() {
         val pgn = PgnHolder(getResourcePath("src/commonTest/resources/cct131.pgn"))
         pgn.loadPgn()
-        val game = pgn.getGames()[0]
+        val game = pgn.games[0]
         game.loadMoveText()
 
-        assertEquals(3, pgn.getGames().size.toLong())
+        assertEquals(3, pgn.games.size.toLong())
         assertEquals("Rookie", game.whitePlayer!!.name)
         assertEquals("JabbaChess", game.blackPlayer!!.name)
         assertEquals("2011.01.29", game.date)
@@ -61,10 +59,10 @@ class PgnHolderTest {
     fun testPGNLoad2() {
         val pgn = PgnHolder(getResourcePath("src/commonTest/resources/rav_alternative.pgn"))
         pgn.loadPgn()
-        val game = pgn.getGames()[0]
+        val game = pgn.games[0]
         game.loadMoveText()
 
-        assertEquals(1, pgn.getGames().size.toLong())
+        assertEquals(1, pgn.games.size.toLong())
         assertEquals("Ponomariov, Ruslan", game.whitePlayer!!.name)
         assertEquals("Ivanchuk, Vassily", game.blackPlayer!!.name)
         assertEquals("2002.02.23", game.date)
@@ -96,10 +94,10 @@ class PgnHolderTest {
     fun testPGNLoad3() {
         val pgn = PgnHolder(getResourcePath("src/commonTest/resources/linares_2002.pgn"))
         pgn.loadPgn()
-        val game = pgn.getGames()[1]
+        val game = pgn.games[1]
         game.loadMoveText()
 
-        assertEquals(42, pgn.getGames().size.toLong())
+        assertEquals(42, pgn.games.size.toLong())
         assertEquals("Shirov, Alexei", game.whitePlayer!!.name)
         assertEquals("Anand, Viswanathan", game.blackPlayer!!.name)
         assertEquals("2002.02.23", game.date)
@@ -132,10 +130,10 @@ class PgnHolderTest {
     fun testPGNLoad4() {
         val pgn = PgnHolder(getResourcePath("src/commonTest/resources/redqueen.pgn"))
         pgn.loadPgn()
-        val game = pgn.getGames()[1]
+        val game = pgn.games[1]
         game.loadMoveText()
 
-        assertEquals(270, pgn.getGames().size.toLong())
+        assertEquals(270, pgn.games.size.toLong())
         assertEquals("Amoeba 1.2 64-bit", game.whitePlayer!!.name)
         assertEquals("RedQueen 1.1.98 64-bit", game.blackPlayer!!.name)
         assertEquals("2016.06.08", game.date)
@@ -164,7 +162,7 @@ class PgnHolderTest {
     fun testPromotionWithMissingEqualSign() {
         val pgn = PgnHolder(getResourcePath("src/commonTest/resources/promoting.pgn"))
         pgn.loadPgn()
-        val game = pgn.getGames()[0]
+        val game = pgn.games[0]
         game.loadMoveText()
         val moves = game.halfMoves
         val board = Board()
@@ -186,7 +184,7 @@ class PgnHolderTest {
     fun testCupPgn() {
         val pgn = PgnHolder(getResourcePath("src/commonTest/resources/cup.pgn"))
         pgn.loadPgn()
-        for (game in pgn.getGames()) {
+        for (game in pgn.games) {
             game.loadMoveText()
             val moves = game.halfMoves
             val board = Board()
@@ -201,7 +199,7 @@ class PgnHolderTest {
     fun testOO() {
         val pgn = PgnHolder(getResourcePath("src/commonTest/resources/oo.pgn"))
         pgn.loadPgn()
-        for (game in pgn.getGames()) {
+        for (game in pgn.games) {
             game.loadMoveText()
             val moves = game.halfMoves
             val board = Board()
@@ -216,7 +214,7 @@ class PgnHolderTest {
     fun testEP() {
         val pgn = PgnHolder(getResourcePath("src/commonTest/resources/ep.pgn"))
         pgn.loadPgn()
-        for (game in pgn.getGames()) {
+        for (game in pgn.games) {
             game.loadMoveText()
             val moves = game.halfMoves
             val board = Board()
@@ -231,7 +229,7 @@ class PgnHolderTest {
     fun testZ0() {
         val pgn = PgnHolder(getResourcePath("src/commonTest/resources/z0.pgn"))
         pgn.loadPgn()
-        for (game in pgn.getGames()) {
+        for (game in pgn.games) {
             game.loadMoveText()
             val moves = game.halfMoves
             val board = Board()
@@ -247,7 +245,7 @@ class PgnHolderTest {
         assertFailsWith(PgnException::class) {
             val pgn = PgnHolder(getResourcePath("src/commonTest/resources/err.pgn"))
             pgn.loadPgn()
-            for (game in pgn.getGames()) {
+            for (game in pgn.games) {
                 game.loadMoveText()
                 val moves = game.halfMoves
                 val board = Board()
@@ -263,7 +261,7 @@ class PgnHolderTest {
     fun testAnsi() {
         val pgn = PgnHolder(getResourcePath("src/commonTest/resources/Morphy_ANSI.pgn"))
         pgn.loadPgn()
-        for (game in pgn.getGames()) {
+        for (game in pgn.games) {
             game.loadMoveText()
             val moves = game.halfMoves
             val board = Board()
@@ -278,7 +276,7 @@ class PgnHolderTest {
     fun testUtf8() {
         val pgn = PgnHolder(getResourcePath("src/commonTest/resources/Morphy_UTF8.pgn"))
         pgn.loadPgn()
-        for (game in pgn.getGames()) {
+        for (game in pgn.games) {
             game.loadMoveText()
             val moves = game.halfMoves
             val board = Board()
@@ -294,7 +292,7 @@ class PgnHolderTest {
         val init = Clock.System.now().toEpochMilliseconds()
         val pgn = PgnHolder(getResourcePath("src/commonTest/resources/longest.pgn"))
         pgn.loadPgn()
-        for (game in pgn.getGames()) {
+        for (game in pgn.games) {
             game.loadMoveText()
             val moves = game.halfMoves
             val board = Board()
@@ -311,7 +309,7 @@ class PgnHolderTest {
     fun testRepetition() {
         val pgn = PgnHolder(getResourcePath("src/commonTest/resources/test.pgn"))
         pgn.loadPgn()
-        val game = pgn.getGames()[0]
+        val game = pgn.games[0]
         game.loadMoveText()
 
         val board = Board()
@@ -326,7 +324,7 @@ class PgnHolderTest {
     fun testRepetition2() {
         val pgn = PgnHolder(getResourcePath("src/commonTest/resources/alekseenko_grachev_2017.pgn"))
         pgn.loadPgn()
-        val game = pgn.getGames()[0]
+        val game = pgn.games[0]
         game.loadMoveText()
 
         val board = Board()
@@ -341,7 +339,7 @@ class PgnHolderTest {
     fun testRepetition3() {
         val pgn = PgnHolder(getResourcePath("src/commonTest/resources/nikolic_arsovic_1989.pgn"))
         pgn.loadPgn()
-        val game = pgn.getGames()[0]
+        val game = pgn.games[0]
         game.loadMoveText()
 
         val board = Board()
@@ -357,7 +355,7 @@ class PgnHolderTest {
     fun testRepetition4() {
         val pgn = PgnHolder(getResourcePath("src/commonTest/resources/no_repetition_1.pgn"))
         pgn.loadPgn()
-        val game = pgn.getGames()[0]
+        val game = pgn.games[0]
         game.loadMoveText()
         val keys: MutableList<String> = ArrayList()
         val board = Board()
@@ -374,7 +372,7 @@ class PgnHolderTest {
     fun testRepetition5() {
         val pgn = PgnHolder(getResourcePath("src/commonTest/resources/no_repetition_2.pgn"))
         pgn.loadPgn()
-        val game = pgn.getGames()[0]
+        val game = pgn.games[0]
         game.loadMoveText()
         val keys: MutableList<String> = ArrayList()
         val board = Board()
@@ -391,10 +389,10 @@ class PgnHolderTest {
     fun testPGNLoadInputStream() {
         val pgn = PgnHolder(null)
         pgn.loadPgn(LargeFile(getResourcePath("src/commonTest/resources/cct131.pgn")))
-        val game = pgn.getGames()[0]
+        val game = pgn.games[0]
         game.loadMoveText()
 
-        assertEquals(3, pgn.getGames().size.toLong())
+        assertEquals(3, pgn.games.size.toLong())
         assertEquals("Rookie", game.whitePlayer!!.name)
         assertEquals("JabbaChess", game.blackPlayer!!.name)
         assertEquals("2011.01.29", game.date)
@@ -465,10 +463,10 @@ class PgnHolderTest {
 
         val pgn = PgnHolder(null)
         pgn.loadPgn(lines)
-        val game = pgn.getGames()[0]
+        val game = pgn.games[0]
         game.loadMoveText()
 
-        assertEquals(1, pgn.getGames().size.toLong())
+        assertEquals(1, pgn.games.size.toLong())
         assertEquals("Rookie", game.whitePlayer!!.name)
         assertEquals("JabbaChess", game.blackPlayer!!.name)
         assertEquals("2011.01.29", game.date)
@@ -497,7 +495,7 @@ class PgnHolderTest {
 
         var numberOfInconsistencies = 0
 
-        for (game in pgn.getGames()) {
+        for (game in pgn.games) {
             game.loadMoveText()
             val s = StringBuilder()
             val map: MutableMap<Long, Int> = HashMap()
@@ -542,7 +540,7 @@ class PgnHolderTest {
     fun testLoadFromStartPosition() {
         val pgn = PgnHolder(getResourcePath("src/commonTest/resources/teststartpos.pgn"))
         pgn.loadPgn()
-        val game = pgn.getGames()[0]
+        val game = pgn.games[0]
         game.loadMoveText()
 
         val board = Board()
@@ -627,7 +625,7 @@ class PgnHolderTest {
 
         assertEquals(3, pgn.countGamesInPgnFile())
         pgn.loadPgn()
-        assertEquals(3, pgn.getGames().size.toLong())
+        assertEquals(3, pgn.games.size.toLong())
     }
 
     /**
@@ -642,6 +640,6 @@ class PgnHolderTest {
 
         assertEquals(31, pgn.countGamesInPgnFile())
         pgn.loadPgn()
-        assertEquals(31, pgn.getGames().size.toLong())
+        assertEquals(31, pgn.games.size.toLong())
     }
 }

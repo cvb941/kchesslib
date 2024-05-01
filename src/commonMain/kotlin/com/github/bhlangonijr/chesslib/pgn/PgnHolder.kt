@@ -46,7 +46,7 @@ class PgnHolder(filename: String?) {
      * @return the chess players
      */
     val player: MutableMap<String?, Player?> = HashMap()
-    private val games: MutableList<Game> = ArrayList()
+    val games: MutableList<Game> = ArrayList()
     private val listener: MutableList<PgnLoadListener> = ArrayList()
     /**
      * Returns the filename of the PGN file.
@@ -105,24 +105,6 @@ class PgnHolder(filename: String?) {
         listener.clear()
         size = 0
     }
-
-    /**
-     * Returns all the games stored in the holder.
-     *
-     * @return the games
-     */
-    fun getGames(): List<Game> {
-        return games
-    }
-
-    @get:Deprecated("use {@link PgnHolder#getGames()} instead")
-    val game: List<Game>
-        /**
-         * Returns all the games stored in the holder.
-         *
-         * @return the games
-         */
-        get() = games
 
     /**
      * Counts the games present in the PGN file.

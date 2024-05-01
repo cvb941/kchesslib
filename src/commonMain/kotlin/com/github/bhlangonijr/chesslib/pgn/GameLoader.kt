@@ -128,7 +128,7 @@ object GameLoader {
                 container.blackPlayer.description = property.value
             }
 
-            "result" -> container.game.result = GameResult.Companion.fromNotation(property.value)
+            "result" -> container.game.result = GameResult.fromNotation(property.value)
             "plycount" -> container.game.plyCount = property.value
             "termination" -> try {
                 container.game.termination =

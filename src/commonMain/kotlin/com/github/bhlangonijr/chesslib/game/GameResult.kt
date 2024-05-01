@@ -65,7 +65,7 @@ enum class GameResult(
         /**
          * The map to correlate the chess notation for a result to one of the [GameResult] values.
          */
-        val notation: MutableMap<String?, GameResult> = HashMap(4)
+        val notation: MutableMap<String, GameResult> = HashMap(4)
 
         init {
             notation["1-0"] = WHITE_WON
@@ -84,8 +84,8 @@ enum class GameResult(
          * @return the game result with the specified name
          * @throws IllegalArgumentException if the name does not correspond to any game result
          */
-        fun fromValue(v: String?): GameResult {
-            return valueOf(v!!)
+        fun fromValue(v: String): GameResult {
+            return valueOf(v)
         }
 
         /**

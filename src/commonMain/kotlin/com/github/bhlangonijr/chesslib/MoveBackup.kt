@@ -208,8 +208,7 @@ class MoveBackup() : BoardEvent {
         halfMoveCounter = board.halfMoveCounter
         this.move = move
         castleRight[Side.WHITE] = board.getCastleRight(Side.WHITE)
-        castleRight[Side.BLACK] =
-            board.getCastleRight(Side.BLACK)
+        castleRight[Side.BLACK] = board.getCastleRight(Side.BLACK)
         capturedPiece = board.getPiece(move.to)
         capturedSquare = move.to
         val moving = board.getPiece(move.from)
