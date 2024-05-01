@@ -54,8 +54,8 @@ repositories {
     google()
 }
 
-group = "io.github.cvb941.kchesslib"
-version = "1.3.3"
+group = "io.github.cvb941"
+version = "1.0.0"
 description = "kchesslib"
 
 mavenPublishing {
