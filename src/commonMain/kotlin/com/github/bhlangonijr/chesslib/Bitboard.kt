@@ -1112,6 +1112,7 @@ object Bitboard {
      * @return the index of the last bit set to 1
      */
     @JvmStatic
+    @OptIn(ExperimentalStdlibApi::class)
     fun bitScanReverse(bb: Long): Int {
         return 63 - bb.countLeadingZeroBits()
     }

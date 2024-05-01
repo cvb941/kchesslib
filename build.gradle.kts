@@ -1,5 +1,8 @@
+import com.vanniktech.maven.publish.SonatypeHost
+
 plugins {
     kotlin("multiplatform") version "1.9.23"
+    id("com.vanniktech.maven.publish") version "0.28.0"
 }
 
 kotlin {
@@ -51,6 +54,37 @@ repositories {
     google()
 }
 
-group = "com.github.cvb941.kchesslib"
+group = "io.github.cvb941.kchesslib"
 version = "1.3.3"
 description = "kchesslib"
+
+mavenPublishing {
+    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL, automaticRelease = false)
+
+    signAllPublications()
+
+    pom {
+        name.set("kchesslib")
+        description.set("Chess library for legal move generation, FEN/PGN parsing and more")
+        inceptionYear.set("2024")
+        url.set("https://github.com/cvb941/kchesslib/")
+        licenses {
+            license {
+                name.set("Apache-2.0")
+                url.set("http://www.apache.org/licenses/LICENSE-2.0")
+            }
+        }
+        developers {
+            developer {
+                id.set("cvb941")
+                name.set("Lukas Kusik")
+                url.set("https://github.com/cvb941/")
+            }
+        }
+        scm {
+            url.set("https://github.com/cvb941/kchesslib/")
+            connection.set("scm:git:git://github.com/cvb941/kchesslib.git")
+            developerConnection.set("scm:git:ssh://git@github.com/cvb941/kchesslib.git")
+        }
+    }
+}
