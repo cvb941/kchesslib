@@ -1151,7 +1151,7 @@ object Bitboard {
      * @return `true` if the bitboard has only one bit set to 1
      */
     fun hasOnly1Bit(bb: Long): Boolean {
-        return bb > 0L && extractLsb(bb) == 0L
+        return bb != 0L && extractLsb(bb) == 0L
     }
 
     /**

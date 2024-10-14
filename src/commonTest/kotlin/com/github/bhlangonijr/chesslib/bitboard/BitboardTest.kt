@@ -1,14 +1,18 @@
 package com.github.bhlangonijr.chesslib.bitboard
 
+import com.github.bhlangonijr.chesslib.Bitboard
 import com.github.bhlangonijr.chesslib.Bitboard.bitScanForward
 import com.github.bhlangonijr.chesslib.Bitboard.bitScanReverse
 import com.github.bhlangonijr.chesslib.Bitboard.bitboardToString
 import com.github.bhlangonijr.chesslib.Bitboard.extractLsb
 import com.github.bhlangonijr.chesslib.Bitboard.getBishopAttacks
 import com.github.bhlangonijr.chesslib.Bitboard.getRookAttacks
+import com.github.bhlangonijr.chesslib.Bitboard.hasOnly1Bit
 import com.github.bhlangonijr.chesslib.Square
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
+
 
 /**
  * The type Bitboard test.
@@ -65,5 +69,12 @@ class BitboardTest {
                 
                 """.trimIndent()
         )
+    }
+
+    @Test
+    fun testHasOnlyOneBit() {
+        for (i in 0 until Square.entries.size - 1) {
+            assertTrue(hasOnly1Bit(Square.squareAt(i).bitboard))
+        }
     }
 }

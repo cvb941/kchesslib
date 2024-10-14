@@ -230,7 +230,7 @@ class Board @JvmOverloads constructor(
     fun doMove(move: String): Boolean {
         val moves = MoveList(this.fen)
         moves.addSanMove(move, true, true)
-        return doMove(moves.removeLast()!!, true)
+        return doMove(moves.removeLast(), true)
     }
 
     /**
@@ -429,9 +429,9 @@ class Board @JvmOverloads constructor(
      */
     fun undoMove(): Move? {
         var move: Move? = null
-        val b = backup.removeLast()
+        val b = backup.removeLastOrNull()
         if (updateHistory) {
-            history.removeLast()
+            history.removeLastOrNull()
         }
         if (b != null) {
             move = b.move

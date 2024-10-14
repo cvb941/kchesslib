@@ -1,8 +1,8 @@
 import com.vanniktech.maven.publish.SonatypeHost
 
 plugins {
-    kotlin("multiplatform") version "1.9.23"
-    id("com.vanniktech.maven.publish") version "0.28.0"
+    kotlin("multiplatform") version "2.0.21"
+    id("com.vanniktech.maven.publish") version "0.30.0"
 }
 
 kotlin {
@@ -31,9 +31,9 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.0-RC.2")
+                implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.1")
                 implementation("com.benasher44:uuid:0.8.4")
-                implementation("org.jetbrains.kotlinx:kotlinx-io-core:0.3.3")
+                implementation("org.jetbrains.kotlinx:kotlinx-io-core:0.5.4")
             }
         }
         commonTest {
@@ -55,7 +55,7 @@ repositories {
 }
 
 group = "io.github.cvb941"
-version = "1.0.0"
+version = "1.0.1"
 description = "kchesslib"
 
 mavenPublishing {
