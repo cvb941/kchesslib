@@ -110,4 +110,14 @@ class MoveGeneratorTest {
             "Illegal move generated",
         )
     }
+
+    @Test
+    fun testEmptyBoard() {
+        val board = Board()
+
+        board.loadFromFen("8/8/8/8/8/8/8/8 w KQkq - 0 0")
+
+        val moves = generateLegalMoves(board)
+        assertEquals(0, moves.size.toLong())
+    }
 }

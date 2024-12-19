@@ -262,7 +262,7 @@ class MoveList
         sanArray = arrayOfNulls(this.size)
         val b = board
         if (b.fen != startFen) {
-            b.loadFromFen(startFen!!)
+            b.loadFromFen(startFen)
         }
         var i = 0
         for (move in this) {
@@ -276,7 +276,7 @@ class MoveList
         fanArray = arrayOfNulls(this.size)
         val b = board
         if (b.fen != startFen) {
-            b.loadFromFen(startFen!!)
+            b.loadFromFen(startFen)
         }
         var i = 0
         for (move in this) {
@@ -298,7 +298,7 @@ class MoveList
         var text = text
         val b = board
         if (b.fen != startFen) {
-            b.loadFromFen(startFen!!)
+            b.loadFromFen(startFen)
         }
         try {
             var side = b.sideToMove
@@ -308,7 +308,7 @@ class MoveList
             for (strMove in m) {
                 val move = Move(strMove, side)
                 add(i++, move)
-                side = side!!.flip()
+                side = side.flip()
             }
         } catch (e: Exception) {
             throw MoveConversionException("Couldn't parse text to MoveList: " + e.message)
@@ -342,7 +342,7 @@ class MoveList
         val b = board
         if (replay) {
             if (b.fen != startFen) {
-                b.loadFromFen(startFen!!)
+                b.loadFromFen(startFen)
             }
             for (move in this) {
                 if (!b.doMove(move, false)) {
@@ -358,7 +358,7 @@ class MoveList
             return
         }
         move.san = san
-        if (!b.doMove(move!!, fullValidation)) {
+        if (!b.doMove(move, fullValidation)) {
             throw MoveConversionException(
                 "Couldn't parse SAN to MoveList: Illegal move: " +
                         move + " [" + san + "] on " + b.fen
@@ -379,7 +379,7 @@ class MoveList
         var text = text
         val b = board
         if (b.fen != startFen) {
-            b.loadFromFen(startFen!!)
+            b.loadFromFen(startFen)
         }
         try {
             text = StringUtil.normalize(text)
@@ -462,7 +462,7 @@ class MoveList
             )
         }
         val promotion =
-            if (strPromotion.isEmpty()) Piece.NONE else Piece.Companion.fromFenSymbol(
+            if (strPromotion.isEmpty()) Piece.NONE else Piece.fromFenSymbol(
                 if (side == Side.WHITE) strPromotion.uppercase() else strPromotion.lowercase(
                     
                 )
@@ -472,13 +472,13 @@ class MoveList
             val mask = Bitboard.getBbtable(to) - 1L
             val xfrom =
                 (if (side == Side.WHITE) mask else mask.inv()) and Bitboard.getFilebb(to) and
-                        board.getBitboard(Piece.Companion.make(side, PieceType.PAWN))
+                        board.getBitboard(Piece.make(side, PieceType.PAWN))
             val f =
                 if (side == Side.BLACK) Bitboard.bitScanForward(xfrom) else Bitboard.bitScanReverse(
                     xfrom
                 )
             if (f >= 0 && f <= 63) {
-                from = Square.Companion.squareAt(f)
+                from = Square.squareAt(f)
             }
         } else {
             val strFrom =
@@ -487,14 +487,14 @@ class MoveList
                     san.length - 2
                 ))
 
-            if (strFrom == null || strFrom.length == 0 || strFrom.length > 3) {
+            if (strFrom.length == 0 || strFrom.length > 3) {
                 throw MoveConversionException("Couldn't parse 'from' square $san: Too many/few characters.")
             }
 
             var fromPiece = PieceType.PAWN
 
             if (strFrom[0].isUpperCase()) {
-                fromPiece = PieceType.Companion.fromSanSymbol(strFrom[0].toString())
+                fromPiece = PieceType.fromSanSymbol(strFrom[0].toString())
             }
 
             if (strFrom.length == 3) {
@@ -525,7 +525,7 @@ class MoveList
                             if (!(irank >= 1 && irank <= 8)) {
                                 throw MoveConversionException("Couldn't parse rank: $location")
                             }
-                            val rank: Rank = Rank.Companion.allRanks.get(irank - 1)
+                            val rank: Rank = Rank.allRanks.get(irank - 1)
                             xfrom = xfrom and Bitboard.getRankbb(rank)
                         } else {
                             try {
@@ -543,7 +543,7 @@ class MoveList
                         }
                         val f = Bitboard.bitScanForward(xfrom)
                         if (f >= 0 && f <= 63) {
-                            from = Square.Companion.squareAt(f)
+                            from = Square.squareAt(f)
                         }
                     }
                 }
@@ -584,7 +584,7 @@ class MoveList
     fun getFen(atMoveIndex: Int, includeCounters: Boolean): String? {
         val b = board
         if (b.fen != startFen) {
-            b.loadFromFen(startFen!!)
+            b.loadFromFen(startFen)
         }
         var i = 0
         for (move in this) {
@@ -778,7 +778,7 @@ class MoveList
             }
 
 
-            val captured = board.backup.last()!!.capturedPiece
+            val captured = board.backup.last().capturedPiece
             val isCapture = captured != Piece.NONE
             if (isCapture) {
                 if (!ambResolved && piece.pieceType == PieceType.PAWN) {
@@ -844,7 +844,7 @@ class MoveList
             var fen: String? = null
             val b = board
             if (b.fen != startMoves.startFen) {
-                b.loadFromFen(startMoves.startFen!!)
+                b.loadFromFen(startMoves.startFen)
             }
             var i = 0
             for (move in startMoves) {

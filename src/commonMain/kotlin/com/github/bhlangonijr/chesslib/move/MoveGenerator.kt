@@ -43,13 +43,13 @@ object MoveGenerator {
      */
     fun generatePawnCaptures(board: Board, moves: MutableList<Move>) {
         val side = board.sideToMove
-        var pieces: Long = board.getBitboard(Piece.Companion.make(side!!, PieceType.PAWN))
+        var pieces: Long = board.getBitboard(Piece.Companion.make(side, PieceType.PAWN))
         while (pieces != 0L) {
             val sourceIndex = Bitboard.bitScanForward(pieces)
             pieces = Bitboard.extractLsb(pieces)
             val sqSource: Square = Square.Companion.squareAt(sourceIndex)
             var attacks = Bitboard.getPawnCaptures(
-                side!!, sqSource,
+                side, sqSource,
                 board.getBitboard(), board.enPassantTarget
             ) and board.getBitboard(side).inv()
             while (attacks != 0L) {
@@ -74,12 +74,12 @@ object MoveGenerator {
      */
     fun generatePawnMoves(board: Board, moves: MutableList<Move>) {
         val side = board.sideToMove
-        var pieces: Long = board.getBitboard(Piece.Companion.make(side!!, PieceType.PAWN))
+        var pieces: Long = board.getBitboard(Piece.Companion.make(side, PieceType.PAWN))
         while (pieces != 0L) {
             val sourceIndex = Bitboard.bitScanForward(pieces)
             pieces = Bitboard.extractLsb(pieces)
             val sqSource: Square = Square.Companion.squareAt(sourceIndex)
-            var attacks = Bitboard.getPawnMoves(side!!, sqSource, board.getBitboard())
+            var attacks = Bitboard.getPawnMoves(side, sqSource, board.getBitboard())
             while (attacks != 0L) {
                 val targetIndex = Bitboard.bitScanForward(attacks)
                 attacks = Bitboard.extractLsb(attacks)
@@ -142,7 +142,7 @@ object MoveGenerator {
         mask: Long = board.getBitboard(board.sideToMove).inv()
     ) {
         val side = board.sideToMove
-        var pieces: Long = board.getBitboard(Piece.Companion.make(side!!, PieceType.KNIGHT))
+        var pieces: Long = board.getBitboard(Piece.Companion.make(side, PieceType.KNIGHT))
         while (pieces != 0L) {
             val knightIndex = Bitboard.bitScanForward(pieces)
             pieces = Bitboard.extractLsb(pieces)
@@ -189,7 +189,7 @@ object MoveGenerator {
         mask: Long = board.getBitboard(board.sideToMove).inv()
     ) {
         val side = board.sideToMove
-        var pieces: Long = board.getBitboard(Piece.Companion.make(side!!, PieceType.BISHOP))
+        var pieces: Long = board.getBitboard(Piece.Companion.make(side, PieceType.BISHOP))
         while (pieces != 0L) {
             val sourceIndex = Bitboard.bitScanForward(pieces)
             pieces = Bitboard.extractLsb(pieces)
@@ -236,7 +236,7 @@ object MoveGenerator {
         mask: Long = board.getBitboard(board.sideToMove).inv()
     ) {
         val side = board.sideToMove
-        var pieces: Long = board.getBitboard(Piece.Companion.make(side!!, PieceType.ROOK))
+        var pieces: Long = board.getBitboard(Piece.Companion.make(side, PieceType.ROOK))
         while (pieces != 0L) {
             val sourceIndex = Bitboard.bitScanForward(pieces)
             pieces = Bitboard.extractLsb(pieces)
@@ -283,7 +283,7 @@ object MoveGenerator {
         mask: Long = board.getBitboard(board.sideToMove).inv()
     ) {
         val side = board.sideToMove
-        var pieces: Long = board.getBitboard(Piece.Companion.make(side!!, PieceType.QUEEN))
+        var pieces: Long = board.getBitboard(Piece.Companion.make(side, PieceType.QUEEN))
         while (pieces != 0L) {
             val sourceIndex = Bitboard.bitScanForward(pieces)
             pieces = Bitboard.extractLsb(pieces)
@@ -330,7 +330,7 @@ object MoveGenerator {
         mask: Long = board.getBitboard(board.sideToMove).inv()
     ) {
         val side = board.sideToMove
-        var pieces: Long = board.getBitboard(Piece.Companion.make(side!!, PieceType.KING))
+        var pieces: Long = board.getBitboard(Piece.Companion.make(side, PieceType.KING))
         while (pieces != 0L) {
             val sourceIndex = Bitboard.bitScanForward(pieces)
             pieces = Bitboard.extractLsb(pieces)
@@ -354,14 +354,14 @@ object MoveGenerator {
      */
     fun generateCastleMoves(board: Board, moves: MutableList<Move>) {
         val side = board.sideToMove
-        if (board.isKingAttacked) {
+        if (board.getKingSquare(board.sideToMove) == Square.NONE || board.isKingAttacked) {
             return
         }
         if (board.getCastleRight(side) == CastleRight.KING_AND_QUEEN_SIDE ||
             (board.getCastleRight(side) == CastleRight.KING_SIDE)
         ) {
             if ((board.getBitboard() and board.context.getooAllSquaresBb(side)) == 0L) {
-                if (!board.isSquareAttackedBy(board.context.getooSquares(side), side!!.flip())) {
+                if (!board.isSquareAttackedBy(board.context.getooSquares(side), side.flip())) {
                     moves.add(board.context.getoo(side))
                 }
             }
@@ -370,7 +370,7 @@ object MoveGenerator {
             (board.getCastleRight(side) == CastleRight.QUEEN_SIDE)
         ) {
             if ((board.getBitboard() and board.context.getoooAllSquaresBb(side)) == 0L) {
-                if (!board.isSquareAttackedBy(board.context.getoooSquares(side), side!!.flip())) {
+                if (!board.isSquareAttackedBy(board.context.getoooSquares(side), side.flip())) {
                     moves.add(board.context.getooo(side))
                 }
             }
