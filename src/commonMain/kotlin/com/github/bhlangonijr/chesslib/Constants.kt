@@ -108,20 +108,6 @@ object Constants {
     val DEFAULT_BLACK_OOO_ALL_SQUARES: MutableList<Square> = ArrayList()
 
     /**
-     * The map that returns the Forsyth-Edwards Notation (FEN) symbols by piece.
-     *
-     */
-    @Deprecated("use {@link Piece#getFenSymbol()} instead")
-    val pieceNotation: MutableMap<Piece, String> = mutableMapOf()
-
-    /**
-     * The map that returns a piece by its Forsyth-Edwards Notation (FEN) symbol.
-     *
-     */
-    @Deprecated("use {@link Piece#fromFenSymbol(String)} instead")
-    val pieceNotationR: MutableMap<String, Piece> = HashMap(12)
-
-    /**
      * A useful special value that represents an empty move, that is, a move that does nothing and leaves the board
      * unchanged.
      */
@@ -149,54 +135,5 @@ object Constants {
         DEFAULT_BLACK_OOO_ALL_SQUARES.add(Square.D8)
         DEFAULT_BLACK_OOO_ALL_SQUARES.add(Square.C8)
         DEFAULT_BLACK_OOO_ALL_SQUARES.add(Square.B8)
-
-        pieceNotation[Piece.WHITE_PAWN] = "P"
-        pieceNotation[Piece.WHITE_KNIGHT] = "N"
-        pieceNotation[Piece.WHITE_BISHOP] = "B"
-        pieceNotation[Piece.WHITE_ROOK] = "R"
-        pieceNotation[Piece.WHITE_QUEEN] = "Q"
-        pieceNotation[Piece.WHITE_KING] = "K"
-        pieceNotation[Piece.BLACK_PAWN] = "p"
-        pieceNotation[Piece.BLACK_KNIGHT] = "n"
-        pieceNotation[Piece.BLACK_BISHOP] = "b"
-        pieceNotation[Piece.BLACK_ROOK] = "r"
-        pieceNotation[Piece.BLACK_QUEEN] = "q"
-        pieceNotation[Piece.BLACK_KING] = "k"
-
-        pieceNotationR["P"] = Piece.WHITE_PAWN
-        pieceNotationR["N"] = Piece.WHITE_KNIGHT
-        pieceNotationR["B"] = Piece.WHITE_BISHOP
-        pieceNotationR["R"] = Piece.WHITE_ROOK
-        pieceNotationR["Q"] = Piece.WHITE_QUEEN
-        pieceNotationR["K"] = Piece.WHITE_KING
-        pieceNotationR["p"] = Piece.BLACK_PAWN
-        pieceNotationR["n"] = Piece.BLACK_KNIGHT
-        pieceNotationR["b"] = Piece.BLACK_BISHOP
-        pieceNotationR["r"] = Piece.BLACK_ROOK
-        pieceNotationR["q"] = Piece.BLACK_QUEEN
-        pieceNotationR["k"] = Piece.BLACK_KING
-    }
-
-    /**
-     * Returns the Forsyth-Edwards Notation (FEN) symbol for a piece.
-     *
-     * @param piece a piece to get the FEN symbol from
-     * @return the Forsyth-Edwards Notation symbol of the piece
-     */
-    @Deprecated("use {@link Piece#getFenSymbol()} instead")
-    fun getPieceNotation(piece: Piece): String? {
-        return piece.fenSymbol
-    }
-
-    /**
-     * Returns the piece corresponding to the given Forsyth-Edwards Notation (FEN) symbol.
-     *
-     * @param notation a piece FEN symbol
-     * @return the piece that corresponds to the FEN symbol provided in input
-     * @throws IllegalArgumentException if the input symbol does not correspond to any standard chess piece
-     */
-    @Deprecated("use {@link Piece#fromFenSymbol(String)} instead")
-    fun getPieceByNotation(notation: String): Piece {
-        return Piece.Companion.fromFenSymbol(notation)
     }
 }

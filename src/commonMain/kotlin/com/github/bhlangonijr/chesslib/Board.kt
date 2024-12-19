@@ -953,7 +953,7 @@ class Board @JvmOverloads constructor(
      * @return this board
      */
     fun removeEventListener(eventType: BoardEventType, listener: BoardEventListener): Board {
-        if (getEventListener() != null && getEventListener()[eventType] != null) {
+        if (getEventListener()[eventType] != null) {
             getEventListener()[eventType]!!.remove(listener)
         }
         return this

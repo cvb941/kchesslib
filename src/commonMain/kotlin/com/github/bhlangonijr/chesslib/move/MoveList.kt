@@ -26,7 +26,6 @@ import com.github.bhlangonijr.chesslib.Side
 import com.github.bhlangonijr.chesslib.Square
 import com.github.bhlangonijr.chesslib.util.StringUtil
 import kotlin.jvm.JvmOverloads
-import kotlin.jvm.Synchronized
 import kotlin.math.abs
 import kotlin.native.concurrent.ThreadLocal
 
@@ -299,7 +298,6 @@ class MoveList
      * @param text the string representing the algebraic list of moves
      * @throws MoveConversionException if it is not possible to parse and convert the moves
      */
-    @Synchronized
     @Throws(MoveConversionException::class)
     fun loadFromText(text: String) {
         var text = text
