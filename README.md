@@ -32,7 +32,7 @@ This library is available on Maven Central. To use it, add the following to your
 
 ```kotlin
 dependencies {
-    implementation("io.github.cvb941:kchesslib:1.0.1")
+    implementation("io.github.cvb941:kchesslib:1.0.2")
 }
 ```
 

@@ -15,7 +15,6 @@
  */
 package com.github.bhlangonijr.chesslib.pgn
 
-import com.benasher44.uuid.uuid4
 import com.github.bhlangonijr.chesslib.game.Event
 import com.github.bhlangonijr.chesslib.game.Game
 import com.github.bhlangonijr.chesslib.game.GameResult
@@ -27,6 +26,8 @@ import com.github.bhlangonijr.chesslib.game.Termination
 import com.github.bhlangonijr.chesslib.game.TimeControl
 import com.github.bhlangonijr.chesslib.util.StringUtil
 import kotlin.math.max
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
 /**
  * A convenient loader to extract a chess game and its metadata from an iterator over the lines of the PGN file.
@@ -198,11 +199,12 @@ object GameLoader {
         game.plyCount = game.halfMoves.size.toString()
     }
 
+    @OptIn(ExperimentalUuidApi::class)
     private class PgnTempContainer {
         //TODO many of this stuff can be accessed through game
         val event: Event = Event()
         val round: Round = Round(event)
-        val game: Game = Game(uuid4().toString(), round)
+        val game: Game = Game(Uuid.random().toString(), round)
         var whitePlayer: Player
         var blackPlayer: Player
         val moveText: StringBuilder
