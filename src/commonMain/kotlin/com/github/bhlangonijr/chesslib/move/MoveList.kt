@@ -55,6 +55,13 @@ class MoveList
     val startFen: String = Constants.startStandardFENPosition,
     private val backingList: MutableList<Move> = mutableListOf()
 ) : MutableList<Move> by backingList {
+    /**
+     * Returns a reference to the board representing the last position after the moves are played.
+     *
+     * @return the board representing the position after the moves are played
+     */
+    private val board: Board = Board()
+
     private var dirty = true
 
     private var sanArray: Array<String?>? = null
@@ -671,17 +678,7 @@ class MoveList
     }
 
     companion object {
-        private const val serialVersionUID = -6204280556340150806L
-        private val boardHolder: Board = Board()
         private val nullMove = Move(Square.NONE, Square.NONE)
-
-        private val board: Board
-            /**
-             * Returns a reference to the board representing the last position after the moves are played.
-             *
-             * @return the board representing the position after the moves are played
-             */
-            get() = boardHolder
 
         /**
          * Encodes the move to its Short Algebraic Notation (SAN), using the context of the given board.
@@ -842,7 +839,7 @@ class MoveList
         @Throws(MoveConversionException::class)
         fun createMoveListFrom(startMoves: MoveList, finalIndex: Int): MoveList {
             var fen: String? = null
-            val b = board
+            val b = Board()
             if (b.fen != startMoves.startFen) {
                 b.loadFromFen(startMoves.startFen)
             }

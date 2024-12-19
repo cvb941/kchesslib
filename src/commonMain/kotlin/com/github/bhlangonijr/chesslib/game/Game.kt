@@ -649,41 +649,39 @@ class Game(
                 !(onCommentBlock) || onLineCommentBlock
             ) {
                 onVariationBlock = false
-                if (variation != null) {
-                    val last = variation.removeLastOrNull()
-                    val currentLine =
-                        StringBuilder(getMovesAt(moves.toString(), halfMove))
-                    try {
-                        onVariationBlock = variation.size > 0
+                val last = variation.removeLastOrNull()
+                val currentLine =
+                    StringBuilder(getMovesAt(moves.toString(), halfMove))
+                try {
+                    onVariationBlock = variation.size > 0
 
-                        for (entry in variation) {
-                            currentLine.append(getMovesAt(entry.text.toString(), entry.size))
-                        }
+                    for (entry in variation) {
+                        currentLine.append(getMovesAt(entry.text.toString(), entry.size))
+                    }
 
-                        val tmp = MoveList()
-                        tmp.loadFromSan(getMovesAt(currentLine.toString(), last!!.index))
-                        val `var`: MoveList = MoveList.Companion.createMoveListFrom(tmp, tmp.size)
-                        `var`.loadFromSan(last.text.toString())
-                        val parent = variation.lastOrNull()
-                        if (onVariationBlock && parent != null) {
-                            `var`.parent = parent.index
-                        } else {
-                            `var`.parent = -1
-                        }
-                        if (variations == null) {
-                            variations = HashMap()
-                        }
-                        variations!![last.index] = `var`
-                    } catch (e: Exception) {
-                        if (last != null) {
-                            throw PgnException(
-                                "Error while reading variation: " +
-                                        getMovesAt(currentLine.toString(), last.index) + " - " +
-                                        last.text.toString(), e
-                            )
-                        } else {
-                            throw PgnException("Error while reading variation: ", e)
-                        }
+                    val tmp = MoveList()
+                    tmp.loadFromSan(getMovesAt(currentLine.toString(), last!!.index))
+                    val `var`: MoveList = MoveList.Companion.createMoveListFrom(tmp, tmp.size)
+                    `var`.loadFromSan(last.text.toString())
+                    val parent = variation.lastOrNull()
+                    if (onVariationBlock && parent != null) {
+                        `var`.parent = parent.index
+                    } else {
+                        `var`.parent = -1
+                    }
+                    if (variations == null) {
+                        variations = HashMap()
+                    }
+                    variations!![last.index] = `var`
+                } catch (e: Exception) {
+                    if (last != null) {
+                        throw PgnException(
+                            "Error while reading variation: " +
+                                    getMovesAt(currentLine.toString(), last.index) + " - " +
+                                    last.text.toString(), e
+                        )
+                    } else {
+                        throw PgnException("Error while reading variation: ", e)
                     }
                 }
                 continue
@@ -698,12 +696,10 @@ class Game(
             }
 
             if (onVariationBlock) {
-                if (variation != null) {
-                    variation.last().text.append(token)
-                    variation.last().text.append(" ")
-                    variation.last().size++
-                    variantIndex++
-                }
+                variation.last().text.append(token)
+                variation.last().text.append(" ")
+                variation.last().size++
+                variantIndex++
                 continue
             }
             variantIndex++
